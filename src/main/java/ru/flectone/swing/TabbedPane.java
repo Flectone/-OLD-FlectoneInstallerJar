@@ -16,6 +16,7 @@ import java.awt.*;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import static ru.flectone.utils.UtilsSystem.listCheckBox;
@@ -26,11 +27,13 @@ public class TabbedPane extends JTabbedPane {
 
     private final JComboBox<String> comboBoxVersion = createComboBox("version." + comboBoxType.getSelectedItem());
 
-    private final JCheckBox checkBoxFabric = new JCheckBox(UtilsSystem.getLocaleString("checkbox.profile"));
+    private final JCheckBox checkBoxFabric = createCheckBox("checkbox.profile");
 
-    private final JCheckBox checkBoxDelete = new JCheckBox(UtilsSystem.getLocaleString("checkbox.delete"));
+    private final JCheckBox checkBoxDelete = createCheckBox("checkbox.delete");
 
-    private final JCheckBox checkBoxSettings = new JCheckBox(UtilsSystem.getLocaleString("checkbox.settings"));
+    private final JCheckBox checkBoxSettings =  createCheckBox("checkbox.settings");
+
+    private final JCheckBox checkBoxFPS = createCheckBox("checkbox.FPS");
 
     private final JTextComponent textComponent = new JTextField();
 
@@ -40,7 +43,6 @@ public class TabbedPane extends JTabbedPane {
 
     private final Box modsExtension = Box.createVerticalBox();
 
-    private final JCheckBox checkBoxFPS = new JCheckBox(UtilsSystem.getLocaleString("checkbox.FPS"));
 
     public TabbedPane(){
         setTabPlacement(JTabbedPane.LEFT);
@@ -53,7 +55,7 @@ public class TabbedPane extends JTabbedPane {
         modsBuilder.add(modsMain);
         modsBuilder.add(modsExtension);
 
-        createMods();
+        createModsListPanel();
 
         addTab(UtilsSystem.getLocaleString("tab.optimization"), modsBuilder.build());
 
@@ -104,142 +106,6 @@ public class TabbedPane extends JTabbedPane {
         addTab(UtilsSystem.getLocaleString("tab.dps"), dpsBuilder.build());
 
         PageBuilder settingsBuilder = new PageBuilder();
-        createSettingsPanel(settingsBuilder);
-
-        addTab(UtilsSystem.getLocaleString("tab.settings"), settingsBuilder.build());
-
-    }
-
-    public Component createOptimizationTab(){
-
-        //Panel where everything is added
-        JPanel mainPanel = new JPanel();
-
-        //Panel for labels, so they don't depend on other components
-        JPanel leftPanel = new JPanel();
-        //Create vertical box
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        JLabel labelType = new JLabel(UtilsSystem.getLocaleString("label.type.mods"));
-        labelType.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        leftPanel.add(labelType);
-        //Add space
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 14)));
-        JLabel labelVersion = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
-        labelVersion.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        leftPanel.add(labelVersion);
-
-        //Label panel add to main panel
-        mainPanel.add(leftPanel);
-
-        //Create panel for other components
-        JPanel rightPanel = new JPanel();
-
-        //Create vertical box
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-
-        //Create additional panel for type Version, so they are on the same line
-        JPanel typeVersionLine = new JPanel();
-        //Create horizontal box
-        typeVersionLine.setLayout(new BoxLayout(typeVersionLine, BoxLayout.X_AXIS));
-
-        comboBoxType.setPreferredSize(new Dimension(200, 20));
-        comboBoxType.addActionListener(e -> {
-            String[] list = UtilsSystem.listObjectsFromConfig.get("version." + comboBoxType.getSelectedItem());
-            comboBoxVersion.setModel(new DefaultComboBoxModel<>(list));
-            createMods();
-        });
-
-        typeVersionLine.add(comboBoxType);
-        typeVersionLine.add(Box.createRigidArea(new Dimension(1, 0)));
-
-        checkBoxFPS.addActionListener(e -> {
-            for(JCheckBox checkBox : listCheckBox.get("modsextension")){
-                checkBox.setSelected(checkBoxFPS.isSelected());
-            }
-        });
-        typeVersionLine.add(checkBoxFPS);
-
-        //Add type version to right panel
-        rightPanel.add(typeVersionLine);
-        rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        rightPanel.add(comboBoxVersion);
-
-        comboBoxVersion.addActionListener(e -> {
-            createMods();
-        });
-
-        //Add right panel to main panel
-        mainPanel.add(rightPanel);
-
-        //Create Box so that other components do not depend on the main panel
-        Box box = Box.createVerticalBox();
-        box.add(Box.createRigidArea(new Dimension(0, 5)));
-        //Add main panel to box
-        box.add(mainPanel);
-
-        //Create line for check box
-        JPanel checkBoxLine = new JPanel();
-
-        checkBoxLine.add(checkBoxFabric);
-        checkBoxLine.add(checkBoxSettings);
-        checkBoxLine.add(checkBoxDelete);
-
-        //Add line to box
-        box.add(checkBoxLine);
-
-        return box;
-    }
-
-    //Create combo box
-    private JComboBox<String> createComboBox(String nameMassive){
-        //Create combo box with UtilsSystem.getFoldersList
-        JComboBox<String> comboBox = new JComboBox<>(Objects.requireNonNull(UtilsSystem.listObjectsFromConfig.get(nameMassive)));
-        //Add to action listener so that check click
-        if(nameMassive.contains("type")){
-            comboBox.setSelectedIndex(1);
-        }
-        return comboBox;
-    }
-
-    private void createMods(){
-        modsMain.removeAll();
-        createModsUtil("main", modsMain);
-
-        modsExtension.removeAll();
-        createModsUtil("extension", modsExtension);
-
-        for(JCheckBox checkBox : listCheckBox.get("modsextension")){
-            checkBox.setSelected(checkBoxFPS.isSelected());
-        }
-    }
-
-    private void createModsUtil(String folder, Box panel){
-        String pathToMods = comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem() + "/" + folder;
-
-        String[] modsList = UtilsSystem.listObjectsFromConfig.get(pathToMods);
-        if(modsList == null){
-            modsList = UtilsWeb.getModsFromWebSite(pathToMods);
-            UtilsSystem.listObjectsFromConfig.put(pathToMods, modsList);
-        }
-
-        JPanel panelModsTotal = new JPanel();
-        panelModsTotal.add(new JLabel(UtilsSystem.getLocaleString("mods.label." + folder)  + " (" + UtilsSystem.getLocaleString("mods.total") + modsList.length + ")"));
-        panel.add(panelModsTotal);
-        panel.add(new JSeparator(SwingUtilities.HORIZONTAL));
-
-        for(String string : modsList){
-            String fileName = "mods." + string
-                    .replace(".jar", "");
-            String firstCheckBox = fileName + ".install";
-            String description = fileName + ".description";
-
-            panel.add(new PageComponent(string.replace(".jar", ".png"), firstCheckBox, modsList.length, description, "mods" + folder));
-            panel.add(new JSeparator(SwingUtilities.HORIZONTAL));
-        }
-    }
-
-    public void createSettingsPanel(PageBuilder builder){
-
         JPanel componentPanel = new JPanel();
         componentPanel.setLayout(new BoxLayout(componentPanel, BoxLayout.Y_AXIS));
 
@@ -255,7 +121,6 @@ public class TabbedPane extends JTabbedPane {
         textComponentLine.add(textComponent);
 
         textComponentLine.add(Box.createRigidArea(new Dimension(3, 0)));
-
 
         JButton buttonDialogSettings = new JButton(UtilsSystem.getLocaleString("button.dialog"));
         buttonDialogSettings.addActionListener(e -> new Thread(() -> actionOnButtonDialog(textComponent)).start());
@@ -299,11 +164,142 @@ public class TabbedPane extends JTabbedPane {
         panel.add(labelPanel);
         panel.add(componentPanel);
 
-        builder.add(panel);
+        settingsBuilder.add(panel);
 
         comboBoxLanguage.addActionListener(e -> actionWhenChangedLocale(comboBoxLanguage));
         comboBoxTheme.addActionListener(e -> actionWhenChangedTheme(comboBoxTheme));
 
+        addTab(UtilsSystem.getLocaleString("tab.settings"), settingsBuilder.build());
+
+    }
+
+    public Component createOptimizationTab(){
+
+        //Panel where everything is added
+        JPanel mainPanel = new JPanel();
+
+        //Panel for labels, so they don't depend on other components
+        JPanel leftPanel = new JPanel();
+        //Create vertical box
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        JLabel labelType = new JLabel(UtilsSystem.getLocaleString("label.type.mods"));
+        labelType.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        leftPanel.add(labelType);
+        //Add space
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 14)));
+        JLabel labelVersion = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
+        labelVersion.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        leftPanel.add(labelVersion);
+
+        //Label panel add to main panel
+        mainPanel.add(leftPanel);
+
+        //Create panel for other components
+        JPanel rightPanel = new JPanel();
+
+        //Create vertical box
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+
+        //Create additional panel for type Version, so they are on the same line
+        JPanel typeVersionLine = new JPanel();
+        //Create horizontal box
+        typeVersionLine.setLayout(new BoxLayout(typeVersionLine, BoxLayout.X_AXIS));
+
+        comboBoxType.setPreferredSize(new Dimension(200, 20));
+        comboBoxType.addActionListener(e -> {
+            String[] list = UtilsSystem.listObjectsFromConfig.get("version." + comboBoxType.getSelectedItem());
+            comboBoxVersion.setModel(new DefaultComboBoxModel<>(list));
+            createModsListPanel();
+        });
+
+        typeVersionLine.add(comboBoxType);
+        typeVersionLine.add(Box.createRigidArea(new Dimension(1, 0)));
+
+        checkBoxFPS.addActionListener(e -> {
+            for(JCheckBox checkBox : listCheckBox.get("modsextension")){
+                checkBox.setSelected(checkBoxFPS.isSelected());
+            }
+        });
+        typeVersionLine.add(checkBoxFPS);
+
+        //Add type version to right panel
+        rightPanel.add(typeVersionLine);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        rightPanel.add(comboBoxVersion);
+
+        comboBoxVersion.addActionListener(e -> {
+            createModsListPanel();
+        });
+
+        //Add right panel to main panel
+        mainPanel.add(rightPanel);
+
+        //Create Box so that other components do not depend on the main panel
+        Box box = Box.createVerticalBox();
+        box.add(Box.createRigidArea(new Dimension(0, 5)));
+        //Add main panel to box
+        box.add(mainPanel);
+
+        //Create line for check box
+        JPanel checkBoxLine = new JPanel();
+
+        checkBoxLine.add(checkBoxFabric);
+        checkBoxLine.add(checkBoxSettings);
+        checkBoxLine.add(checkBoxDelete);
+
+        //Add line to box
+        box.add(checkBoxLine);
+
+        return box;
+    }
+
+    //Create combo box
+    private JComboBox<String> createComboBox(String nameMassive){
+        //Create combo box with UtilsSystem.getFoldersList
+        JComboBox<String> comboBox = new JComboBox<>(Objects.requireNonNull(UtilsSystem.listObjectsFromConfig.get(nameMassive)));
+        //Add to action listener so that check click
+        if(nameMassive.contains("type")){
+            comboBox.setSelectedIndex(1);
+        }
+        return comboBox;
+    }
+
+    private void createModsListPanel(){
+        UtilsSystem.listCheckBox = new HashMap<>();
+        modsMain.removeAll();
+        createModsUtil("main", modsMain);
+
+        modsExtension.removeAll();
+        createModsUtil("extension", modsExtension);
+
+        for(JCheckBox checkBox : listCheckBox.get("modsextension")){
+            checkBox.setSelected(checkBoxFPS.isSelected());
+        }
+    }
+
+    private void createModsUtil(String folder, Box panel){
+        String pathToMods = comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem() + "/" + folder;
+
+        String[] modsList = UtilsSystem.listObjectsFromConfig.get(pathToMods);
+        if(modsList == null){
+            modsList = UtilsWeb.getModsFromWebSite(pathToMods);
+            UtilsSystem.listObjectsFromConfig.put(pathToMods, modsList);
+        }
+
+        JPanel panelModsTotal = new JPanel();
+        panelModsTotal.add(new JLabel(UtilsSystem.getLocaleString("mods.label." + folder)  + " (" + UtilsSystem.getLocaleString("mods.total") + modsList.length + ")"));
+        panel.add(panelModsTotal);
+        panel.add(new JSeparator(SwingUtilities.HORIZONTAL));
+
+        for(String string : modsList){
+            String fileName = "mods." + string
+                    .replace(".jar", "");
+            String firstCheckBox = fileName + ".install";
+            String description = fileName + ".description";
+
+            panel.add(new PageComponent(string.replace(".jar", ".png"), firstCheckBox, modsList.length, description, "mods" + folder));
+            panel.add(new JSeparator(SwingUtilities.HORIZONTAL));
+        }
     }
 
     private JComboBox<String> createComboBox(String firstButton, String secondButton){
@@ -405,9 +401,7 @@ public class TabbedPane extends JTabbedPane {
         buttonInstall.addActionListener(e -> new Thread(() -> {
             switch(page){
                 case "modsmain":
-                    downloadFiles("main", labelStatus);
-                    downloadFiles("extension", labelStatus);
-                    showSuccessInstallMessage(labelStatus);
+                    installModsOptimization(labelStatus);
                     break;
                 case "resourcepacks":
                     installZipFile(page, textComponent, labelStatus);
@@ -423,6 +417,7 @@ public class TabbedPane extends JTabbedPane {
 
         buttonInstall.setEnabled(enablePanel);
         JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
+        buttonDialog.setToolTipText(UtilsSystem.getLocaleString("button.dialog.tooltip"));
         buttonDialog.addActionListener(e -> {
             Frame.getTabbedPane().setSelectedIndex(Frame.getTabbedPane().getTabCount()-1);
             actionOnButtonDialog(textComponent);
@@ -436,6 +431,52 @@ public class TabbedPane extends JTabbedPane {
 
         builder.add(box);
         UtilsSystem.enabledComponentsHashMap.put(page, arrayList);
+    }
+
+    private void installModsOptimization(JLabel labelStatus){
+
+        File folderMods = new File(UtilsSystem.pathToMinecraftFolder + "mods");
+        if(!folderMods.exists()){
+            folderMods.mkdirs();
+        }
+
+        if(checkBoxDelete.isSelected()){
+            UtilsSystem.removeListFiles(UtilsSystem.pathToMinecraftFolder + "mods");
+        }
+
+        downloadModsOptimization("main", labelStatus);
+        downloadModsOptimization("extension", labelStatus);
+
+        if(checkBoxFabric.isSelected()){
+            labelStatus.setText(UtilsSystem.getLocaleString("label.status.profile"));
+            UtilsSystem.createCustomProfile(comboBoxVersion.getSelectedItem().toString());
+        }
+
+        //Download settings for minecraft
+        if(checkBoxSettings.isSelected()){
+
+            //Download settings from site
+            for(String fileName : UtilsSystem.listObjectsFromConfig.get("settings.minecraft")){
+
+                //Set final path file name
+                String toFileName = UtilsSystem.pathToMinecraftFolder;
+
+
+                //Put options.txt to ./minecraft but another files to ./minecraft/config/
+                if(fileName.equals("options.txt")) {
+                    toFileName = toFileName + File.separator + "options.txt";
+                } else {
+                    toFileName = toFileName + File.separator + "config" + File.separator + fileName;
+                }
+
+                //Set label status
+                labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + fileName);
+                //Download file
+                UtilsWeb.downloadFiles("mods/" + fileName, toFileName);
+            }
+        }
+
+        showSuccessInstallMessage(labelStatus);
     }
 
     private void installZipFile(String page, JTextComponent textComponent, JLabel labelStatus){
@@ -478,7 +519,7 @@ public class TabbedPane extends JTabbedPane {
         UtilsMessage.showInformation(UtilsSystem.getLocaleString("message.install.success"));
     }
 
-    private void downloadFiles(String folder, JLabel labelStatus){
+    private void downloadModsOptimization(String folder, JLabel labelStatus){
         //For list checkbox
         for(JCheckBox checkBox : listCheckBox.get("mods" + folder)){
             //Get url folder where will install mod
@@ -494,6 +535,16 @@ public class TabbedPane extends JTabbedPane {
                 UtilsWeb.downloadFiles(urlString, to + checkBox.getName() + ".jar");
             }
         }
+    }
+
+    //Create check box
+    public JCheckBox createCheckBox(String checkBoxName){
+        //Create check box with name from locale
+        JCheckBox checkBox = new JCheckBox(UtilsSystem.getLocaleString(checkBoxName));
+        //Add tool tip
+        checkBox.setToolTipText(UtilsSystem.getLocaleString(checkBoxName + ".tooltip"));
+
+        return checkBox;
     }
 
 }
