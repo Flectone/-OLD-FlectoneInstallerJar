@@ -1,8 +1,0 @@
-type: Vulkan Sodium Optifine
-version.Vulkan: 1.19.2 1.19.1 1.19 1.18.2
-version.Sodium: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1 1.16.5
-version.Optifine: 1.19.1 1.19 1.18.2 1.18.1 1.17.1
-settings.minecraft: betterfpsdist.json bobby.conf dynamicfps.toml moreculling.toml smoke_suppression.json sodium-options.json options.txt
-farms.images: afkfish.jpg newporox.jpg obsidian.jpg oldporox.jpg oneblock.jpg raid.jpg slime.jpg witcher.jpg wither.jpg wood.jpg guard.jpg squid.jpg
-rps.images: bossbars.png discs.png doors.jpeg elytra.png icons.png ores.png potion.png tools.png torch.png village.png
-dps.images: villagetrades.jpg cauldron.jpg soulorb.jpg shears.jpg loot.jpg enchant.jpg craft.jpg chainarmor.jpg bettervanilla.jpg alchemy.jpg
