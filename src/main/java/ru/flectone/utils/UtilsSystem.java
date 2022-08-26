@@ -264,7 +264,7 @@ public class UtilsSystem {
 
 
     //Remove all jar files from folder
-    public static void removeListFiles(String textComponentFolder, JLabel labelStatus){
+    public static void removeListFiles(String textComponentFolder){
         //Get folder
         File file = new File(textComponentFolder);
         for(File mod : Objects.requireNonNull(file.listFiles())){
@@ -278,10 +278,6 @@ public class UtilsSystem {
                 String extension = fileName.substring(index + 1);
                 //If file .jar
                 if(extension.equals("jar")){
-                    //Set color remove
-                    labelStatus.setForeground(new Color(240, 79, 79));
-                    //Set status label remove
-                    labelStatus.setText(getLocaleString("label.status.remove") + mod.getName() + "...");
                     //Delete file
                     removeFile(mod);
                 }
