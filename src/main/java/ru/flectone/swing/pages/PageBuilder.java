@@ -1,23 +1,7 @@
 package ru.flectone.swing.pages;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.ui.FlatButtonBorder;
-import ru.flectone.swing.Frame;
-import ru.flectone.swing.TabbedPane;
-import ru.flectone.utils.UtilsMessage;
-import ru.flectone.utils.UtilsOS;
-import ru.flectone.utils.UtilsSystem;
-import ru.flectone.utils.UtilsWeb;
-
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-
-import static ru.flectone.utils.UtilsSystem.listCheckBox;
 
 public class PageBuilder {
 
