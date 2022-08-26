@@ -1,6 +1,6 @@
 # Project exclude paths
 /out/
 /target/
-/flectone
+/target/classes/
 /flectonemods.txt
 /fabric.jar
