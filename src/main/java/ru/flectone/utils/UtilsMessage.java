@@ -5,7 +5,7 @@ import javax.swing.*;
 public class UtilsMessage {
 
     public static void showInformation(String text){
-        JOptionPane.showMessageDialog(null, text, UtilsSystem.getLocaleString("installer.title"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, text, UtilsSystem.getLocaleString("message.install.title"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     //Show error message for user
