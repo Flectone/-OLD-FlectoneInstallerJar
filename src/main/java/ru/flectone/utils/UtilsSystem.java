@@ -183,7 +183,7 @@ public class UtilsSystem {
             File jsonFile = new File(pathMinecraftFolder + File.separator + "launcher_profiles.json");
             //Check default minecraft path
             if(!jsonFile.exists()){
-                UtilsMessage.showErrorMessage(getLocaleString("error.message.profile"), null);
+                UtilsMessage.showErrorMessage(getLocaleString("message.error.profile"), null);
                 return;
             }
 
@@ -258,7 +258,7 @@ public class UtilsSystem {
             Files.write(Paths.get(jsonFile.getPath()), listForFile);
         } catch (Exception e){
             //Show error
-            UtilsMessage.showErrorMessage(getLocaleString("error.message.profile") + e.getLocalizedMessage(), null);
+            UtilsMessage.showErrorMessage(getLocaleString("message.error.profile") + e.getLocalizedMessage(), null);
         }
     }
 
@@ -292,7 +292,7 @@ public class UtilsSystem {
             Files.delete(file.toPath());
         } catch (Exception error) {
             //If file doesn't exist
-            UtilsMessage.showErrorMessage(getLocaleString("error.message.remove"), file.getPath());
+            UtilsMessage.showErrorMessage(getLocaleString("message.error.remove"), file.getPath());
         }
     }
 

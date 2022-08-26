@@ -58,7 +58,7 @@ public class UtilsWeb {
             }
 
         } catch (Exception error){
-            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("error.message.file.exist") + error.getMessage(), null);
+            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.file.exist") + error.getMessage(), null);
         }
     }
 
@@ -126,7 +126,7 @@ public class UtilsWeb {
 
         } catch (IOException e){
             //If file unable to download
-            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("error.message.download") + e.getMessage(), urlString);
+            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.download") + e.getMessage(), urlString);
         }
     }
 }
