@@ -117,8 +117,8 @@ public class UtilsSystem {
             //Get flectonemods.txt from path minecraft
             File file = new File(getWorkingDirectory() + File.separator + "flectonemods.txt");
             //Get settings file
-            getFileUtil(settingsFile, Files.newInputStream(file.toPath()));
 
+            getFileUtil(settingsFile, Files.newInputStream(file.toPath()));
         } catch (Exception e){
             //File is empty
         }
@@ -143,11 +143,6 @@ public class UtilsSystem {
         if(settingsFile == null) return null;
         //Return string
         return settingsFile.get(string);
-    }
-
-    //Get logo for program from resources
-    public static Image getImageIcon(){
-        return new ImageIcon(Objects.requireNonNull(Main.class.getResource("/logo.png"))).getImage();
     }
 
     //Get path jar directory

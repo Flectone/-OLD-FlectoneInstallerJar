@@ -14,6 +14,8 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +29,10 @@ public class TabbedPane extends JTabbedPane {
 
     private final JComboBox<String> comboBoxVersion = createComboBox("version." + comboBoxType.getSelectedItem());
 
+    private final JComboBox<String> comboBoxLanguage = createComboBox("ru", "en");
+
+    private final JComboBox<String> comboBoxTheme = createComboBox("dark", "light");
+
     private final JCheckBox checkBoxFabric = createCheckBox("checkbox.profile");
 
     private final JCheckBox checkBoxDelete = createCheckBox("checkbox.delete");
@@ -35,7 +41,7 @@ public class TabbedPane extends JTabbedPane {
 
     private final JCheckBox checkBoxFPS = createCheckBox("checkbox.FPS");
 
-    private final JTextComponent textComponent = new JTextField();
+    private final  JTextComponent textComponent = new JTextField();
 
     private final JTextComponent datapackTextComponent = new JTextField();
 
@@ -131,17 +137,16 @@ public class TabbedPane extends JTabbedPane {
         componentPanel.add(textComponentLine);
         componentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JComboBox<String> comboBoxLanguage = createComboBox("ru", "en");
-
         componentPanel.add(comboBoxLanguage);
+
         comboBoxLanguage.setSelectedItem(UtilsSystem.getLocaleString("button." + UtilsOS.getSystemLocale()));
 
         componentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JComboBox<String> comboBoxTheme = createComboBox("dark", "light");
-
         componentPanel.add(comboBoxTheme);
+
         comboBoxTheme.setSelectedItem(FlatLightLaf.isLafDark() ? UtilsSystem.getLocaleString("button.dark") : UtilsSystem.getLocaleString("button.light"));
+
 
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
@@ -171,6 +176,39 @@ public class TabbedPane extends JTabbedPane {
 
         addTab(UtilsSystem.getLocaleString("tab.settings"), settingsBuilder.build());
 
+        Runtime.getRuntime().addShutdownHook(saveConfigWhenExit());
+    }
+
+    //Save flectonemods.txt
+    public Thread saveConfigWhenExit(){
+
+        return new Thread(() -> {
+            try {
+                ArrayList<String> listForFile = new ArrayList<>();
+
+                String pathMinecraftFolder = "path.Minecraft: ";
+                //If user path is null that get default path minecraft
+                if(textComponent.getText().isEmpty()){
+                    //Default path
+                    pathMinecraftFolder = pathMinecraftFolder + UtilsSystem.pathToMinecraftFolder;
+                } else {
+                    //User path
+                    pathMinecraftFolder = pathMinecraftFolder + textComponent.getText() + (textComponent.getText().endsWith(File.separator) ? "" : File.separator);
+                }
+                listForFile.add(pathMinecraftFolder);
+
+                String chosenLanguage = "chosen.Language: " +  (UtilsSystem.getLocaleString("button.ru").equals(comboBoxLanguage.getSelectedItem()) ? "ru" : "en");
+                listForFile.add(chosenLanguage);
+
+                String chosenTheme = "chosen.Theme: " +  (UtilsSystem.getLocaleString("button.dark").equals(comboBoxTheme.getSelectedItem()) ? "dark" : "light");
+                listForFile.add(chosenTheme);
+
+                Files.write(Paths.get(UtilsSystem.getWorkingDirectory(), File.separator + "flectonemods.txt"), listForFile);
+
+            } catch (IOException ignored) {
+
+            }
+        });
     }
 
     public Component createOptimizationTab(){
@@ -344,7 +382,10 @@ public class TabbedPane extends JTabbedPane {
             Frame.getFrame().getContentPane().removeAll();
             Frame.getFrame().getContentPane().add(newTabbedPane);
             Frame.getFrame().validate();
+
         }).start();
+
+
     }
 
     private void actionOnButtonDialog(JTextComponent textComponentFolder){
