@@ -90,5 +90,4 @@ public class PageDefault extends JPanel {
         return checkBox;
     }
 
-
 }
