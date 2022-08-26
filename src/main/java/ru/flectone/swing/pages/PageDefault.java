@@ -51,17 +51,25 @@ public class PageDefault extends JPanel {
         checkBox.setName(checkBoxName.split("\\.")[1]);
         if(checkBoxName.contains("litematic")) checkBox.setName(checkBoxName.split("\\.")[1] + "litematic");
 
-        ArrayList listCheckBox = new ArrayList();
+        ArrayList<JCheckBox> listCheckBox = new ArrayList<>();
         if(UtilsSystem.listCheckBox.get(page) != null){
             listCheckBox = UtilsSystem.listCheckBox.get(page);
         }
+
         listCheckBox.add(checkBox);
         UtilsSystem.listCheckBox.put(page, listCheckBox);
 
-        if(!page.equals("datapacks") && !page.equals("resourcepacks") && !page.equals("farms")) return checkBox;
+        if(page.equals("mods")){
+            checkBox.setEnabled(true);
+        }
+
+        if(!page.equals("datapacks") && !page.equals("resourcepacks") && !page.equals("farms") && !page.equals("mods")) return checkBox;
 
         checkBox.addActionListener(e -> {
+
             int count = UtilsSystem.countCheckBoxHashMap.get(page);
+
+            System.out.println(count);
             if(checkBox.isSelected()){
                 count = count + 1;
             } else {

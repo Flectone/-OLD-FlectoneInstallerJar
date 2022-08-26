@@ -63,15 +63,33 @@ public class UtilsWeb {
     }
 
     //Get name mods from list.txt from www.flectone.ru/mods.../list
-    public static String[] getModsList(String folder) {
+    public static void getModsList() {
+
+        String[] modsType = UtilsSystem.listObjectsFromConfig.get("type");
+
+        ArrayList<String> arrayList = new ArrayList<>();
+        for(String modType : modsType){
+            String[] versionMods = UtilsSystem.listObjectsFromConfig.get("version." + modType);
+            for(String versionMod : versionMods){
+                arrayList.add(modType + "/" + versionMod + "/main");
+                arrayList.add(modType + "/" + versionMod + "/extension");
+            }
+        }
+
+        for(String folderPath : arrayList.toArray(new String[0])){
+            if(UtilsSystem.listObjectsFromConfig.get(folderPath) != null) continue;
+            UtilsSystem.listObjectsFromConfig.put(folderPath, getModsFromWebSite(folderPath));
+        }
+    }
+
+    public static String[] getModsFromWebSite(String folderPath){
         //Create document html
         Document html = null;
         try {
             //Get document html
-            html = Jsoup.connect(UtilsSystem.getWebSiteIp() + "mods/" + folder).userAgent("Mozilla/5.0").get();
+            html = Jsoup.connect(UtilsSystem.getWebSiteIp() + "mods/" + folderPath).userAgent("Mozilla/5.0").get();
         } catch (Exception e){
-            //If site offline
-            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("error.message.site") + e.getMessage(), null);
+
         }
         //Get files from html document
         Elements links = html.select("a[href]");
@@ -85,7 +103,7 @@ public class UtilsWeb {
                 list.add(name);
             }
         }
-        //Return mods massive
+
         return list.toArray(new String[0]);
     }
 

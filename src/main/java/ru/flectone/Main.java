@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import ru.flectone.swing.Frame;
 import ru.flectone.utils.UtilsOS;
 import ru.flectone.utils.UtilsSystem;
+import ru.flectone.utils.UtilsWeb;
 
 import java.util.HashMap;
 
@@ -13,6 +14,17 @@ public class Main {
         UtilsSystem.countCheckBoxHashMap = new HashMap<>();
         UtilsSystem.enabledComponentsHashMap = new HashMap<>();
         UtilsSystem.listCheckBox = new HashMap<>();
+        //Create new hash map from config.yml
+        UtilsSystem.listObjectsFromConfig = new HashMap<>();
+        //Get locale file (ru.yml or en.yml)
+        UtilsSystem.getLocaleFile();
+
+        //Get folders from hash map config.yml
+        UtilsSystem.getFoldersList();
+
+        new Thread(() -> {
+            UtilsWeb.getModsList();
+        }).start();
 
         //Set dark theme
         FlatDarkLaf.setup();
@@ -24,12 +36,6 @@ public class Main {
 
         //Get default minecraft path
         UtilsSystem.getMinecraftFolder();
-        //Create new hash map from config.yml
-        UtilsSystem.listObjectsFromConfig = new HashMap<>();
-        //Get folders from hash map config.yml
-        UtilsSystem.getFoldersList();
-        //Get locale file (ru.yml or en.yml)
-        UtilsSystem.getLocaleFile();
 
         FlatDarkLaf.setup();
 
