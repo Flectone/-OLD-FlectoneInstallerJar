@@ -20,8 +20,6 @@ public class UtilsSystem {
 
     public static HashMap<String, ArrayList<Component>> enabledComponentsHashMap;
 
-    public static final Dimension frameSizeTab1 = new Dimension(660, 350);
-
     public static String pathToMinecraftFolder;
 
     public static int getCountCheckBox(String page){
@@ -34,6 +32,10 @@ public class UtilsSystem {
         }
 
         return count;
+    }
+
+    public static void setCountCheckBox(String page, int count) {
+        countCheckBoxHashMap.put(page, count);
     }
 
     //Get default minecraft path

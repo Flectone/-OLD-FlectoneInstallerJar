@@ -45,15 +45,13 @@ public class PageComponent extends PageDefault {
         setName(page);
     }
 
-    public PageComponent(String imageName, String checkBox, boolean enableCheckBox, String description, String page){
+    public PageComponent(String imageName, String checkBox, int countEnable, String description, String page){
         this(imageName);
 
-        UtilsSystem.getCountCheckBox(page);
+        UtilsSystem.setCountCheckBox(page, countEnable);
 
         Box box = Box.createVerticalBox();
-        JCheckBox finalCheckBox = createCheckBox(checkBox, page);
-        finalCheckBox.setSelected(enableCheckBox);
-        box.add(finalCheckBox);
+        box.add(createCheckBox(checkBox, page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
 

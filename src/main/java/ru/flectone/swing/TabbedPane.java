@@ -37,15 +37,18 @@ public class TabbedPane extends JTabbedPane {
     private final JTextComponent datapackTextComponent = new JTextField();
 
     private final Box modsMain = Box.createVerticalBox();
+
     private final Box modsExtension = Box.createVerticalBox();
+
+    private final JCheckBox checkBoxFPS = new JCheckBox(UtilsSystem.getLocaleString("checkbox.FPS"));
 
     public TabbedPane(){
         setTabPlacement(JTabbedPane.LEFT);
         setBorder(null);
 
         PageBuilder modsBuilder = new PageBuilder();
-        modsBuilder.add(addModInstallPanel());
-        addInstallPanel("mods", modsBuilder);
+        modsBuilder.add(createOptimizationTab());
+        addInstallPanel("modsmain", modsBuilder, true);
 
         modsBuilder.add(modsMain);
         modsBuilder.add(modsExtension);
@@ -66,7 +69,7 @@ public class TabbedPane extends JTabbedPane {
             farmsBuilder.add(new PageComponent(image, version, firstCheckBox, secondCheckBox, description, "farms"));
             farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addInstallPanel("farms", farmsBuilder);
+        addInstallPanel("farms", farmsBuilder, false);
         addTab(UtilsSystem.getLocaleString("tab.farms"), farmsBuilder.build());
 
         PageBuilder rpsBuilder = new PageBuilder();
@@ -81,7 +84,7 @@ public class TabbedPane extends JTabbedPane {
             rpsBuilder.add(new PageComponent(image, firstCheckBox, description, "resourcepacks"));
             rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addInstallPanel("resourcepacks", rpsBuilder);
+        addInstallPanel("resourcepacks", rpsBuilder, false);
         addTab(UtilsSystem.getLocaleString("tab.rps"), rpsBuilder.build());
 
         PageBuilder dpsBuilder = new PageBuilder();
@@ -97,7 +100,7 @@ public class TabbedPane extends JTabbedPane {
             dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
         addTextComponentFieldPanel(dpsBuilder);
-        addInstallPanel("datapacks", dpsBuilder);
+        addInstallPanel("datapacks", dpsBuilder, false);
         addTab(UtilsSystem.getLocaleString("tab.dps"), dpsBuilder.build());
 
         PageBuilder settingsBuilder = new PageBuilder();
@@ -107,7 +110,7 @@ public class TabbedPane extends JTabbedPane {
 
     }
 
-    public Component addModInstallPanel(){
+    public Component createOptimizationTab(){
 
         //Panel where everything is added
         JPanel mainPanel = new JPanel();
@@ -143,15 +146,17 @@ public class TabbedPane extends JTabbedPane {
         comboBoxType.addActionListener(e -> {
             String[] list = UtilsSystem.listObjectsFromConfig.get("version." + comboBoxType.getSelectedItem());
             comboBoxVersion.setModel(new DefaultComboBoxModel<>(list));
-
             createMods();
         });
 
         typeVersionLine.add(comboBoxType);
         typeVersionLine.add(Box.createRigidArea(new Dimension(1, 0)));
 
-        JCheckBox checkBoxFPS = new JCheckBox(UtilsSystem.getLocaleString("checkbox.FPS"));
-
+        checkBoxFPS.addActionListener(e -> {
+            for(JCheckBox checkBox : listCheckBox.get("modsextension")){
+                checkBox.setSelected(checkBoxFPS.isSelected());
+            }
+        });
         typeVersionLine.add(checkBoxFPS);
 
         //Add type version to right panel
@@ -199,8 +204,13 @@ public class TabbedPane extends JTabbedPane {
     private void createMods(){
         modsMain.removeAll();
         createModsUtil("main", modsMain);
+
         modsExtension.removeAll();
         createModsUtil("extension", modsExtension);
+
+        for(JCheckBox checkBox : listCheckBox.get("modsextension")){
+            checkBox.setSelected(checkBoxFPS.isSelected());
+        }
     }
 
     private void createModsUtil(String folder, Box panel){
@@ -223,7 +233,7 @@ public class TabbedPane extends JTabbedPane {
             String firstCheckBox = fileName + ".install";
             String description = fileName + ".description";
 
-            panel.add(new PageComponent(string.replace(".jar", ".png"), firstCheckBox, true, description, "mods"));
+            panel.add(new PageComponent(string.replace(".jar", ".png"), firstCheckBox, modsList.length, description, "mods" + folder));
             panel.add(new JSeparator(SwingUtilities.HORIZONTAL));
         }
     }
@@ -378,14 +388,14 @@ public class TabbedPane extends JTabbedPane {
         builder.add(dialogPanel);
     }
 
-    public void addInstallPanel(String page, PageBuilder builder){
+    public void addInstallPanel(String page, PageBuilder builder, boolean enablePanel){
 
         ArrayList<Component> arrayList = new ArrayList<>();
 
         Box box = Box.createVerticalBox();
 
-        JLabel labelStatus = new JLabel(UtilsSystem.getLocaleString("label.status.ready.false"));
-        labelStatus.setEnabled(false);
+        JLabel labelStatus = new JLabel(UtilsSystem.getLocaleString("label.status.ready." + enablePanel));
+        labelStatus.setEnabled(enablePanel);
 
         JPanel panelStatus = new JPanel();
         panelStatus.add(labelStatus);
@@ -406,7 +416,7 @@ public class TabbedPane extends JTabbedPane {
                     break;
             }
         }).start());
-        buttonInstall.setEnabled(false);
+        buttonInstall.setEnabled(enablePanel);
         JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
         buttonDialog.addActionListener(e -> {
             Frame.getTabbedPane().setSelectedIndex(Frame.getTabbedPane().getTabCount()-1);

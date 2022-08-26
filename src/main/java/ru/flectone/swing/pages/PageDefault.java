@@ -59,17 +59,16 @@ public class PageDefault extends JPanel {
         listCheckBox.add(checkBox);
         UtilsSystem.listCheckBox.put(page, listCheckBox);
 
-        if(page.equals("mods")){
-            checkBox.setEnabled(true);
+        if(page.equals("modsmain")){
+            checkBox.setSelected(true);
         }
-
-        if(!page.equals("datapacks") && !page.equals("resourcepacks") && !page.equals("farms") && !page.equals("mods")) return checkBox;
+        if(!page.equals("datapacks") && !page.equals("resourcepacks") && !page.equals("farms") && !page.equals("modsmain")) return checkBox;
 
         checkBox.addActionListener(e -> {
 
+
             int count = UtilsSystem.countCheckBoxHashMap.get(page);
 
-            System.out.println(count);
             if(checkBox.isSelected()){
                 count = count + 1;
             } else {
