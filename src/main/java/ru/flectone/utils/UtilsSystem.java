@@ -49,23 +49,18 @@ public class UtilsSystem {
     }
     
     public static String getDefaultMinecraftFolder(){
-        String string = null;
         //Windows OS
-        if(UtilsOS.isWindows){
+        if(UtilsOS.systemOc.contains("win")){
             //Appdata + ./minecraft/mods/
-            string = System.getenv("APPDATA") + "\\.minecraft\\";
-        }
-        //Unix OS
-        if(UtilsOS.isUnix){
-            //home + user name + ./minecraft/mods
-            string =  "/home/" + UtilsSystem.getUserNameOC("/home/") + "/.minecraft/";
+            return System.getenv("APPDATA") + "\\.minecraft\\";
         }
         //Mac OS
-        if(UtilsOS.isMac){
+        if(UtilsOS.systemOc.contains("mac")){
             //Users  + user name + /Library/Application Support/minecraft/mods
-            string =  "/Users/" + UtilsSystem.getUserNameOC("/Users/") + "/Library/Application Support/minecraft/";
+            return "/Users/" + UtilsSystem.getUserNameOC("/Users/") + "/Library/Application Support/minecraft/";
         }
-        return string;
+        //Unix
+        return "/home/" + UtilsSystem.getUserNameOC("/home/") + "/.minecraft/";
     }
 
     //Get user name for linux or mac
@@ -120,7 +115,7 @@ public class UtilsSystem {
         settingsFile = new HashMap<>();
         try {
             //Get flectonemods.txt from path minecraft
-            File file = new File(getWorkingDirectory() + UtilsOS.getSystemSlash() + "flectonemods.txt");
+            File file = new File(getWorkingDirectory() + File.separator + "flectonemods.txt");
             //Get settings file
             getFileUtil(settingsFile, Files.newInputStream(file.toPath()));
 
@@ -180,14 +175,12 @@ public class UtilsSystem {
     //Create profile in minecraft launcher
     public static void createCustomProfile(String minecraftVersion){
         try {
-            //Get system slash, windows "\\" but other OS "/"
-            String slash = UtilsOS.getSystemSlash();
 
             //Get folder ./minecraft
             String pathMinecraftFolder = pathToMinecraftFolder;
 
             //Get minecraft launcher_profiles.json
-            File jsonFile = new File(pathMinecraftFolder + slash + "launcher_profiles.json");
+            File jsonFile = new File(pathMinecraftFolder + File.separator + "launcher_profiles.json");
             //Check default minecraft path
             if(!jsonFile.exists()){
                 UtilsMessage.showErrorMessage(getLocaleString("error.message.profile"), null);
@@ -195,7 +188,7 @@ public class UtilsSystem {
             }
 
             //Get path to fabric jar and download
-            String pathFabricJar = getWorkingDirectory() + slash + "fabric.jar";
+            String pathFabricJar = getWorkingDirectory() + File.separator + "fabric.jar";
             UtilsWeb.downloadFiles("mods/fabric.jar", pathFabricJar);
 
             //Get command and run fabric jar
@@ -208,7 +201,7 @@ public class UtilsSystem {
             String fabricName = minecraftVersion;
 
             //Get folder ./minecraft/versions
-            File folderMinecraftVersions = new File(pathMinecraftFolder + slash + "versions");
+            File folderMinecraftVersions = new File(pathMinecraftFolder + File.separator + "versions");
 
             //Get all files from /versions
             for(File version : folderMinecraftVersions.listFiles()){

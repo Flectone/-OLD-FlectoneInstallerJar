@@ -2,7 +2,6 @@ package ru.flectone;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import ru.flectone.swing.Frame;
-import ru.flectone.utils.UtilsOS;
 import ru.flectone.utils.UtilsSystem;
 import ru.flectone.utils.UtilsWeb;
 
@@ -22,14 +21,10 @@ public class Main {
         //Get folders from hash map config.yml
         UtilsSystem.getFoldersList();
 
-        new Thread(() -> {
-            UtilsWeb.getModsList();
-        }).start();
+        new Thread(() -> UtilsWeb.getModsList()).start();
 
         //Set dark theme
         FlatDarkLaf.setup();
-
-        UtilsOS.setSystemSlash();
 
         //Get settings file (flectonemods.txt), default this null
         UtilsSystem.getSettingsFile();

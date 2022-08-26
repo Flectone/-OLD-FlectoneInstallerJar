@@ -322,7 +322,6 @@ public class TabbedPane extends JTabbedPane {
         } else {
             UtilsOS.setSystemLocale("en");
         }
-
         //Reload "locale" file
         UtilsSystem.getLocaleFile();
         reloadFrame();
@@ -370,15 +369,15 @@ public class TabbedPane extends JTabbedPane {
         //If user click save
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             //Set text component folder
-            textComponentFolder.setText(fileChooser.getSelectedFile().getPath() + UtilsOS.systemSlash);
-            if(textComponentFolder == textComponent) UtilsSystem.pathToMinecraftFolder = fileChooser.getSelectedFile().getPath() + UtilsOS.systemSlash;
+            textComponentFolder.setText(fileChooser.getSelectedFile().getPath() + File.separator);
+            if(textComponentFolder == textComponent) UtilsSystem.pathToMinecraftFolder = fileChooser.getSelectedFile().getPath() + File.separator;
         }
     }
 
     public void addTextComponentFieldPanel(PageBuilder builder){
         JPanel dialogPanel = new JPanel();
         dialogPanel.add(new JLabel(UtilsSystem.getLocaleString("label.folder.minecraft.saves")));
-        datapackTextComponent.setText(UtilsSystem.pathToMinecraftFolder + "saves" + UtilsOS.systemSlash);
+        datapackTextComponent.setText(UtilsSystem.pathToMinecraftFolder + "saves" + File.separator);
         dialogPanel.add(datapackTextComponent);
         JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
         dialogPanel.add(buttonDialog);
@@ -405,8 +404,10 @@ public class TabbedPane extends JTabbedPane {
         JButton buttonInstall = new JButton(UtilsSystem.getLocaleString("button.install"));
         buttonInstall.addActionListener(e -> new Thread(() -> {
             switch(page){
-                case "datapacks":
-                    installZipFile(page, datapackTextComponent, labelStatus);
+                case "modsmain":
+                    downloadFiles("main", labelStatus);
+                    downloadFiles("extension", labelStatus);
+                    showSuccessInstallMessage(labelStatus);
                     break;
                 case "resourcepacks":
                     installZipFile(page, textComponent, labelStatus);
@@ -414,8 +415,12 @@ public class TabbedPane extends JTabbedPane {
                 case "farms":
                     installFarms(labelStatus);
                     break;
+                case "datapacks":
+                    installZipFile(page, datapackTextComponent, labelStatus);
+                    break;
             }
         }).start());
+
         buttonInstall.setEnabled(enablePanel);
         JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
         buttonDialog.addActionListener(e -> {
@@ -442,13 +447,11 @@ public class TabbedPane extends JTabbedPane {
 
             String url = page + "/" + checkBox.getName() + ".zip";
 
-            String path = textComponent.getText() + page + UtilsOS.getSystemSlash() + checkBox.getName() + ".zip";
+            String path = textComponent.getText() + page + File.separator + checkBox.getName() + ".zip";
 
             UtilsWeb.downloadFiles(url, path);
         }
-        labelStatus.setForeground(null);
-        labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready.true"));
-        UtilsMessage.showInformation(UtilsSystem.getLocaleString("message.install.success"));
+        showSuccessInstallMessage(labelStatus);
     }
 
     private void installFarms(JLabel labelStatus){
@@ -456,9 +459,9 @@ public class TabbedPane extends JTabbedPane {
         for(JCheckBox checkBox : listCheckBox.get("farms")){
             if(!checkBox.isSelected()) continue;
 
-            String toFile = "saves" + UtilsOS.getSystemSlash() + checkBox.getName();
+            String toFile = "saves" + File.separator + checkBox.getName();
             if(checkBox.getName().contains("litematic")){
-                toFile = "schematics" + UtilsOS.getSystemSlash();
+                toFile = "schematics" + File.separator;
             }
 
             String url = "farms/" + checkBox.getName() + ".zip";
@@ -466,12 +469,31 @@ public class TabbedPane extends JTabbedPane {
 
             UtilsWeb.unzip(url, Paths.get(path), labelStatus);
         }
+        showSuccessInstallMessage(labelStatus);
+    }
 
-        labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready.true"));
+    private void showSuccessInstallMessage(JLabel labelStatus){
         labelStatus.setForeground(null);
-
-        //Show successful message
+        labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready.true"));
         UtilsMessage.showInformation(UtilsSystem.getLocaleString("message.install.success"));
+    }
+
+    private void downloadFiles(String folder, JLabel labelStatus){
+        //For list checkbox
+        for(JCheckBox checkBox : listCheckBox.get("mods" + folder)){
+            //Get url folder where will install mod
+            String to = UtilsSystem.pathToMinecraftFolder + "mods" + File.separator;
+            //Get url where mod
+            String urlString = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem() + "/" + folder + "/" + checkBox.getName() + ".jar";
+            //Mod selected?
+            if(checkBox.isSelected()) {
+                //Change status download and his color
+                labelStatus.setForeground(new Color(79, 240, 114));
+                labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + checkBox.getName() + "...");
+                //Use method downloadFiles
+                UtilsWeb.downloadFiles(urlString, to + checkBox.getName() + ".jar");
+            }
+        }
     }
 
 }
