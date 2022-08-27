@@ -12,6 +12,7 @@ button.dialog: "..."
 button.dialog.tooltip: "Выбрать путь установки"
 button.ru: "Русский язык"
 button.en: "Английский язык"
+button.ua: "Украинский язык"
 button.dark: "Тёмная тема"
 button.light: "Светлая тема"
 
