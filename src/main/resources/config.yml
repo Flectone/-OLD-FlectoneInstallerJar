@@ -6,3 +6,5 @@ settings.minecraft: betterfpsdist.json bobby.conf dynamicfps.toml moreculling.to
 farms.images: afkfish.jpg newporox.jpg obsidian.jpg oldporox.jpg oneblock.jpg raid.jpg slime.jpg witcher.jpg wither.jpg wood.jpg guard.jpg squid.jpg
 rps.images: bossbars.png discs.png doors.jpeg elytra.png icons.png ores.png potion.png tools.png torch.png village.png
 dps.images: villagetrades.jpg cauldron.jpg soulorb.jpg shears.jpg loot.jpg enchant.jpg craft.jpg chainarmor.jpg bettervanilla.jpg alchemy.jpg
+support.languages: ru en ua
+support.themes: dark light
