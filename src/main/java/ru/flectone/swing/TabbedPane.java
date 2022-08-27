@@ -68,6 +68,7 @@ public class TabbedPane extends JTabbedPane {
         addTab(UtilsSystem.getLocaleString("tab.optimization"), modsBuilder.build());
 
         PageBuilder farmsBuilder = new PageBuilder();
+        addInstallPanel("farms", farmsBuilder, false);
         for(String image : UtilsSystem.listObjectsFromConfig.get("farms.images")){
 
             String fileName = "farms." + image.replace(".jpg", "");
@@ -79,10 +80,10 @@ public class TabbedPane extends JTabbedPane {
             farmsBuilder.add(new PageComponent(image, version, firstCheckBox, secondCheckBox, description, "farms"));
             farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addInstallPanel("farms", farmsBuilder, false);
         addTab(UtilsSystem.getLocaleString("tab.farms"), farmsBuilder.build());
 
         PageBuilder rpsBuilder = new PageBuilder();
+        addInstallPanel("resourcepacks", rpsBuilder, false);
         for(String image : UtilsSystem.listObjectsFromConfig.get("rps.images")){
             String fileName = "rps." + image
                     .replace(".jpg", "")
@@ -94,10 +95,11 @@ public class TabbedPane extends JTabbedPane {
             rpsBuilder.add(new PageComponent(image, firstCheckBox, description, "resourcepacks"));
             rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addInstallPanel("resourcepacks", rpsBuilder, false);
         addTab(UtilsSystem.getLocaleString("tab.rps"), rpsBuilder.build());
 
         PageBuilder dpsBuilder = new PageBuilder();
+        addTextComponentFieldPanel(dpsBuilder);
+        addInstallPanel("datapacks", dpsBuilder, false);
         for(String image : UtilsSystem.listObjectsFromConfig.get("dps.images")){
             String fileName = "dps." + image
                     .replace(".jpg", "")
@@ -109,8 +111,6 @@ public class TabbedPane extends JTabbedPane {
             dpsBuilder.add(new PageComponent(image, version, firstCheckBox, description, "datapacks"));
             dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addTextComponentFieldPanel(dpsBuilder);
-        addInstallPanel("datapacks", dpsBuilder, false);
         addTab(UtilsSystem.getLocaleString("tab.dps"), dpsBuilder.build());
 
         PageBuilder settingsBuilder = new PageBuilder();
@@ -436,6 +436,7 @@ public class TabbedPane extends JTabbedPane {
         box.add(panelStatus);
 
         JButton buttonInstall = new JButton(UtilsSystem.getLocaleString("button.install"));
+        arrayList.add(buttonInstall);
         buttonInstall.addActionListener(e -> new Thread(() -> {
             switch(page){
                 case "modsmain":
@@ -484,9 +485,36 @@ public class TabbedPane extends JTabbedPane {
             actionOnButtonDialog(textComponent);
         });
 
+        JButton buttonSelect = new JButton(UtilsSystem.getLocaleString("button.select.true"));
+        buttonSelect.setToolTipText(UtilsSystem.getLocaleString("button.select.tooltip"));
+        buttonSelect.addActionListener(e -> {
+            boolean bol = buttonSelect.getText().equals(UtilsSystem.getLocaleString("button.select.true"));
+            buttonSelect.setText(UtilsSystem.getLocaleString("button.select." + !bol));
+
+            buttonInstall.setEnabled(bol);
+            labelStatus.setEnabled(bol);
+            labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready." + bol));
+
+            for(JCheckBox checkBox : listCheckBox.get(page)){
+                checkBox.setSelected(bol);
+            }
+            if(page.equals("modsmain")){
+                for(JCheckBox checkBox : listCheckBox.get("modsextension")){
+                    checkBox.setSelected(bol);
+                }
+                checkBoxFPS.setSelected(bol);
+            }
+
+            if(bol){
+                UtilsSystem.countCheckBoxHashMap.put(page, listCheckBox.get(page).toArray().length);
+            } else {
+                UtilsSystem.countCheckBoxHashMap.put(page, 0);
+            }
+        });
+
         JPanel panelInstall = new JPanel();
+        panelInstall.add(buttonSelect);
         panelInstall.add(buttonInstall);
-        arrayList.add(buttonInstall);
         panelInstall.add(buttonDialog);
         box.add(panelInstall);
 
