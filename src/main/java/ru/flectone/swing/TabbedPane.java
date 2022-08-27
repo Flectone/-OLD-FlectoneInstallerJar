@@ -3,6 +3,7 @@ package ru.flectone.swing;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.ui.FlatButtonBorder;
+import ru.flectone.Installation;
 import ru.flectone.swing.pages.PageBuilder;
 import ru.flectone.swing.pages.PageComponent;
 import ru.flectone.utils.UtilsMessage;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -265,9 +267,7 @@ public class TabbedPane extends JTabbedPane {
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         rightPanel.add(comboBoxVersion);
 
-        comboBoxVersion.addActionListener(e -> {
-            createModsListPanel();
-        });
+        comboBoxVersion.addActionListener(e -> createModsListPanel());
 
         //Add right panel to main panel
         mainPanel.add(rightPanel);
@@ -442,16 +442,48 @@ public class TabbedPane extends JTabbedPane {
         buttonInstall.addActionListener(e -> new Thread(() -> {
             switch(page){
                 case "modsmain":
-                    installModsOptimization(labelStatus);
+                    if(comboBoxType.getSelectedItem().equals("Vulkan")){
+                        UtilsMessage.showWarnMessage(UtilsSystem.getLocaleString("message.warn.vulkan"));
+                    }
+
+                    File folderMods = new File(UtilsSystem.pathToMinecraftFolder + "mods");
+                    if(!folderMods.exists()){
+                        folderMods.mkdirs();
+                    }
+
+                    if(checkBoxDelete.isSelected()){
+                        UtilsSystem.removeListFiles(UtilsSystem.pathToMinecraftFolder + "mods");
+                    }
+
+
+                    String urlFolder = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem();
+                    new Installation(labelStatus, listCheckBox.get("modsmain"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/main");
+                    new Installation(labelStatus, listCheckBox.get("modsextension"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/extension");
+
+                    if(checkBoxFabric.isSelected()){
+                        labelStatus.setText(UtilsSystem.getLocaleString("label.status.profile"));
+                        UtilsSystem.createCustomProfile(comboBoxVersion.getSelectedItem().toString());
+                    }
+
+                    if(checkBoxFabric.isSelected()){
+                        labelStatus.setText(UtilsSystem.getLocaleString("label.status.profile"));
+                        UtilsSystem.createCustomProfile(comboBoxVersion.getSelectedItem().toString());
+                    }
+
+                    //Download settings for minecraft
+                    if(checkBoxSettings.isSelected()){
+                        new Installation(labelStatus, UtilsSystem.listObjectsFromConfig.get("settings.minecraft"), Paths.get(textComponent.getText()));
+                    }
+
                     break;
                 case "resourcepacks":
-                    installZipFile(page, textComponent, labelStatus);
+                    new Installation(labelStatus, listCheckBox.get(page), Paths.get(textComponent.getText(), page),  ".zip", page);
                     break;
                 case "farms":
-                    installFarms(labelStatus);
+                    new Installation(labelStatus, listCheckBox.get(page), Paths.get(textComponent.getText()),  ".zip", page);
                     break;
                 case "datapacks":
-                    installZipFile(page, datapackTextComponent, labelStatus);
+                    new Installation(labelStatus, listCheckBox.get(page), Paths.get(datapackTextComponent.getText(), page),  ".zip", page);
                     break;
             }
         }).start());
@@ -472,110 +504,6 @@ public class TabbedPane extends JTabbedPane {
 
         builder.add(box);
         UtilsSystem.enabledComponentsHashMap.put(page, arrayList);
-    }
-
-    private void installModsOptimization(JLabel labelStatus){
-
-        File folderMods = new File(UtilsSystem.pathToMinecraftFolder + "mods");
-        if(!folderMods.exists()){
-            folderMods.mkdirs();
-        }
-
-        if(checkBoxDelete.isSelected()){
-            UtilsSystem.removeListFiles(UtilsSystem.pathToMinecraftFolder + "mods");
-        }
-
-        downloadModsOptimization("main", labelStatus);
-        downloadModsOptimization("extension", labelStatus);
-
-        if(checkBoxFabric.isSelected()){
-            labelStatus.setText(UtilsSystem.getLocaleString("label.status.profile"));
-            UtilsSystem.createCustomProfile(comboBoxVersion.getSelectedItem().toString());
-        }
-
-        //Download settings for minecraft
-        if(checkBoxSettings.isSelected()){
-
-            //Download settings from site
-            for(String fileName : UtilsSystem.listObjectsFromConfig.get("settings.minecraft")){
-
-                //Set final path file name
-                String toFileName = UtilsSystem.pathToMinecraftFolder;
-
-
-                //Put options.txt to ./minecraft but another files to ./minecraft/config/
-                if(fileName.equals("options.txt")) {
-                    toFileName = toFileName + File.separator + "options.txt";
-                } else {
-                    toFileName = toFileName + File.separator + "config" + File.separator + fileName;
-                }
-
-                //Set label status
-                labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + fileName);
-                //Download file
-                UtilsWeb.downloadFiles("mods/" + fileName, toFileName);
-            }
-        }
-
-        showSuccessInstallMessage(labelStatus);
-    }
-
-    private void installZipFile(String page, JTextComponent textComponent, JLabel labelStatus){
-        for(JCheckBox checkBox : listCheckBox.get(page)){
-            if(!checkBox.isSelected()) continue;
-
-            labelStatus.setForeground(new Color(79, 240, 114));
-            labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + checkBox.getName() + "...");
-
-            String url = page + "/" + checkBox.getName() + ".zip";
-
-            String path = textComponent.getText() + page + File.separator + checkBox.getName() + ".zip";
-
-            UtilsWeb.downloadFiles(url, path);
-        }
-        showSuccessInstallMessage(labelStatus);
-    }
-
-    private void installFarms(JLabel labelStatus){
-
-        for(JCheckBox checkBox : listCheckBox.get("farms")){
-            if(!checkBox.isSelected()) continue;
-
-            String toFile = "saves" + File.separator + checkBox.getName();
-            if(checkBox.getName().contains("litematic")){
-                toFile = "schematics" + File.separator;
-            }
-
-            String url = "farms/" + checkBox.getName() + ".zip";
-            String path = UtilsSystem.pathToMinecraftFolder + toFile;
-
-            UtilsWeb.unzip(url, Paths.get(path), labelStatus);
-        }
-        showSuccessInstallMessage(labelStatus);
-    }
-
-    private void showSuccessInstallMessage(JLabel labelStatus){
-        labelStatus.setForeground(null);
-        labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready.true"));
-        UtilsMessage.showInformation(UtilsSystem.getLocaleString("message.install.success"));
-    }
-
-    private void downloadModsOptimization(String folder, JLabel labelStatus){
-        //For list checkbox
-        for(JCheckBox checkBox : listCheckBox.get("mods" + folder)){
-            //Get url folder where will install mod
-            String to = UtilsSystem.pathToMinecraftFolder + "mods" + File.separator;
-            //Get url where mod
-            String urlString = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem() + "/" + folder + "/" + checkBox.getName() + ".jar";
-            //Mod selected?
-            if(checkBox.isSelected()) {
-                //Change status download and his color
-                labelStatus.setForeground(new Color(79, 240, 114));
-                labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + checkBox.getName() + "...");
-                //Use method downloadFiles
-                UtilsWeb.downloadFiles(urlString, to + checkBox.getName() + ".jar");
-            }
-        }
     }
 
     //Create check box
