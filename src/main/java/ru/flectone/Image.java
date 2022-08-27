@@ -1,7 +1,6 @@
 package ru.flectone;
 
 import com.formdev.flatlaf.ui.FlatButtonBorder;
-import ru.flectone.Main;
 import ru.flectone.utils.UtilsMessage;
 import ru.flectone.utils.UtilsSystem;
 
@@ -75,5 +74,4 @@ public class Image extends JLabel {
 
         }).start();
     }
-
 }
