@@ -32,11 +32,11 @@ public class Main {
             }
         }
 
+        //Get folders from hash map config.yml
+        UtilsSystem.getConfigFile();
+
         //Get locale file (ru.yml or en.yml)
         UtilsSystem.getLocaleFile();
-
-        //Get folders from hash map config.yml
-        UtilsSystem.getFoldersList();
 
         new Thread(() -> UtilsWeb.getModsList()).start();
 

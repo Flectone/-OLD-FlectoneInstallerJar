@@ -1,6 +1,6 @@
 package ru.flectone.swing.pages;
 
-import ru.flectone.swing.Image;
+import ru.flectone.Image;
 import ru.flectone.utils.UtilsSystem;
 
 import javax.swing.*;

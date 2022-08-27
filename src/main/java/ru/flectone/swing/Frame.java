@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class Frame extends JFrame{
 
-    static JTabbedPane tabbedPane = new TabbedPane();
+    static TabbedPane tabbedPane = new TabbedPane();
     static JFrame frame;
     public Frame(){
         frame = this;
@@ -28,6 +28,7 @@ public class Frame extends JFrame{
     public static JFrame getFrame(){
         return frame;
     }
+
     public static int getSelectedIndex(){
         return tabbedPane.getSelectedIndex();
     }

@@ -1,7 +1,5 @@
 package ru.flectone.utils;
 
-import java.io.File;
-
 public class UtilsOS {
 
     //Get system OC and minecraft folder path
