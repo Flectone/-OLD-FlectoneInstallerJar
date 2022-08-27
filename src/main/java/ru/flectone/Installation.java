@@ -2,17 +2,121 @@ package ru.flectone;
 
 import ru.flectone.utils.UtilsMessage;
 import ru.flectone.utils.UtilsSystem;
-import ru.flectone.utils.UtilsWeb;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.WRITE;
+
 public class Installation {
 
+    //Create profile in minecraft launcher
+    public Installation(String minecraftVersion, String pathToMinecraftFolder){
+        try {
+
+            //Get minecraft launcher_profiles.json
+            File jsonFile = new File(Paths.get(pathToMinecraftFolder, "launcher_profiles.json").toString());
+            //Check default minecraft path
+            if(!jsonFile.exists()){
+                UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.profile"), null);
+                return;
+            }
+            //Get path to fabric jar and download
+            String pathFabricJar = Paths.get(UtilsSystem.getWorkingDirectory(), "fabric.jar").toString();
+            downloadFiles("mods/fabric.jar", pathFabricJar);
+
+            //Get command and run fabric jar
+            String commandRunFabric = "java -jar " + pathFabricJar + " client -dir " + pathToMinecraftFolder + " -noprofile -mcversion " + minecraftVersion;
+            Process process = Runtime.getRuntime().exec(commandRunFabric);
+            //Waiting process
+            process.waitFor();
+
+            //Get fabric name for start minecraft profile, default - user selected version
+            String fabricName = minecraftVersion;
+
+            //Get folder ./minecraft/versions
+            File folderMinecraftVersions = new File(Paths.get(pathToMinecraftFolder, "versions").toString());
+
+            //Get all files from /versions
+            for(File version : folderMinecraftVersions.listFiles()){
+                //Get version folder name
+                String fileName = version.getName();
+
+                //If fabric installed
+                if(fileName.contains("fabric-loader") && fileName.contains(minecraftVersion)){
+                    //Set fabric name
+                    fabricName = fileName;
+                    break;
+                }
+            }
+
+            //Check profile exist
+            boolean profileCreated = false;
+            //Create list for new file
+            ArrayList<String> listForFile = new ArrayList<>();
+            //Read file line by line
+            Scanner scanner = new Scanner(jsonFile, "UTF-8").useDelimiter("\\A");
+
+            while(scanner.hasNext()){
+                //Check next line
+                if(scanner.hasNextLine()){
+                    //Get next line
+                    String line = scanner.nextLine();
+                    //Add line to final file
+                    listForFile.add(line);
+
+                    //Add flectone profile to file
+                    if(line.equals("    },") && !profileCreated){
+                        //Read file from resources line by line
+                        Scanner scannerProfile = new Scanner(Main.class.getResourceAsStream("/profile.yml"), "UTF-8").useDelimiter("\\A");
+
+                        //If profile.yml not empty
+                        while(scannerProfile.hasNext()){
+                            //Check next line
+                            if(scannerProfile.hasNextLine()){
+                                //Get next line
+                                String lineProfile = scannerProfile.nextLine();
+                                //Add line profile to final file
+                                listForFile.add(lineProfile
+                                        .replace("%version%", minecraftVersion)
+                                        .replace("%fabric%", fabricName)
+                                        .replace("%date%", LocalDateTime.now().toString()));
+                            }
+                        }
+                        //Set profileCreated true
+                        profileCreated = true;
+                    }
+                }
+            }
+            //Write ./minecraft/launcher_profiles.json
+            Files.write(Paths.get(jsonFile.getPath()), listForFile);
+        } catch (Exception e){
+            //Show error
+            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.profile") + e.getLocalizedMessage(), null);
+        }
+    }
+
     public Installation(JLabel labelStatus, ArrayList<JCheckBox> arrayList, Path folderPath, String fileExtension, String urlFolder){
+
+        new File(folderPath.toString()).mkdirs();
+
         for(JCheckBox checkBox : arrayList){
             if(!checkBox.isSelected()) continue;
 
@@ -30,7 +134,7 @@ public class Installation {
 
                 System.out.println(path);
 
-                UtilsWeb.unzip(url, Paths.get(path), labelStatus);
+                unZipFile(url, Paths.get(path), labelStatus);
                 continue;
             }
 
@@ -38,9 +142,9 @@ public class Installation {
             String url = urlFolder + "/" + checkBox.getName() + fileExtension;
             String path = Paths.get(folderPath.toString(), checkBox.getName() + fileExtension).toString();
 
-            UtilsWeb.downloadFiles(url, path);
+            downloadFiles(url, path);
         }
-        if(!urlFolder.contains("mods/")){
+        if(!urlFolder.contains("/main")){
             showSuccessInstallMessage(labelStatus);
         }
     }
@@ -62,14 +166,67 @@ public class Installation {
             labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + fileName + "...");
 
             //Download file
-            UtilsWeb.downloadFiles("mods/" + fileName, path.toString());
+            downloadFiles("mods/" + fileName, path.toString());
         }
-        showSuccessInstallMessage(labelStatus);
     }
 
     private void showSuccessInstallMessage(JLabel labelStatus){
         labelStatus.setForeground(null);
         labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready.true"));
         UtilsMessage.showInformation(UtilsSystem.getLocaleString("message.install.success"));
+    }
+
+    private void unZipFile(final String url, final Path decryptTo, JLabel labelStatus) {
+
+        try {
+
+            URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + url).openConnection();
+            //Add property to request than connect was real
+            openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+
+            ZipInputStream zipInputStream = new ZipInputStream(openConnection.getInputStream());
+
+            if(!new File(String.valueOf(decryptTo)).exists()){
+                new File(String.valueOf(decryptTo)).mkdirs();
+            }
+
+            for (ZipEntry entry = zipInputStream.getNextEntry(); entry != null; entry = zipInputStream.getNextEntry()) {
+                labelStatus.setForeground(new Color(79, 240, 114));
+                labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + entry.getName() + "...");
+
+                Path toPath = decryptTo.resolve(entry.getName());
+                if (entry.isDirectory()) {
+                    Files.createDirectory(toPath);
+                } else try (FileChannel fileChannel = FileChannel.open(toPath, WRITE, CREATE)) {
+                    fileChannel.transferFrom(Channels.newChannel(zipInputStream), 0, Long.MAX_VALUE);
+                }
+            }
+
+        } catch (Exception error){
+            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.file.exist") + error.getMessage(), null);
+        }
+    }
+
+    //Download files from www.flectone.ru/mods
+    private void downloadFiles(String urlString, String toFileName){
+        try {
+
+            File file = new File(toFileName);
+            if(!file.exists()) file.mkdirs();
+
+            //Connect to site
+            URLConnection openConnection = new URL(UtilsSystem.getLocaleString("flectone.url") + urlString).openConnection();
+            //Add property to request than connect was real
+            openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+
+            //Trying to download a file
+            InputStream in = openConnection.getInputStream();
+            //Copy file is download to file path
+            Files.copy(in, Paths.get(toFileName), StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException e){
+            //If file unable to download
+            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.download") + e.getMessage(), urlString);
+        }
     }
 }
