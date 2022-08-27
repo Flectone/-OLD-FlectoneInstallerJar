@@ -31,9 +31,9 @@ public class TabbedPane extends JTabbedPane {
 
     private final JComboBox<String> comboBoxVersion = createComboBox("version." + comboBoxType.getSelectedItem());
 
-    private final JComboBox<String> comboBoxLanguage = createComboBox("ru", "en");
+    private final JComboBox<String> comboBoxLanguage = createComboBoxConfig("languages");
 
-    private final JComboBox<String> comboBoxTheme = createComboBox("dark", "light");
+    private final JComboBox<String> comboBoxTheme = createComboBoxConfig("themes");
 
     private final JCheckBox checkBoxFabric = createCheckBox("checkbox.profile");
 
@@ -178,13 +178,13 @@ public class TabbedPane extends JTabbedPane {
 
         addTab(UtilsSystem.getLocaleString("tab.settings"), settingsBuilder.build());
 
-        Runtime.getRuntime().addShutdownHook(saveConfigWhenExit());
+        saveConfigWhenExit();
+
     }
 
     //Save flectonemods.txt
-    public Thread saveConfigWhenExit(){
-
-        return new Thread(() -> {
+    public void saveConfigWhenExit(){
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 ArrayList<String> listForFile = new ArrayList<>();
 
@@ -199,8 +199,11 @@ public class TabbedPane extends JTabbedPane {
                 }
                 listForFile.add(pathMinecraftFolder);
 
-                String chosenLanguage = "chosen.Language: " +  (UtilsSystem.getLocaleString("button.ru").equals(comboBoxLanguage.getSelectedItem()) ? "ru" : "en");
-                listForFile.add(chosenLanguage);
+                for(String string : UtilsSystem.listObjectsFromConfig.get("support.languages")){
+                    if(UtilsSystem.getLocaleString("button." + string).equals(comboBoxLanguage.getSelectedItem())){
+                        listForFile.add("chosen.Language: " + string);
+                    }
+                }
 
                 String chosenTheme = "chosen.Theme: " +  (UtilsSystem.getLocaleString("button.dark").equals(comboBoxTheme.getSelectedItem()) ? "dark" : "light");
                 listForFile.add(chosenTheme);
@@ -210,7 +213,7 @@ public class TabbedPane extends JTabbedPane {
             } catch (IOException ignored) {
 
             }
-        });
+        }));
     }
 
     public Component createOptimizationTab(){
@@ -340,22 +343,16 @@ public class TabbedPane extends JTabbedPane {
         }
     }
 
-    private JComboBox<String> createComboBox(String firstButton, String secondButton){
-        ArrayList<String> listLanguage = new ArrayList<>();
-        listLanguage.add(UtilsSystem.getLocaleString("button." + firstButton));
-        listLanguage.add(UtilsSystem.getLocaleString("button." + secondButton));
-
-        return new JComboBox<>(listLanguage.toArray(new String[0]));
-    }
-
     //Action when user click on button locale (update frame)
     private void actionWhenChangedLocale(JComboBox<String> comboBoxLanguage){
-        //Update system locale
-        if(comboBoxLanguage.getSelectedItem().equals(UtilsSystem.getLocaleString("button.ru"))){
-            UtilsOS.setSystemLocale("ru");
-        } else {
-            UtilsOS.setSystemLocale("en");
+
+        for(String string : UtilsSystem.listObjectsFromConfig.get("support.languages")){
+            if(UtilsSystem.getLocaleString("button." + string).equals(comboBoxLanguage.getSelectedItem())){
+                UtilsOS.setSystemLocale(string);
+                break;
+            }
         }
+
         //Reload "locale" file
         UtilsSystem.getLocaleFile();
         reloadFrame();
@@ -446,34 +443,25 @@ public class TabbedPane extends JTabbedPane {
                         UtilsMessage.showWarnMessage(UtilsSystem.getLocaleString("message.warn.vulkan"));
                     }
 
-                    File folderMods = new File(UtilsSystem.pathToMinecraftFolder + "mods");
-                    if(!folderMods.exists()){
-                        folderMods.mkdirs();
-                    }
 
                     if(checkBoxDelete.isSelected()){
                         UtilsSystem.removeListFiles(UtilsSystem.pathToMinecraftFolder + "mods");
                     }
 
-
-                    String urlFolder = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem();
-                    new Installation(labelStatus, listCheckBox.get("modsmain"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/main");
-                    new Installation(labelStatus, listCheckBox.get("modsextension"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/extension");
-
                     if(checkBoxFabric.isSelected()){
+                        labelStatus.setForeground(new Color(79, 240, 114));
                         labelStatus.setText(UtilsSystem.getLocaleString("label.status.profile"));
-                        UtilsSystem.createCustomProfile(comboBoxVersion.getSelectedItem().toString());
-                    }
-
-                    if(checkBoxFabric.isSelected()){
-                        labelStatus.setText(UtilsSystem.getLocaleString("label.status.profile"));
-                        UtilsSystem.createCustomProfile(comboBoxVersion.getSelectedItem().toString());
+                        new Installation(comboBoxVersion.getSelectedItem().toString(), textComponent.getText());
                     }
 
                     //Download settings for minecraft
                     if(checkBoxSettings.isSelected()){
                         new Installation(labelStatus, UtilsSystem.listObjectsFromConfig.get("settings.minecraft"), Paths.get(textComponent.getText()));
                     }
+
+                    String urlFolder = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem();
+                    new Installation(labelStatus, listCheckBox.get("modsmain"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/main");
+                    new Installation(labelStatus, listCheckBox.get("modsextension"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/extension");
 
                     break;
                 case "resourcepacks":
@@ -514,6 +502,14 @@ public class TabbedPane extends JTabbedPane {
         checkBox.setToolTipText(UtilsSystem.getLocaleString(checkBoxName + ".tooltip"));
 
         return checkBox;
+    }
+
+    private JComboBox createComboBoxConfig(String supportString){
+        ArrayList<String> listLanguage = new ArrayList<>();
+        for(String configString : UtilsSystem.listObjectsFromConfig.get("support." + supportString)){
+            listLanguage.add(UtilsSystem.getLocaleString("button." + configString));
+        }
+        return new JComboBox<>(listLanguage.toArray(new String[0]));
     }
 
 }
