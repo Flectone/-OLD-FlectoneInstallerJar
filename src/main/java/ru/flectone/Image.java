@@ -1,4 +1,4 @@
-package ru.flectone.swing;
+package ru.flectone;
 
 import com.formdev.flatlaf.ui.FlatButtonBorder;
 import ru.flectone.Main;
