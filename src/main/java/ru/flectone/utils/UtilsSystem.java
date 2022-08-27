@@ -162,121 +162,29 @@ public class UtilsSystem {
         }
     }
 
-    //Get system date
-    private static String getSystemDate(){
-        return LocalDateTime.now().toString();
-    }
-
-    //Create profile in minecraft launcher
-    public static void createCustomProfile(String minecraftVersion){
-        try {
-
-            //Get folder ./minecraft
-            String pathMinecraftFolder = pathToMinecraftFolder;
-
-            //Get minecraft launcher_profiles.json
-            File jsonFile = new File(pathMinecraftFolder + File.separator + "launcher_profiles.json");
-            //Check default minecraft path
-            if(!jsonFile.exists()){
-                UtilsMessage.showErrorMessage(getLocaleString("message.error.profile"), null);
-                return;
-            }
-
-            //Get path to fabric jar and download
-            String pathFabricJar = getWorkingDirectory() + File.separator + "fabric.jar";
-            UtilsWeb.downloadFiles("mods/fabric.jar", pathFabricJar);
-
-            //Get command and run fabric jar
-            String commandRunFabric = "java -jar " + pathFabricJar + " client -dir " + pathMinecraftFolder + " -noprofile -mcversion " + minecraftVersion;
-            Process process = Runtime.getRuntime().exec(commandRunFabric);
-            //Waiting process
-            process.waitFor();
-
-            //Get fabric name for start minecraft profile, default - user selected version
-            String fabricName = minecraftVersion;
-
-            //Get folder ./minecraft/versions
-            File folderMinecraftVersions = new File(pathMinecraftFolder + File.separator + "versions");
-
-            //Get all files from /versions
-            for(File version : folderMinecraftVersions.listFiles()){
-                //Get version folder name
-                String fileName = version.getName();
-
-                //If fabric installed
-                if(fileName.contains("fabric-loader") && fileName.contains(minecraftVersion)){
-                    //Set fabric name
-                    fabricName = fileName;
-                    break;
-                }
-            }
-
-            //Check profile exist
-            boolean profileCreated = false;
-            //Create list for new file
-            ArrayList<String> listForFile = new ArrayList<>();
-            //Read file line by line
-            Scanner scanner = new Scanner(jsonFile, "UTF-8").useDelimiter("\\A");
-
-            while(scanner.hasNext()){
-                //Check next line
-                if(scanner.hasNextLine()){
-                    //Get next line
-                    String line = scanner.nextLine();
-                    //Add line to final file
-                    listForFile.add(line);
-
-                    //Add flectone profile to file
-                    if(line.equals("    },") && !profileCreated){
-                        //Read file from resources line by line
-                        Scanner scannerProfile = new Scanner(Main.class.getResourceAsStream("/profile.yml"), "UTF-8").useDelimiter("\\A");
-
-                        //If profile.yml not empty
-                        while(scannerProfile.hasNext()){
-                            //Check next line
-                            if(scannerProfile.hasNextLine()){
-                                //Get next line
-                                String lineProfile = scannerProfile.nextLine();
-                                //Add line profile to final file
-                                listForFile.add(lineProfile
-                                        .replace("%version%", minecraftVersion)
-                                        .replace("%fabric%", fabricName)
-                                        .replace("%date%", getSystemDate()));
-                            }
-                        }
-                        //Set profileCreated true
-                        profileCreated = true;
-                    }
-                }
-            }
-            //Write ./minecraft/launcher_profiles.json
-            Files.write(Paths.get(jsonFile.getPath()), listForFile);
-        } catch (Exception e){
-            //Show error
-            UtilsMessage.showErrorMessage(getLocaleString("message.error.profile") + e.getLocalizedMessage(), null);
-        }
-    }
-
 
     //Remove all jar files from folder
     public static void removeListFiles(String textComponentFolder){
-        //Get folder
-        File file = new File(textComponentFolder);
-        for(File mod : Objects.requireNonNull(file.listFiles())){
-            //Get file name
-            String fileName = mod.toString();
+        try {
+            //Get folder
+            for(File mod : new File(textComponentFolder).listFiles()){
+                //Get file name
+                String fileName = mod.toString();
 
-            //If file have extension
-            int index = fileName.lastIndexOf('.');
-            if(index > 0) {
-                //Get extension file
-                String extension = fileName.substring(index + 1);
-                //If file .jar
-                if(extension.equals("jar")){
-                    //Delete file
-                    removeFile(mod);
+                //If file have extension
+                int index = fileName.lastIndexOf('.');
+                if(index > 0) {
+                    //Get extension file
+                    String extension = fileName.substring(index + 1);
+                    //If file .jar
+                    if(extension.equals("jar")){
+                        //Delete file
+                        removeFile(mod);
+                    }
                 }
             }
+        } catch (Exception ignored){
+
         }
     }
 
