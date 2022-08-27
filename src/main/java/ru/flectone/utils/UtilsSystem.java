@@ -4,15 +4,10 @@ import ru.flectone.Main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class UtilsSystem {
 
@@ -85,19 +80,19 @@ public class UtilsSystem {
     //Ad locale file
     public static HashMap<String, String> localeFile;
 
+
     //Get locale file
     public static void getLocaleFile(){
         //Create new locale file
         localeFile = new HashMap<>();
 
-        //User knows russian language?
-        if(UtilsOS.getSystemLocale().equals("ru") || UtilsOS.getSystemLocale().equals("ua") || UtilsOS.getSystemLocale().equals("be") || UtilsOS.getSystemLocale().equals("kz")){
-            //Get ru locale file
-            getFileUtil(localeFile, Main.class.getResourceAsStream("/language/ru.yml"));
-        } else {
-            //Get en locale file
-            getFileUtil(localeFile, Main.class.getResourceAsStream("/language/en.yml"));
+        for(String string : UtilsSystem.listObjectsFromConfig.get("support.languages")){
+            if(UtilsOS.getSystemLocale().equals(string)){
+                getFileUtil(localeFile, Main.class.getResourceAsStream("/language/" + string + ".yml"));
+                return;
+            }
         }
+        getFileUtil(localeFile, Main.class.getResourceAsStream("/language/ru.yml"));
     }
 
     //All strings from locales ru, en
@@ -154,7 +149,7 @@ public class UtilsSystem {
     public static HashMap<String, String[]> listObjectsFromConfig;
 
     //Get name folders in "Resources"
-    public static void getFoldersList(){
+    public static void getConfigFile(){
         Scanner scanner = new Scanner(Objects.requireNonNull(Main.class.getResourceAsStream("/config.yml")), "UTF-8").useDelimiter("\\A");
         while(scanner.hasNext()){
             String[] nextLine = scanner.nextLine().split(": ");
