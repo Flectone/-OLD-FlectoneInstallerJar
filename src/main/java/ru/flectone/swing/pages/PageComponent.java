@@ -26,7 +26,7 @@ public class PageComponent extends PageDefault {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
 
-        box.setPreferredSize(new Dimension(325, 100));
+        box.setPreferredSize(new Dimension(324, 100));
         add(box);
     }
 
