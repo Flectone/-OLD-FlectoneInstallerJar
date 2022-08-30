@@ -281,6 +281,8 @@ public class TabbedPane extends JTabbedPane {
         comboBoxType.addActionListener(e -> {
             String[] list = UtilsSystem.listObjectsFromConfig.get("version." + comboBoxType.getSelectedItem());
             comboBoxVersionOp.setModel(new DefaultComboBoxModel<>(list));
+            listCheckBox.put("modsmain", new ArrayList<>());
+            listCheckBox.put("modsextension", new ArrayList<>());
             createModsListPanel();
         });
 
@@ -299,7 +301,11 @@ public class TabbedPane extends JTabbedPane {
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         rightPanel.add(comboBoxVersionOp);
 
-        comboBoxVersionOp.addActionListener(e -> createModsListPanel());
+        comboBoxVersionOp.addActionListener(e -> {
+            listCheckBox.put("modsmain", new ArrayList<>());
+            listCheckBox.put("modsextension", new ArrayList<>());
+            createModsListPanel();
+        });
 
         //Add right panel to main panel
         mainPanel.add(rightPanel);
@@ -335,7 +341,6 @@ public class TabbedPane extends JTabbedPane {
     }
 
     private void createModsListPanel(){
-        UtilsSystem.listCheckBox = new HashMap<>();
         modsMain.removeAll();
         createModsUtil(comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem() + "/main","main", modsMain);
 

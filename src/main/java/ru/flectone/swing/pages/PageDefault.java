@@ -65,6 +65,7 @@ public class PageDefault extends JPanel {
 
         checkBox.addActionListener(e -> {
 
+            System.out.println(page);
             int count = UtilsSystem.countCheckBoxHashMap.get(page);
 
             if(checkBox.isSelected()){
