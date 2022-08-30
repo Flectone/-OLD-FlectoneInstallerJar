@@ -5,7 +5,7 @@ version.Optifine: 1.19.1 1.19 1.18.2 1.18.1 1.17.1
 mods.notop.version: 1.19.2 1.19.1 1.19 1.18.2
 settings.minecraft: betterfpsdist.json bobby.conf dynamicfps.toml moreculling.toml smoke_suppression.json sodium-options.json options.txt
 farms.images: afkfish.jpg newporox.jpg obsidian.jpg oldporox.jpg oneblock.jpg raid.jpg slime.jpg witcher.jpg wither.jpg wood.jpg guard.jpg squid.jpg
-rps.images: bossbars.png discs.png doors.jpeg elytra.png icons.png ores.png potion.png tools.png torch.png village.png
+rps.images: bossbars.png discs.png doors.jpeg elytra.png icons.png ores.png potion.png tools.png torch.png village.png bicons.png bigbraingui.png defaultdarkmode.png ingamebrewingguide.png numberedhotbar.png redstonetweaks.png torchesreimagined.png voidomonenchanted.png
 dps.images: villagetrades.jpg cauldron.jpg soulorb.jpg shears.jpg loot.jpg enchant.jpg craft.jpg chainarmor.jpg bettervanilla.jpg alchemy.jpg
 support.languages: ru en ua
 support.themes: dark light
