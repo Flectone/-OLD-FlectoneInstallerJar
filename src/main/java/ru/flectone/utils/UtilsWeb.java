@@ -12,6 +12,14 @@ public class UtilsWeb {
     //Get name mods from list.txt from www.flectone.ru/mods.../list
     public static void getModsList() {
 
+        new Thread(() -> {
+            String[] versionsNotOpMods = UtilsSystem.listObjectsFromConfig.get("mods.notop.version");
+            for(String version : versionsNotOpMods){
+                if(UtilsSystem.listObjectsFromConfig.get("/notop/" + version) != null) continue;
+                UtilsSystem.listObjectsFromConfig.put("/notop/" + version, getModsFromWebSite("/notop/" + version));
+            }
+        }).start();
+
         String[] modsType = UtilsSystem.listObjectsFromConfig.get("type");
 
         ArrayList<String> arrayList = new ArrayList<>();

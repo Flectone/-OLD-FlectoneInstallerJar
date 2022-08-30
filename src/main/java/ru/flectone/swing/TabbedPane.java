@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -29,11 +28,13 @@ public class TabbedPane extends JTabbedPane {
 
     private final JComboBox<String> comboBoxType = createComboBox("type");
 
-    private final JComboBox<String> comboBoxVersion = createComboBox("version." + comboBoxType.getSelectedItem());
+    private final JComboBox<String> comboBoxVersionOp = createComboBox("version." + comboBoxType.getSelectedItem());
 
     private final JComboBox<String> comboBoxLanguage = createComboBoxConfig("languages");
 
     private final JComboBox<String> comboBoxTheme = createComboBoxConfig("themes");
+
+    private final JComboBox<String> comboBoxVersionNotOp = createComboBox("mods.notop.version");
 
     private final JCheckBox checkBoxFabric = createCheckBox("checkbox.profile");
 
@@ -51,21 +52,49 @@ public class TabbedPane extends JTabbedPane {
 
     private final Box modsExtension = Box.createVerticalBox();
 
+    private final Box modsNotOp = Box.createVerticalBox();
+
 
     public TabbedPane(){
         setTabPlacement(JTabbedPane.LEFT);
         setBorder(null);
 
-        PageBuilder modsBuilder = new PageBuilder();
-        modsBuilder.add(createOptimizationTab());
-        addInstallPanel("modsmain", modsBuilder, true);
+        PageBuilder optimizationBulider = new PageBuilder();
+        optimizationBulider.add(createOptimizationTab());
+        addInstallPanel("modsmain", optimizationBulider, true);
 
-        modsBuilder.add(modsMain);
-        modsBuilder.add(modsExtension);
+        optimizationBulider.add(modsMain);
+        optimizationBulider.add(modsExtension);
 
         createModsListPanel();
 
-        addTab(UtilsSystem.getLocaleString("tab.optimization"), modsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.optimization"), optimizationBulider.build());
+
+        
+        PageBuilder modsBuilder = new PageBuilder();
+
+        comboBoxVersionNotOp.setPreferredSize(new Dimension(300, 20));
+        comboBoxVersionNotOp.addActionListener(e -> {
+            modsNotOp.removeAll();
+            UtilsSystem.listCheckBox.put("modsnotop", new ArrayList<>());
+            createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
+            UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
+        });
+        JLabel label = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
+        JPanel panelMods = new JPanel();
+        panelMods.add(label);
+        panelMods.add(comboBoxVersionNotOp);
+
+        modsBuilder.add(panelMods);
+        modsBuilder.add(modsNotOp);
+
+        addInstallPanel("modsnotop", modsBuilder, false);
+        createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
+        UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
+
+        modsBuilder.add(modsNotOp);
+
+        addTab(UtilsSystem.getLocaleString("tab.mods"), modsBuilder.build());
 
         PageBuilder farmsBuilder = new PageBuilder();
         addInstallPanel("farms", farmsBuilder, false);
@@ -251,7 +280,7 @@ public class TabbedPane extends JTabbedPane {
         comboBoxType.setPreferredSize(new Dimension(200, 20));
         comboBoxType.addActionListener(e -> {
             String[] list = UtilsSystem.listObjectsFromConfig.get("version." + comboBoxType.getSelectedItem());
-            comboBoxVersion.setModel(new DefaultComboBoxModel<>(list));
+            comboBoxVersionOp.setModel(new DefaultComboBoxModel<>(list));
             createModsListPanel();
         });
 
@@ -268,9 +297,9 @@ public class TabbedPane extends JTabbedPane {
         //Add type version to right panel
         rightPanel.add(typeVersionLine);
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        rightPanel.add(comboBoxVersion);
+        rightPanel.add(comboBoxVersionOp);
 
-        comboBoxVersion.addActionListener(e -> createModsListPanel());
+        comboBoxVersionOp.addActionListener(e -> createModsListPanel());
 
         //Add right panel to main panel
         mainPanel.add(rightPanel);
@@ -308,22 +337,22 @@ public class TabbedPane extends JTabbedPane {
     private void createModsListPanel(){
         UtilsSystem.listCheckBox = new HashMap<>();
         modsMain.removeAll();
-        createModsUtil("main", modsMain);
+        createModsUtil(comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem() + "/main","main", modsMain);
 
         modsExtension.removeAll();
-        createModsUtil("extension", modsExtension);
+        createModsUtil(comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem() + "/extension", "extension", modsExtension);
 
         for(JCheckBox checkBox : listCheckBox.get("modsextension")){
             checkBox.setSelected(checkBoxFPS.isSelected());
         }
     }
 
-    private void createModsUtil(String folder, Box panel){
-        String pathToMods = comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem() + "/" + folder;
+    private void createModsUtil(String pathToMods, String folder, Box panel){
 
         String[] modsList = UtilsSystem.listObjectsFromConfig.get(pathToMods);
         if(modsList == null){
             modsList = UtilsWeb.getModsFromWebSite(pathToMods);
+
             UtilsSystem.listObjectsFromConfig.put(pathToMods, modsList);
         }
 
@@ -452,7 +481,7 @@ public class TabbedPane extends JTabbedPane {
                     if(checkBoxFabric.isSelected()){
                         labelStatus.setForeground(new Color(79, 240, 114));
                         labelStatus.setText(UtilsSystem.getLocaleString("label.status.profile"));
-                        new Installation(comboBoxVersion.getSelectedItem().toString(), textComponent.getText());
+                        new Installation(comboBoxVersionOp.getSelectedItem().toString(), textComponent.getText());
                     }
 
                     //Download settings for minecraft
@@ -460,7 +489,7 @@ public class TabbedPane extends JTabbedPane {
                         new Installation(labelStatus, UtilsSystem.listObjectsFromConfig.get("settings.minecraft"), Paths.get(textComponent.getText()));
                     }
 
-                    String urlFolder = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersion.getSelectedItem();
+                    String urlFolder = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem();
                     new Installation(labelStatus, listCheckBox.get("modsmain"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/main");
                     new Installation(labelStatus, listCheckBox.get("modsextension"), Paths.get(textComponent.getText(), "mods"),  ".jar", urlFolder + "/extension");
 
@@ -474,6 +503,10 @@ public class TabbedPane extends JTabbedPane {
                 case "datapacks":
                     new Installation(labelStatus, listCheckBox.get(page), Paths.get(datapackTextComponent.getText(), page),  ".zip", page);
                     break;
+                case "modsnotop":
+                    new Installation(labelStatus, listCheckBox.get(page), Paths.get(textComponent.getText(), "mods"),  ".jar", "mods/notop/" + comboBoxVersionNotOp.getSelectedItem());
+                    break;
+
             }
         }).start());
 
@@ -532,7 +565,7 @@ public class TabbedPane extends JTabbedPane {
         return checkBox;
     }
 
-    private JComboBox createComboBoxConfig(String supportString){
+    private JComboBox<String> createComboBoxConfig(String supportString){
         ArrayList<String> listLanguage = new ArrayList<>();
         for(String configString : UtilsSystem.listObjectsFromConfig.get("support." + supportString)){
             listLanguage.add(UtilsSystem.getLocaleString("button." + configString));
