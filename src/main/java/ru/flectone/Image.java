@@ -1,7 +1,7 @@
 package ru.flectone;
 
 import com.formdev.flatlaf.ui.FlatButtonBorder;
-import ru.flectone.utils.UtilsMessage;
+import ru.flectone.swing.MessageDialog;
 import ru.flectone.utils.UtilsSystem;
 
 import javax.imageio.ImageIO;
@@ -45,7 +45,7 @@ public class Image extends JLabel {
                 try {
                     Desktop.getDesktop().browse(new URL(UtilsSystem.getLocaleString("url." + urlString)).toURI());
                 } catch (Exception error) {
-                    UtilsMessage.showErrorMessage(error.getMessage(), null);
+                    new MessageDialog(error.getMessage(), "error", 0);
                 }
 
             }

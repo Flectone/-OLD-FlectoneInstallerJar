@@ -1,6 +1,6 @@
 package ru.flectone;
 
-import ru.flectone.utils.UtilsMessage;
+import ru.flectone.swing.MessageDialog;
 import ru.flectone.utils.UtilsSystem;
 
 import javax.swing.*;
@@ -35,7 +35,7 @@ public class Installation {
             File jsonFile = new File(Paths.get(pathToMinecraftFolder, "launcher_profiles.json").toString());
             //Check default minecraft path
             if(!jsonFile.exists()){
-                UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.profile"), null);
+                new MessageDialog(UtilsSystem.getLocaleString("message.error.profile"), "error", 0);
                 return;
             }
             //Get path to fabric jar and download
@@ -109,7 +109,7 @@ public class Installation {
             Files.write(Paths.get(jsonFile.getPath()), listForFile);
         } catch (Exception e){
             //Show error
-            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.profile") + e.getLocalizedMessage(), null);
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.profile") + e.getLocalizedMessage(), "error", 0);
         }
     }
 
@@ -173,7 +173,7 @@ public class Installation {
     private void showSuccessInstallMessage(JLabel labelStatus){
         labelStatus.setForeground(null);
         labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready.true"));
-        UtilsMessage.showInformation(UtilsSystem.getLocaleString("message.install.success"));
+        new MessageDialog(UtilsSystem.getLocaleString("message.install.success"), "install", 1);
     }
 
     private void unZipFile(final String url, final Path decryptTo, JLabel labelStatus) {
@@ -203,7 +203,7 @@ public class Installation {
             }
 
         } catch (Exception error){
-            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.file.exist") + error.getMessage(), null);
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.file.exist") + error.getMessage(), "error", 0);
         }
     }
 
@@ -226,7 +226,7 @@ public class Installation {
 
         } catch (IOException e){
             //If file unable to download
-            UtilsMessage.showErrorMessage(UtilsSystem.getLocaleString("message.error.download") + e.getMessage(), urlString);
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.download") + e.getMessage(), urlString, "error", 0);
         }
     }
 }

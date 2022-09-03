@@ -6,7 +6,6 @@ import com.formdev.flatlaf.ui.FlatButtonBorder;
 import ru.flectone.Installation;
 import ru.flectone.swing.pages.PageBuilder;
 import ru.flectone.swing.pages.PageComponent;
-import ru.flectone.utils.UtilsMessage;
 import ru.flectone.utils.UtilsOS;
 import ru.flectone.utils.UtilsSystem;
 import ru.flectone.utils.UtilsWeb;
@@ -19,7 +18,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 import static ru.flectone.utils.UtilsSystem.listCheckBox;
@@ -475,7 +473,7 @@ public class TabbedPane extends JTabbedPane {
             switch(page){
                 case "modsmain":
                     if(comboBoxType.getSelectedItem().equals("Vulkan")){
-                        UtilsMessage.showWarnMessage(UtilsSystem.getLocaleString("message.warn.vulkan"));
+                        new MessageDialog(UtilsSystem.getLocaleString("message.warn.vulkan"), "warn", 2);
                     }
 
 

@@ -1,6 +1,7 @@
 package ru.flectone.utils;
 
 import ru.flectone.Main;
+import ru.flectone.swing.MessageDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -190,7 +191,7 @@ public class UtilsSystem {
             Files.delete(file.toPath());
         } catch (Exception error) {
             //If file doesn't exist
-            UtilsMessage.showErrorMessage(getLocaleString("message.error.remove"), file.getPath());
+            new MessageDialog(getLocaleString("message.error.remove"), file.getPath(), "error", 0);
         }
     }
 
