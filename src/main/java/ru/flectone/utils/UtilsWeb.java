@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.flectone.swing.MessageDialog;
 
 import java.util.ArrayList;
 
@@ -43,8 +44,8 @@ public class UtilsWeb {
         try {
             //Get document html
             html = Jsoup.connect(UtilsSystem.getWebSiteIp() + "mods/" + folderPath).userAgent("Mozilla/5.0").get();
-        } catch (Exception e){
-
+        } catch (Exception error){
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + "\n" + error.getMessage(), "error", 0);
         }
         //Get files from html document
         Elements links = html.select("a[href]");

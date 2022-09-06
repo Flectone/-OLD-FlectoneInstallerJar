@@ -65,7 +65,6 @@ public class PageDefault extends JPanel {
 
         checkBox.addActionListener(e -> {
 
-            System.out.println(page);
             int count = UtilsSystem.countCheckBoxHashMap.get(page);
 
             if(checkBox.isSelected()){
@@ -73,7 +72,6 @@ public class PageDefault extends JPanel {
             } else {
                 count = count - 1;
             }
-            System.out.println(UtilsSystem.countCheckBoxHashMap.get(page));
             ArrayList<Component> arrayList = UtilsSystem.enabledComponentsHashMap.get(page);
             for(Component component : arrayList){
                 boolean bol = count > 0;

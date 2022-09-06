@@ -107,9 +107,9 @@ public class Installation {
             }
             //Write ./minecraft/launcher_profiles.json
             Files.write(Paths.get(jsonFile.getPath()), listForFile);
-        } catch (Exception e){
+        } catch (Exception error){
             //Show error
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.profile") + e.getLocalizedMessage(), "error", 0);
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.profile") + "\n" + error.getMessage(), "error", 0);
         }
     }
 
@@ -131,8 +131,6 @@ public class Installation {
 
                 String url = urlFolder + "/" + checkBox.getName() + ".zip";
                 String path = Paths.get(folderPath.toString(), toFile).toString();
-
-                System.out.println(path);
 
                 unZipFile(url, Paths.get(path), labelStatus);
                 continue;
@@ -176,15 +174,11 @@ public class Installation {
         new MessageDialog(UtilsSystem.getLocaleString("message.install.success"), "install", 1);
     }
 
-    private void unZipFile(final String url, final Path decryptTo, JLabel labelStatus) {
+    private void unZipFile(String url, Path decryptTo, JLabel labelStatus) {
 
         try {
 
-            URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + url).openConnection();
-            //Add property to request than connect was real
-            openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-
-            ZipInputStream zipInputStream = new ZipInputStream(openConnection.getInputStream());
+            ZipInputStream zipInputStream = new ZipInputStream(openConnection(url).getInputStream());
 
             if(!new File(String.valueOf(decryptTo)).exists()){
                 new File(String.valueOf(decryptTo)).mkdirs();
@@ -203,7 +197,7 @@ public class Installation {
             }
 
         } catch (Exception error){
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.file.exist") + error.getMessage(), "error", 0);
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.file.exist") + "\n" + error.getMessage(), "error", 0);
         }
     }
 
@@ -214,19 +208,25 @@ public class Installation {
             File file = new File(toFileName);
             if(!file.exists()) file.mkdirs();
 
+            //Copy file is download to file path
+            Files.copy(openConnection(urlString).getInputStream(), Paths.get(toFileName), StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException error){
+            //If file unable to download
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.download") + "\n" + error.getMessage(), urlString, "error", 0);
+        }
+    }
+
+    private URLConnection openConnection(String urlString){
+        try {
             //Connect to site
-            URLConnection openConnection = new URL(UtilsSystem.getLocaleString("flectone.url") + urlString).openConnection();
+            URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + urlString).openConnection();
             //Add property to request than connect was real
             openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-
-            //Trying to download a file
-            InputStream in = openConnection.getInputStream();
-            //Copy file is download to file path
-            Files.copy(in, Paths.get(toFileName), StandardCopyOption.REPLACE_EXISTING);
-
-        } catch (IOException e){
-            //If file unable to download
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.download") + e.getMessage(), urlString, "error", 0);
+            return openConnection;
+        } catch (IOException error) {
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + "\n" + error.getMessage(), "error", 0);
+            return null;
         }
     }
 }
