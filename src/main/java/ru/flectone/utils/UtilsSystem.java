@@ -18,6 +18,8 @@ public class UtilsSystem {
 
     public static String pathToMinecraftFolder;
 
+    public static int test1 = 0;
+
     public static int getCountCheckBox(String page){
         int count;
         if(countCheckBoxHashMap.get(page) == null){

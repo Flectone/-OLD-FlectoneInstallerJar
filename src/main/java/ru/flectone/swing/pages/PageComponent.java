@@ -71,7 +71,7 @@ public class PageComponent extends PageDefault {
         box.add(createCheckBox(checkBox, page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
-        box.setPreferredSize(new Dimension(440, 60));
+        box.setPreferredSize(new Dimension(440, 70));
         add(box);
     }
 

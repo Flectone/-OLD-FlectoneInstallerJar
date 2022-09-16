@@ -12,7 +12,6 @@ public class UtilsWeb {
 
     //Get name mods from list.txt from www.flectone.ru/mods.../list
     public static void getModsList() {
-
         new Thread(() -> {
             String[] versionsNotOpMods = UtilsSystem.listObjectsFromConfig.get("mods.notop.version");
             for(String version : versionsNotOpMods){
@@ -47,6 +46,7 @@ public class UtilsWeb {
         } catch (Exception error){
             new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + "\n" + error.getMessage(), "error", 0);
         }
+
         //Get files from html document
         Elements links = html.select("a[href]");
         //Create new list for massive

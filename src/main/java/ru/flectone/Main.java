@@ -38,7 +38,11 @@ public class Main {
         //Get locale file (ru.yml or en.yml)
         UtilsSystem.getLocaleFile();
 
-        new Thread(() -> UtilsWeb.getModsList()).start();
+        try {
+            new Thread(() -> UtilsWeb.getModsList()).start();
+        } catch (Exception ignored){
+
+        }
 
         //Get default minecraft path
         UtilsSystem.getMinecraftFolder();
