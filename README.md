@@ -1,8 +1,11 @@
-# FlectoneInstallerJar
+# FlectoneInstaller
 Java version installer mods
 
-Best optimization minecraft
-Install Sodium modpack or Optifine modpack or Vulcan modpack
+All minecraft optimization in one installation program
+
+Choose those mods, farms, resource packs, data packs that you definitely need!
+
+Support English, Russian, Ukrainian languages
 
 Support versions:
 - 1.19.2
