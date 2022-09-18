@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
@@ -35,7 +34,6 @@ public class Installation {
             File jsonFile = new File(Paths.get(pathToMinecraftFolder, "launcher_profiles.json").toString());
             //Check default minecraft path
             if(!jsonFile.exists()){
-                System.out.println(1);
                 new MessageDialog(UtilsSystem.getLocaleString("message.error.profile"), "error", 0);
                 return;
             }
@@ -48,6 +46,7 @@ public class Installation {
             Process process = Runtime.getRuntime().exec(commandRunFabric);
             //Waiting process
             process.waitFor();
+            Files.delete(Paths.get(pathFabricJar));
 
             //Get fabric name for start minecraft profile, default - user selected version
             String fabricName = minecraftVersion;
