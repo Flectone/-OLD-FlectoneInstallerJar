@@ -33,7 +33,7 @@ label.type.mods: "Type mods:"
 label.version.mods: "Version Minecraft:"
 
 checkbox.FPS: "Maximum FPS"
-checkbox.FPS.tooltip: "Additional mods for better fps but with reduced graphics"
+checkbox.FPS.tooltip: "Unstable mods for maximum FPS (may cause FPS drops)"
 checkbox.settings: "Configure Minecraft"
 checkbox.settings.tooltip: "Optimal config of graphics and mods"
 checkbox.profile: "Create a profile"

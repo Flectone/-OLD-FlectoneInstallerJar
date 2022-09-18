@@ -33,7 +33,7 @@ label.type.mods: "Тип збiрки:"
 label.version.mods: "Версiя Майнкрафту:"
 
 checkbox.FPS: "Максимальный фпс"
-checkbox.FPS.tooltip: "Додатковi моди для лiпшого фпс, але з погiршенням графiки"
+checkbox.FPS.tooltip: "Нестабільні моди для максимального ФПС (можуть спричинити падіння ФПС)"
 checkbox.settings: "Налаштувати майнкрафт"
 checkbox.settings.tooltip: "Оптимальне налаштування графiки та модiв"
 checkbox.profile: "Створити профiль"
