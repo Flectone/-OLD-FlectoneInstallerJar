@@ -235,7 +235,7 @@ public class TabbedPane extends JTabbedPane {
                 String chosenTheme = "chosen.Theme: " +  (UtilsSystem.getLocaleString("button.dark").equals(comboBoxTheme.getSelectedItem()) ? "dark" : "light");
                 listForFile.add(chosenTheme);
 
-                Files.write(Paths.get(UtilsSystem.getWorkingDirectory(), File.separator + "flectonemods.txt"), listForFile);
+                Files.write(Paths.get(UtilsSystem.getWorkingDirectory(), File.separator + "flectone.installer"), listForFile);
 
             } catch (IOException ignored) {
 

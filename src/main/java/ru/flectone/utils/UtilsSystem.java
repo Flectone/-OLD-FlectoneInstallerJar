@@ -113,7 +113,7 @@ public class UtilsSystem {
         settingsFile = new HashMap<>();
         try {
             //Get flectonemods.txt from path minecraft
-            File file = new File(getWorkingDirectory() + File.separator + "flectonemods.txt");
+            File file = new File(getWorkingDirectory() + File.separator + "flectone.installer");
             //Get settings file
 
             getFileUtil(settingsFile, Files.newInputStream(file.toPath()));
