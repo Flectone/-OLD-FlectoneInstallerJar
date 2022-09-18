@@ -46,6 +46,8 @@ public class Installation {
             Process process = Runtime.getRuntime().exec(commandRunFabric);
             //Waiting process
             process.waitFor();
+
+            //Delete temp fabric.jar
             Files.delete(Paths.get(pathFabricJar));
 
             //Get fabric name for start minecraft profile, default - user selected version

@@ -54,21 +54,36 @@ public class Image extends JLabel {
 
     private void getImageForLabel(String url){
         new Thread(() -> {
-            try {
 
-                //Connect to site
-                URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + url).openConnection();
-                //Add property to request than connect was real
-                openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+            int k = 10;
 
-                //Trying to download a file
-                InputStream in = openConnection.getInputStream();
-                BufferedImage myPicture = ImageIO.read(in);
+            //Default flectone.gif width
+            while(getIcon().getIconWidth() == 50){
+                try {
 
-                this.setIcon(new ImageIcon(myPicture));
+                    //Connect to site
+                    URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + url).openConnection();
 
+                    //Add property to request than connect was real
+                    openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 
-            } catch (Exception ignored){
+                    //Trying to download a file
+                    InputStream in = openConnection.getInputStream();
+                    BufferedImage myPicture = ImageIO.read(in);
+                    setIcon(new ImageIcon(myPicture));
+
+                } catch (Exception ignored){
+                    try {
+                        k -= 1;
+                        if(k == 0) {
+                            setIcon(new ImageIcon(Main.class.getResource("/timed-out.png")));
+                            break;
+                        }
+                        Thread.sleep(5000);
+                    } catch (Exception error){
+
+                    }
+                }
 
             }
 
