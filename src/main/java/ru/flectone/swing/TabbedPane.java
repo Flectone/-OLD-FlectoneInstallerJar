@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.ui.FlatButtonBorder;
 import ru.flectone.Installation;
+import ru.flectone.Main;
 import ru.flectone.swing.pages.PageBuilder;
 import ru.flectone.swing.pages.PageComponent;
 import ru.flectone.utils.UtilsOS;
@@ -210,10 +211,17 @@ public class TabbedPane extends JTabbedPane {
         comboBoxLanguage.addActionListener(e -> actionWhenChangedLocale(comboBoxLanguage));
         comboBoxTheme.addActionListener(e -> actionWhenChangedTheme(comboBoxTheme));
 
+
         addTab(UtilsSystem.getLocaleString("tab.settings"), settingsBuilder.build());
+//        addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/logo.png")), settingsBuilder.build());
+
+
+
+
+        addTab("by TheFaser", null, new JPanel(), UtilsSystem.getLocaleString("tab.author.tooltip"));
+        setEnabledAt(getTabCount() - 1, false);
 
         saveConfigWhenExit();
-
     }
 
     //Save flectonemods.txt

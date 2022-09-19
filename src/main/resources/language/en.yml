@@ -7,6 +7,7 @@ tab.farms: "Farms"
 tab.rps: "Resourcepacks"
 tab.dps: "Datapacks"
 tab.settings: "Settings"
+tab.author.tooltip: "Creator of this installer (Faser)"
 
 button.install: "Install"
 button.dialog: "..."

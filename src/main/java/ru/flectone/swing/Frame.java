@@ -23,6 +23,7 @@ public class Frame extends JFrame{
         setResizable(true);
         setLocationRelativeTo(null);
         setIconImage(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/logo.png"))).getImage());
+
     }
 
     public static JFrame getFrame(){

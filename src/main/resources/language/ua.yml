@@ -7,6 +7,7 @@ tab.farms: "Ферми"
 tab.rps: "Ресурспаки"
 tab.dps: "Датапаки"
 tab.settings: "Налаштування"
+tab.author.tooltip: "Автор цього установника (Фасер)"
 
 button.install: "Встановити"
 button.dialog: "..."
