@@ -20,6 +20,12 @@ public class UtilsSystem {
     public static String pathToMinecraftFolder;
     public static Color secondColor;
 
+    public static boolean changeBackgroundColor = false;
+
+    public static void setChangeBackgroundColor(boolean changeBackgroundColor) {
+        UtilsSystem.changeBackgroundColor = changeBackgroundColor;
+    }
+
     public static Color getSecondColor() {
         if(secondColor == null){
             if(FlatDarkLaf.isLafDark()) return new Color(54, 57, 59);

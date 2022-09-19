@@ -8,6 +8,8 @@ import java.awt.*;
 
 public class PageComponent extends PageDefault {
 
+    private boolean changeBackgroundColor = UtilsSystem.changeBackgroundColor;
+
     public PageComponent(String imageName){
         add(new Image(imageName));
     }
@@ -27,6 +29,8 @@ public class PageComponent extends PageDefault {
         box.add(createLabel(description));
 
         box.setPreferredSize(new Dimension(324, 100));
+        setSecondBackgroundColor();
+
         add(box);
     }
 
@@ -41,6 +45,8 @@ public class PageComponent extends PageDefault {
         box.add(createLabel(description));
 
         box.setPreferredSize(new Dimension(500, 50));
+        setSecondBackgroundColor();
+
         add(box);
         setName(page);
     }
@@ -56,8 +62,17 @@ public class PageComponent extends PageDefault {
         box.add(createLabel(description));
 
         box.setPreferredSize(new Dimension(500, 45));
+        setSecondBackgroundColor();
         add(box);
 
+    }
+
+    private void setSecondBackgroundColor(){
+        if(changeBackgroundColor) {
+            setBackground(UtilsSystem.getSecondColor());
+            UtilsSystem.setChangeBackgroundColor(false);
+
+        } else UtilsSystem.setChangeBackgroundColor(true);
     }
 
     public PageComponent(String imageName, String version, String checkBox, String description, String page){
@@ -72,6 +87,7 @@ public class PageComponent extends PageDefault {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
         box.setPreferredSize(new Dimension(384, 70));
+        setSecondBackgroundColor();
         add(box);
     }
 
