@@ -52,6 +52,10 @@ public class TabbedPane extends JTabbedPane {
 
     private final Box modsNotOp = Box.createVerticalBox();
 
+    private boolean changeBackgroundColor = false;
+
+    private Color backgroundColor = UtilsSystem.getSecondColor();
+
 
     public TabbedPane(){
         setTabPlacement(JTabbedPane.LEFT);
@@ -96,6 +100,8 @@ public class TabbedPane extends JTabbedPane {
 
         PageBuilder farmsBuilder = new PageBuilder();
         addInstallPanel("farms", farmsBuilder, false);
+        farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+
         for(String image : UtilsSystem.listObjectsFromConfig.get("farms.images")){
 
             String fileName = "farms." + image.replace(".jpg", "");
@@ -104,13 +110,24 @@ public class TabbedPane extends JTabbedPane {
             String secondCheckBox = fileName + ".litematic";
             String description = fileName + ".description";
 
-            farmsBuilder.add(new PageComponent(image, version, firstCheckBox, secondCheckBox, description, "farms"));
+
+            PageComponent pageComponent = new PageComponent(image, version, firstCheckBox, secondCheckBox, description, "farms");
+
+            if(changeBackgroundColor) {
+                pageComponent.setBackground(backgroundColor);
+                changeBackgroundColor = false;
+            } else changeBackgroundColor = true;
+
+            farmsBuilder.add(pageComponent);
             farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+
         }
         addTab(UtilsSystem.getLocaleString("tab.farms"), farmsBuilder.build());
 
         PageBuilder rpsBuilder = new PageBuilder();
         addInstallPanel("resourcepacks", rpsBuilder, false);
+        rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+
         for(String image : UtilsSystem.listObjectsFromConfig.get("rps.images")){
             String fileName = "rps." + image
                     .replace(".jpg", "")
@@ -119,7 +136,14 @@ public class TabbedPane extends JTabbedPane {
             String firstCheckBox = fileName + ".install";
             String description = fileName + ".description";
 
-            rpsBuilder.add(new PageComponent(image, firstCheckBox, description, "resourcepacks"));
+            PageComponent pageComponent = new PageComponent(image, firstCheckBox, description, "resourcepacks");
+
+            if(changeBackgroundColor) {
+                pageComponent.setBackground(backgroundColor);
+                changeBackgroundColor = false;
+            } else changeBackgroundColor = true;
+
+            rpsBuilder.add(pageComponent);
             rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
         addTab(UtilsSystem.getLocaleString("tab.rps"), rpsBuilder.build());
@@ -127,6 +151,8 @@ public class TabbedPane extends JTabbedPane {
         PageBuilder dpsBuilder = new PageBuilder();
         addTextComponentFieldPanel(dpsBuilder);
         addInstallPanel("datapacks", dpsBuilder, false);
+        dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+
         for(String image : UtilsSystem.listObjectsFromConfig.get("dps.images")){
             String fileName = "dps." + image
                     .replace(".jpg", "")
@@ -135,7 +161,14 @@ public class TabbedPane extends JTabbedPane {
             String version = fileName + ".version";
             String firstCheckBox = fileName + ".install";
             String description = fileName + ".description";
-            dpsBuilder.add(new PageComponent(image, version, firstCheckBox, description, "datapacks"));
+
+            PageComponent pageComponent = new PageComponent(image, version, firstCheckBox, description, "datapacks");
+            if(changeBackgroundColor) {
+                pageComponent.setBackground(backgroundColor);
+                changeBackgroundColor = false;
+            } else changeBackgroundColor = true;
+
+            dpsBuilder.add(pageComponent);
             dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
         addTab(UtilsSystem.getLocaleString("tab.dps"), dpsBuilder.build());
@@ -370,8 +403,14 @@ public class TabbedPane extends JTabbedPane {
             String firstCheckBox = fileName + ".install";
             String description = fileName + ".description";
 
-            panel.add(new PageComponent(string.replace(".jar", ".png"), firstCheckBox, modsList.length, description, "mods" + folder));
-            panel.add(new JSeparator(SwingUtilities.HORIZONTAL));
+            PageComponent pageComponent = new PageComponent(string.replace(".jar", ".png"), firstCheckBox, modsList.length, description, "mods" + folder);
+            if(changeBackgroundColor) {
+                pageComponent.setBackground(backgroundColor);
+                changeBackgroundColor = false;
+            } else changeBackgroundColor = true;
+
+            panel.add(pageComponent);
+            panel.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
     }
 
@@ -394,9 +433,11 @@ public class TabbedPane extends JTabbedPane {
         if(comboBoxTheme.getSelectedItem().equals(UtilsSystem.getLocaleString("button.light"))){
             //Set light theme
             FlatLightLaf.setup();
+            UtilsSystem.setSecondColor(new Color(218, 218, 218));
         } else {
             //Set dark theme
             FlatDarkLaf.setup();
+            UtilsSystem.setSecondColor(new Color(54, 57, 59));
         }
         FlatLightLaf.updateUI();
         reloadFrame();

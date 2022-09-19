@@ -1,5 +1,6 @@
 package ru.flectone.utils;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import ru.flectone.Main;
 import ru.flectone.swing.MessageDialog;
 
@@ -17,8 +18,20 @@ public class UtilsSystem {
     public static HashMap<String, ArrayList<Component>> enabledComponentsHashMap;
 
     public static String pathToMinecraftFolder;
+    public static Color secondColor;
 
-    public static int test1 = 0;
+    public static Color getSecondColor() {
+        if(secondColor == null){
+            if(FlatDarkLaf.isLafDark()) return new Color(54, 57, 59);
+            else return new Color(218, 218, 218);
+        }
+
+        return secondColor;
+    }
+
+    public static void setSecondColor(Color secondColor) {
+        UtilsSystem.secondColor = secondColor;
+    }
 
     public static int getCountCheckBox(String page){
         int count;
