@@ -54,7 +54,7 @@ public class TabbedPane extends JTabbedPane {
     private final Box modsNotOp = Box.createVerticalBox();
 
     public TabbedPane(){
-        setTabPlacement(JTabbedPane.LEFT);
+        setTabPlacement(JTabbedPane.TOP);
         setBorder(null);
 
         PageBuilder optimizationBulider = new PageBuilder();
@@ -78,6 +78,7 @@ public class TabbedPane extends JTabbedPane {
             createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
             UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
         });
+
         JLabel label = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
         JPanel panelMods = new JPanel();
         panelMods.add(label);
@@ -213,12 +214,10 @@ public class TabbedPane extends JTabbedPane {
 
 
         addTab(UtilsSystem.getLocaleString("tab.settings"), settingsBuilder.build());
-//        addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/logo.png")), settingsBuilder.build());
-
-
 
 
         addTab("by TheFaser", null, new JPanel(), UtilsSystem.getLocaleString("tab.author.tooltip"));
+
         setEnabledAt(getTabCount() - 1, false);
 
         saveConfigWhenExit();

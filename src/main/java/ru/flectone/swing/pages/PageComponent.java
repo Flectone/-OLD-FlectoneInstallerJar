@@ -11,6 +11,7 @@ public class PageComponent extends PageDefault {
     private boolean changeBackgroundColor = UtilsSystem.changeBackgroundColor;
 
     public PageComponent(String imageName){
+        setLayout(new FlowLayout(FlowLayout.LEFT));
         add(new Image(imageName));
     }
 
@@ -28,10 +29,9 @@ public class PageComponent extends PageDefault {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
 
-        box.setPreferredSize(new Dimension(324, 100));
         setSecondBackgroundColor();
-
         add(box);
+
     }
 
     public PageComponent(String imageName, String checkBox, String description, String page){
@@ -44,11 +44,10 @@ public class PageComponent extends PageDefault {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
 
-        box.setPreferredSize(new Dimension(500, 50));
         setSecondBackgroundColor();
-
         add(box);
         setName(page);
+
     }
 
     public PageComponent(String imageName, String checkBox, int countEnable, String description, String page){
@@ -61,7 +60,7 @@ public class PageComponent extends PageDefault {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
 
-        box.setPreferredSize(new Dimension(500, 45));
+
         setSecondBackgroundColor();
         add(box);
 
@@ -86,7 +85,7 @@ public class PageComponent extends PageDefault {
         box.add(createCheckBox(checkBox, page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(description));
-        box.setPreferredSize(new Dimension(384, 70));
+
         setSecondBackgroundColor();
         add(box);
     }

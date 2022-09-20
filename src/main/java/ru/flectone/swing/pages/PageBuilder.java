@@ -13,6 +13,7 @@ public class PageBuilder {
 
 
     public JScrollPane build(){
+
         JScrollPane scrollPane = new JScrollPane(builder);
 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -20,6 +21,7 @@ public class PageBuilder {
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         //Remove ugly border
         scrollPane.setBorder(null);
+
         return scrollPane;
     }
 
