@@ -64,7 +64,6 @@ public class PageDefault extends JPanel {
         if(page.equals("modsextension")) return checkBox;
 
         checkBox.addActionListener(e -> {
-            System.out.println(checkBox.getName());
             int count = UtilsSystem.countCheckBoxHashMap.get(page);
 
             if(checkBox.isSelected()){
