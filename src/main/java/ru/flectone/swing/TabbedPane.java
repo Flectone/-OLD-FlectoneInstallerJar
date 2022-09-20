@@ -533,7 +533,6 @@ public class TabbedPane extends JTabbedPane {
         JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
         buttonDialog.setToolTipText(UtilsSystem.getLocaleString("button.dialog.tooltip"));
         buttonDialog.addActionListener(e -> {
-            Frame.getTabbedPane().setSelectedIndex(Frame.getTabbedPane().getTabCount()-1);
             actionOnButtonDialog(textComponent);
         });
 
