@@ -3,6 +3,7 @@ package ru.flectone.swing;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.ui.FlatButtonBorder;
+import ru.flectone.Image;
 import ru.flectone.Installation;
 import ru.flectone.Main;
 import ru.flectone.swing.pages.PageBuilder;
@@ -13,12 +14,10 @@ import ru.flectone.utils.UtilsWeb;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -69,7 +68,7 @@ public class TabbedPane extends JTabbedPane {
 
         createModsListPanel();
 
-        addTab(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/test6.png")), optimizationBulider.build());
+        addTab(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), optimizationBulider.build());
 
         
         PageBuilder modsBuilder = new PageBuilder();
@@ -96,7 +95,7 @@ public class TabbedPane extends JTabbedPane {
 
         modsBuilder.add(modsNotOp);
 
-        addTab(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/test3.png")), modsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), modsBuilder.build());
 
         PageBuilder farmsBuilder = new PageBuilder();
         addInstallPanel("farms", farmsBuilder, false);
@@ -114,7 +113,7 @@ public class TabbedPane extends JTabbedPane {
             farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
 
         }
-        addTab(UtilsSystem.getLocaleString("tab.farms"), new ImageIcon(Main.class.getResource("/test4.png")), farmsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.farms"), new ImageIcon(Main.class.getResource("/images/farms.png")), farmsBuilder.build());
 
         PageBuilder rpsBuilder = new PageBuilder();
         addInstallPanel("resourcepacks", rpsBuilder, false);
@@ -131,7 +130,7 @@ public class TabbedPane extends JTabbedPane {
             rpsBuilder.add(new PageComponent(image, firstCheckBox, description, "resourcepacks"));
             rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addTab(UtilsSystem.getLocaleString("tab.rps"), new ImageIcon(Main.class.getResource("/test.png")), rpsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.rps"), new ImageIcon(Main.class.getResource("/images/resourcepacks.png")), rpsBuilder.build());
 
         PageBuilder dpsBuilder = new PageBuilder();
         addTextComponentFieldPanel(dpsBuilder);
@@ -150,7 +149,7 @@ public class TabbedPane extends JTabbedPane {
             dpsBuilder.add(new PageComponent(image, version, firstCheckBox, description, "datapacks"));
             dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addTab(UtilsSystem.getLocaleString("tab.dps"), new ImageIcon(Main.class.getResource("/test2.png")), dpsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.dps"), new ImageIcon(Main.class.getResource("/images/datapacks.png")), dpsBuilder.build());
 
         PageBuilder settingsBuilder = new PageBuilder();
         JPanel componentPanel = new JPanel();
@@ -214,28 +213,52 @@ public class TabbedPane extends JTabbedPane {
         comboBoxTheme.addActionListener(e -> actionWhenChangedTheme(comboBoxTheme));
 
         JPanel linkPanel = new JPanel();
-        linkPanel.add(createEditorPane("https://www.donationalerts.com/r/thefaser", "support"));
-        linkPanel.add(createEditorPane("https://www.flectone.ru/info/", "answers"));
+        linkPanel.add(createEditorPane("support"));
+
+        linkPanel.add(createEditorPane( "answers"));
 
         settingsBuilder.add(panel);
         settingsBuilder.add(linkPanel);
+
         settingsBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
 
-        addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/test5.png")), settingsBuilder.build());
+        //?????????
+        JPanel panelForClickMe = new JPanel();
+        panelForClickMe.add(createEditorPane("clickme"));
+        settingsBuilder.add(panelForClickMe);
+
+        addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/images/settings.png")), settingsBuilder.build());
 
 
         addTab("by TheFaser", null, new JPanel(), UtilsSystem.getLocaleString("tab.author.tooltip"));
 
+        JPanel imagePanel = new JPanel();
+        Image discordImage = new Image("discord.png");
+        discordImage.setBorder(null);
+        imagePanel.add(discordImage);
+
+        Image ytImage = new Image("yt.png");
+        ytImage.setBorder(null);
+        imagePanel.add(ytImage);
+
+        Image githubImage = new Image("github.png");
+        githubImage.setBorder(null);
+        imagePanel.add(githubImage);
+
+        addTab("", null, new JPanel());
+        setTabComponentAt(getTabCount() - 1, imagePanel);
+
         setEnabledAt(getTabCount() - 1, false);
+        setEnabledAt(getTabCount() - 2, false);
 
         saveConfigWhenExit();
     }
 
-    private JEditorPane createEditorPane(String url, String labelLocale){
+    private JEditorPane createEditorPane(String labelLocale){
         JEditorPane editorPane = new JEditorPane();
         editorPane.setContentType("text/html");
 
-        editorPane.setText("<a href='" + url + "'>"+ UtilsSystem.getLocaleString("label." + labelLocale));
+        editorPane.setText("<a href='" + UtilsSystem.getLocaleString("url." + labelLocale) + "'>"+ UtilsSystem.getLocaleString("label." + labelLocale));
         editorPane.setEditable(false);
         editorPane.addHyperlinkListener(e -> {
             if(HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
