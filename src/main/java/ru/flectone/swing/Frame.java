@@ -18,7 +18,7 @@ public class Frame extends JFrame{
         setSize(new Dimension(680, 400));
         setMinimumSize(new Dimension(680, 400));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle(UtilsSystem.getLocaleString("frame.title"));
+        setTitle(UtilsSystem.getLocaleString("frame.title") + UtilsSystem.getVersionProgram());
         setVisible(true);
         setResizable(true);
         setLocationRelativeTo(null);
