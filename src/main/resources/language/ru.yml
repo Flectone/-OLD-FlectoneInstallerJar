@@ -33,6 +33,8 @@ label.language: "Язык приложения:"
 label.theme: "Тема приложения:"
 label.type.mods: "Тип сборки:"
 label.version.mods: "Версия Майнкрафта:"
+label.support: "Поддержать нас"
+label.answers: "Ответы на вопросы"
 
 checkbox.FPS: "Максимальный фпс"
 checkbox.FPS.tooltip: "Нестабильные моды для максимального ФПС (могут вызвать падение ФПС)"

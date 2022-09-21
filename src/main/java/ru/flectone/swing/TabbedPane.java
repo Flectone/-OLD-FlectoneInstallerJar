@@ -12,10 +12,13 @@ import ru.flectone.utils.UtilsSystem;
 import ru.flectone.utils.UtilsWeb;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -207,11 +210,16 @@ public class TabbedPane extends JTabbedPane {
         panel.add(labelPanel);
         panel.add(componentPanel);
 
-        settingsBuilder.add(panel);
-
         comboBoxLanguage.addActionListener(e -> actionWhenChangedLocale(comboBoxLanguage));
         comboBoxTheme.addActionListener(e -> actionWhenChangedTheme(comboBoxTheme));
 
+        JPanel linkPanel = new JPanel();
+        linkPanel.add(createEditorPane("https://www.donationalerts.com/r/thefaser", "support"));
+        linkPanel.add(createEditorPane("https://www.flectone.ru/info/", "answers"));
+
+        settingsBuilder.add(panel);
+        settingsBuilder.add(linkPanel);
+        settingsBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
 
         addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/test5.png")), settingsBuilder.build());
 
@@ -221,6 +229,25 @@ public class TabbedPane extends JTabbedPane {
         setEnabledAt(getTabCount() - 1, false);
 
         saveConfigWhenExit();
+    }
+
+    private JEditorPane createEditorPane(String url, String labelLocale){
+        JEditorPane editorPane = new JEditorPane();
+        editorPane.setContentType("text/html");
+
+        editorPane.setText("<a href='" + url + "'>"+ UtilsSystem.getLocaleString("label." + labelLocale));
+        editorPane.setEditable(false);
+        editorPane.addHyperlinkListener(e -> {
+            if(HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+                Desktop desktop = Desktop.getDesktop();
+                try {
+                    desktop.browse(e.getURL().toURI());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        return editorPane;
     }
 
     //Save flectonemods.txt

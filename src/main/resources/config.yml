@@ -9,4 +9,4 @@ rps.images: bossbars.png discs.png doors.png elytra.png icons.png ores.png potio
 dps.images: villagetrades.png cauldron.png soulorb.png shears.png loot.png enchant.png craft.png chainarmor.png bettervanilla.png alchemy.png
 support.languages: ru en ua kz
 support.themes: dark light
-version.program: 1.5
+version.program: 1.5.1
