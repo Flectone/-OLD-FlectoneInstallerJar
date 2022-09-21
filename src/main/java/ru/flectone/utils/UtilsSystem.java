@@ -107,6 +107,7 @@ public class UtilsSystem {
     public static void getLocaleFile(){
         //Create new locale file
         localeFile = new HashMap<>();
+        getFileUtil(localeFile, Main.class.getResourceAsStream("/urls.yml"));
 
         for(String string : UtilsSystem.listObjectsFromConfig.get("support.languages")){
             if(UtilsOS.getSystemLocale().equals(string)){
