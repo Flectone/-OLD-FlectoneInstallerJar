@@ -66,7 +66,7 @@ public class TabbedPane extends JTabbedPane {
 
         createModsListPanel();
 
-        addTab(UtilsSystem.getLocaleString("tab.optimization"), optimizationBulider.build());
+        addTab(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/test6.png")), optimizationBulider.build());
 
         
         PageBuilder modsBuilder = new PageBuilder();
@@ -93,7 +93,7 @@ public class TabbedPane extends JTabbedPane {
 
         modsBuilder.add(modsNotOp);
 
-        addTab(UtilsSystem.getLocaleString("tab.mods"), modsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/test3.png")), modsBuilder.build());
 
         PageBuilder farmsBuilder = new PageBuilder();
         addInstallPanel("farms", farmsBuilder, false);
@@ -111,7 +111,7 @@ public class TabbedPane extends JTabbedPane {
             farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
 
         }
-        addTab(UtilsSystem.getLocaleString("tab.farms"), farmsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.farms"), new ImageIcon(Main.class.getResource("/test4.png")), farmsBuilder.build());
 
         PageBuilder rpsBuilder = new PageBuilder();
         addInstallPanel("resourcepacks", rpsBuilder, false);
@@ -128,7 +128,7 @@ public class TabbedPane extends JTabbedPane {
             rpsBuilder.add(new PageComponent(image, firstCheckBox, description, "resourcepacks"));
             rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addTab(UtilsSystem.getLocaleString("tab.rps"), rpsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.rps"), new ImageIcon(Main.class.getResource("/test.png")), rpsBuilder.build());
 
         PageBuilder dpsBuilder = new PageBuilder();
         addTextComponentFieldPanel(dpsBuilder);
@@ -147,7 +147,7 @@ public class TabbedPane extends JTabbedPane {
             dpsBuilder.add(new PageComponent(image, version, firstCheckBox, description, "datapacks"));
             dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
-        addTab(UtilsSystem.getLocaleString("tab.dps"), dpsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.dps"), new ImageIcon(Main.class.getResource("/test2.png")), dpsBuilder.build());
 
         PageBuilder settingsBuilder = new PageBuilder();
         JPanel componentPanel = new JPanel();
@@ -213,7 +213,7 @@ public class TabbedPane extends JTabbedPane {
         comboBoxTheme.addActionListener(e -> actionWhenChangedTheme(comboBoxTheme));
 
 
-        addTab(UtilsSystem.getLocaleString("tab.settings"), settingsBuilder.build());
+        addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/test5.png")), settingsBuilder.build());
 
 
         addTab("by TheFaser", null, new JPanel(), UtilsSystem.getLocaleString("tab.author.tooltip"));
