@@ -42,9 +42,9 @@ public class Installation {
             downloadFiles("mods/fabric.jar", pathFabricJar);
 
             //Get command and run fabric jar
-            String commandRunFabric = "java -jar " + pathFabricJar + " client -dir " + pathToMinecraftFolder + " -noprofile -mcversion " + minecraftVersion;
-            Process process = Runtime.getRuntime().exec(commandRunFabric);
             //Waiting process
+            Process process = UtilsSystem.runJarFile(pathFabricJar + " client -dir " + pathToMinecraftFolder + " -noprofile -mcversion " + minecraftVersion);
+            if(process == null) return;
             process.waitFor();
 
             //Delete temp fabric.jar
@@ -204,9 +204,8 @@ public class Installation {
     }
 
     //Download files from www.flectone.ru/mods
-    private void downloadFiles(String urlString, String toFileName){
+    public static void downloadFiles(String urlString, String toFileName){
         try {
-
             File file = new File(toFileName);
             if(!file.exists()) file.mkdirs();
 
@@ -219,7 +218,7 @@ public class Installation {
         }
     }
 
-    private URLConnection openConnection(String urlString){
+    private static URLConnection openConnection(String urlString){
         try {
             //Connect to site
             URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + urlString).openConnection();
