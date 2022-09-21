@@ -54,7 +54,7 @@ public class TabbedPane extends JTabbedPane {
     private final Box modsNotOp = Box.createVerticalBox();
 
     public TabbedPane(){
-        setTabPlacement(JTabbedPane.TOP);
+        setTabPlacement(JTabbedPane.LEFT);
         setBorder(null);
 
         PageBuilder optimizationBulider = new PageBuilder();
