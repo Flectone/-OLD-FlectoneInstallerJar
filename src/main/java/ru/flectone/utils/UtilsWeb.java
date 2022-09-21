@@ -38,17 +38,9 @@ public class UtilsWeb {
     }
 
     public static String[] getModsFromWebSite(String folderPath){
-        //Create document html
-        Document html = null;
-        try {
-            //Get document html
-            html = Jsoup.connect(UtilsSystem.getWebSiteIp() + "mods/" + folderPath).userAgent("Mozilla/5.0").get();
-        } catch (Exception error){
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + "\n" + error.getMessage(), "error", 0);
-        }
-
+        
         //Get files from html document
-        Elements links = html.select("a[href]");
+        Elements links = getHtmlPage("mods/" + folderPath).select("a[href]");
         //Create new list for massive
         ArrayList<String> list = new ArrayList<>();
         for(Element link : links){
@@ -61,5 +53,15 @@ public class UtilsWeb {
         }
 
         return list.toArray(new String[0]);
+    }
+
+    public static Document getHtmlPage(String urlForSite){
+        try {
+            //Get document html
+            return Jsoup.connect(UtilsSystem.getWebSiteIp() + urlForSite).userAgent("Mozilla/5.0").get();
+        } catch (Exception error){
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + "\n" + error.getMessage(), "error", 0);
+            return null;
+        }
     }
 }
