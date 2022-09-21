@@ -221,4 +221,17 @@ public class UtilsSystem {
     }
 
     public static HashMap<String, ArrayList<JCheckBox>> listCheckBox;
+
+    public static Process runJarFile(String pathToFile){
+        try {
+            return Runtime.getRuntime().exec("java -jar " + pathToFile);
+        } catch (Exception error){
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.jar") + error, "error", 0);
+        }
+        return null;
+    }
+
+    public static String getVersionProgram(){
+        return UtilsSystem.listObjectsFromConfig.get("version.program")[0];
+    }
 }
