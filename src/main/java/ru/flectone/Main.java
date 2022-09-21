@@ -2,11 +2,14 @@ package ru.flectone;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import org.jsoup.select.Elements;
 import ru.flectone.swing.Frame;
 import ru.flectone.utils.UtilsOS;
 import ru.flectone.utils.UtilsSystem;
 import ru.flectone.utils.UtilsWeb;
 
+import javax.swing.*;
+import java.io.File;
 import java.util.HashMap;
 
 public class Main {
@@ -48,5 +51,29 @@ public class Main {
         UtilsSystem.getMinecraftFolder();
 
         new Frame();
+
+        checkUpdate();
+    }
+
+    private static void checkUpdate(){
+
+        //Get files from html document
+        Elements links = UtilsWeb.getHtmlPage("versions/apps/").select("a[href]");
+
+        String lastProgramName = links.last().attr("href");
+        String lastVersion = lastProgramName.split("-")[1].replace(".jar", "");
+
+        if(!lastVersion.equals(UtilsSystem.getVersionProgram())){
+
+            int reply = JOptionPane.showConfirmDialog(null, UtilsSystem.getLocaleString("message.update.agreement"), UtilsSystem.getLocaleString("message.update.title"), JOptionPane.YES_NO_OPTION);;
+
+            if(reply == JOptionPane.YES_OPTION){
+                Installation.downloadFiles("versions/apps/" + lastProgramName, UtilsSystem.getWorkingDirectory() + File.separator + lastProgramName);
+                UtilsSystem.runJarFile(UtilsSystem.getWorkingDirectory() + File.separator + lastProgramName);
+
+                System.exit(0);
+            }
+        }
+
     }
 }
