@@ -17,7 +17,7 @@ import java.net.URLConnection;
 public class Image extends JLabel {
 
     public Image(String string){
-        ImageIcon imageIcon = new ImageIcon(Main.class.getResource("/flectone.gif"));
+        ImageIcon imageIcon = new ImageIcon(Main.class.getResource("/images/flectone.gif"));
 
         setIcon(imageIcon);
         setBorder(new FlatButtonBorder());
@@ -76,7 +76,7 @@ public class Image extends JLabel {
                     try {
                         k -= 1;
                         if(k == 0) {
-                            setIcon(new ImageIcon(Main.class.getResource("/timed-out.png")));
+                            setIcon(new ImageIcon(Main.class.getResource("/images/timed-out.png")));
                             break;
                         }
                         Thread.sleep(5000);
