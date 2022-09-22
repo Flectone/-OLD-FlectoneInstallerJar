@@ -101,15 +101,15 @@ public class TabbedPane extends JTabbedPane {
         addInstallPanel("farms", farmsBuilder, false);
         farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-        for(String image : UtilsSystem.listObjectsFromConfig.get("farms.images")){
+        for(String image : UtilsSystem.listObjectsFromConfig.get("farms")){
 
-            String fileName = "farms." + image.replace(".jpg", "");
+            String fileName = "farms." + image;
             String version = fileName + ".version";
             String firstCheckBox = fileName + ".install";
             String secondCheckBox = fileName + ".litematic";
             String description = fileName + ".description";
 
-            farmsBuilder.add(new PageComponent(image, version, firstCheckBox, secondCheckBox, description, "farms"));
+            farmsBuilder.add(new PageComponent(image + ".jpg", version, firstCheckBox, secondCheckBox, description, "farms"));
             farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
 
         }
@@ -119,15 +119,12 @@ public class TabbedPane extends JTabbedPane {
         addInstallPanel("resourcepacks", rpsBuilder, false);
         rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-        for(String image : UtilsSystem.listObjectsFromConfig.get("rps.images")){
-            String fileName = "rps." + image
-                    .replace(".jpg", "")
-                    .replace(".png", "")
-                    .replace(".jpeg", "");
+        for(String image : UtilsSystem.listObjectsFromConfig.get("resourcepacks")){
+            String fileName = "rps." + image;
             String firstCheckBox = fileName + ".install";
             String description = fileName + ".description";
 
-            rpsBuilder.add(new PageComponent(image, firstCheckBox, description, "resourcepacks"));
+            rpsBuilder.add(new PageComponent(image + ".png", firstCheckBox, description, "resourcepacks"));
             rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
         addTab(UtilsSystem.getLocaleString("tab.rps"), new ImageIcon(Main.class.getResource("/images/resourcepacks.png")), rpsBuilder.build());
@@ -137,16 +134,13 @@ public class TabbedPane extends JTabbedPane {
         addInstallPanel("datapacks", dpsBuilder, false);
         dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-        for(String image : UtilsSystem.listObjectsFromConfig.get("dps.images")){
-            String fileName = "dps." + image
-                    .replace(".jpg", "")
-                    .replace(".png", "")
-                    .replace(".jpeg", "");
+        for(String image : UtilsSystem.listObjectsFromConfig.get("datapacks")){
+            String fileName = "dps." + image;
             String version = fileName + ".version";
             String firstCheckBox = fileName + ".install";
             String description = fileName + ".description";
 
-            dpsBuilder.add(new PageComponent(image, version, firstCheckBox, description, "datapacks"));
+            dpsBuilder.add(new PageComponent(image + ".png", version, firstCheckBox, description, "datapacks"));
             dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
         }
         addTab(UtilsSystem.getLocaleString("tab.dps"), new ImageIcon(Main.class.getResource("/images/datapacks.png")), dpsBuilder.build());

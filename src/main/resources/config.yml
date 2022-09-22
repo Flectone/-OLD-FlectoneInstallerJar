@@ -4,9 +4,7 @@ version.Sodium: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1 1.16.5
 version.Optifine: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1
 mods.notop.version: 1.19.2 1.19.1 1.18.2
 settings.minecraft: betterfpsdist.json bobby.conf dynamicfps.toml moreculling.toml smoke_suppression.json sodium-options.json options.txt
-farms.images: iron.jpg gold.jpg portalporox.jpg afkfish.jpg newporox.jpg obsidian.jpg oldporox.jpg oneblock.jpg raid.jpg slime.jpg witcher.jpg wither.jpg wood.jpg guard.jpg squid.jpg ender.jpg
-rps.images: bossbars.png discs.png doors.png elytra.png icons.png ores.png potion.png tools.png torch.png village.png bicons.png bigbraingui.png defaultdarkmode.png ingamebrewingguide.png numberedhotbar.png redstonetweaks.png torchesreimagined.png voidomonenchanted.png
-dps.images: villagetrades.png cauldron.png soulorb.png shears.png loot.png enchant.png craft.png chainarmor.png bettervanilla.png alchemy.png
+web.folders: datapacks farms resourcepacks
 support.languages: ru en ua kz
 support.themes: dark light
-version.program: 1.5.1
+version.program: 1.5.2

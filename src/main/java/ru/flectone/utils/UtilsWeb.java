@@ -20,6 +20,20 @@ public class UtilsWeb {
             }
         }).start();
 
+        for(String folder : UtilsSystem.listObjectsFromConfig.get("web.folders")){
+            ArrayList<String> listComponents = new ArrayList();
+            Elements components = getHtmlPage("/" + folder + "/").select("a[href]");
+
+            for(Element element : components){
+                String name = element.attr("href");
+
+                if(name.contains(".zip") && !name.contains("litematic")){
+                    listComponents.add(name.replace(".zip", ""));
+                }
+            }
+            UtilsSystem.listObjectsFromConfig.put(folder, listComponents.toArray(new String[0]));
+        }
+
         String[] modsType = UtilsSystem.listObjectsFromConfig.get("type");
 
         ArrayList<String> arrayList = new ArrayList<>();
@@ -35,6 +49,22 @@ public class UtilsWeb {
             if(UtilsSystem.listObjectsFromConfig.get(folderPath) != null) continue;
             UtilsSystem.listObjectsFromConfig.put(folderPath, getModsFromWebSite(folderPath));
         }
+
+    }
+
+    private static void getDatapacks(){
+        ArrayList<String> datapacksList = new ArrayList();
+        Elements datapacks = getHtmlPage("/datapacks/").select("a[href]");
+
+        for(Element datapack : datapacks){
+            String name = datapack.attr("href");
+
+            if(name.contains(".zip")){
+                datapacksList.add(name.replace(".zip", ""));
+            }
+        }
+        UtilsSystem.listObjectsFromConfig.put("dps", datapacksList.toArray(new String[0]));
+
     }
 
     public static String[] getModsFromWebSite(String folderPath){
