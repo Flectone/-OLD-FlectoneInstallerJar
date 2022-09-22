@@ -59,7 +59,7 @@ public class Image extends JLabel {
         return this;
     }
 
-    private void getImageForLabel(String url){
+    protected void getImageForLabel(String url){
         new Thread(() -> {
 
             int k = 10;

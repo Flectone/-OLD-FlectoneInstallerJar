@@ -1,20 +1,9 @@
 package ru.flectone.components;
 
-import ru.flectone.utils.UtilsSystem;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class FPanel extends JPanel {
-
-    //Create label
-    protected JLabel createLabel(String labelName){
-        //Create label with name from locale
-        JLabel label = new JLabel(UtilsSystem.getLocaleString(labelName));
-        //Set alignment
-        label.setAlignmentX(LEFT_ALIGNMENT);
-        return label;
-    }
 
     public FPanel addComponent(Component component){
         this.add(component);
