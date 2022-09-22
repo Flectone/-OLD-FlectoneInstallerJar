@@ -167,7 +167,7 @@ public class Installation {
             labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + fileName + "...");
 
             //Download file
-            downloadFiles("mods/" + fileName, path.toString());
+            downloadFiles("settings/" + fileName, path.toString());
         }
     }
 
@@ -215,7 +215,7 @@ public class Installation {
 
         } catch (IOException error){
             //If file unable to download
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.download") + "\n" + error.getMessage(), urlString, "error", 0);
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.download") + error.getMessage(), urlString, "error", 0);
         }
     }
 
@@ -227,7 +227,7 @@ public class Installation {
             openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
             return openConnection;
         } catch (IOException error) {
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + "\n" + error.getMessage(), "error", 0);
+            new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + error.getMessage(), "error", 0);
             return null;
         }
     }

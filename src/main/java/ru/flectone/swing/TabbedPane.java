@@ -103,6 +103,8 @@ public class TabbedPane extends JTabbedPane {
 
         ///////CREATE TABS: FARMS, RESOURCEPACKS, DATAPACKS
         for(String folder : UtilsSystem.listObjectsFromConfig.get("web.folders")){
+            if(folder.equals("settings")) continue;
+
             PageBuilder pageBuilder = new PageBuilder();
 
             if(folder.equals("datapacks")) addTextComponentFieldPanel(pageBuilder);
@@ -483,7 +485,7 @@ public class TabbedPane extends JTabbedPane {
 
                     //Download settings for minecraft
                     if(checkBoxSettings.isSelected()){
-                        new Installation(labelStatus, UtilsSystem.listObjectsFromConfig.get("settings.minecraft"), Paths.get(textComponentSettings.getText()));
+                        new Installation(labelStatus, UtilsSystem.listObjectsFromConfig.get("settings"), Paths.get(textComponentSettings.getText()));
                     }
 
                     String urlFolder = "mods/" + comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem();
