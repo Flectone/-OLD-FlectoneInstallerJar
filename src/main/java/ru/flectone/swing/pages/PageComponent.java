@@ -1,6 +1,7 @@
 package ru.flectone.swing.pages;
 
 import ru.flectone.Image;
+import ru.flectone.swing.FPanel;
 import ru.flectone.utils.UtilsSystem;
 
 import javax.swing.*;
@@ -54,15 +55,17 @@ public class PageComponent extends PageDefault {
 
     }
 
-    public PageComponent(String imageName, String checkBox, int countEnable, String description, String page){
-        this(imageName);
+    public PageComponent(String component, String checkBox, int countEnable, String description, String page){
+        this(component + ".png");
 
         UtilsSystem.setCountCheckBox(page, countEnable);
 
+        component = "mods." + component;
+
         Box box = Box.createVerticalBox();
-        box.add(createCheckBox(checkBox, page));
+        box.add(createCheckBox(component + ".install", page));
         box.add(createRigidArea(0, 5));
-        box.add(createLabel(description));
+        box.add(createLabel(component + ".description"));
 
 
         setSecondBackgroundColor();
