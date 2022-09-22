@@ -59,16 +59,16 @@ public class TabbedPane extends JTabbedPane {
         setTabPlacement(JTabbedPane.LEFT);
         setBorder(null);
 
-        PageBuilder optimizationBulider = new PageBuilder();
-        optimizationBulider.add(createOptimizationTab());
-        addInstallPanel("modsmain", optimizationBulider, true);
+        PageBuilder optimizationBuilder = new PageBuilder();
+        optimizationBuilder.add(createOptimizationTab());
+        addInstallPanel("modsmain", optimizationBuilder, true);
 
-        optimizationBulider.add(modsMain);
-        optimizationBulider.add(modsExtension);
+        optimizationBuilder.add(modsMain);
+        optimizationBuilder.add(modsExtension);
 
         createModsListPanel();
 
-        addTab(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), optimizationBulider.build());
+        addTab(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), optimizationBuilder.build());
 
         
         PageBuilder modsBuilder = new PageBuilder();
@@ -97,53 +97,32 @@ public class TabbedPane extends JTabbedPane {
 
         addTab(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), modsBuilder.build());
 
-        PageBuilder farmsBuilder = new PageBuilder();
-        addInstallPanel("farms", farmsBuilder, false);
-        farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+        for(String folder : UtilsSystem.listObjectsFromConfig.get("web.folders")){
+            PageBuilder pageBuilder = new PageBuilder();
 
-        for(String image : UtilsSystem.listObjectsFromConfig.get("farms")){
+            if(folder.equals("datapacks")) addTextComponentFieldPanel(pageBuilder);
 
-            String fileName = "farms." + image;
-            String version = fileName + ".version";
-            String firstCheckBox = fileName + ".install";
-            String secondCheckBox = fileName + ".litematic";
-            String description = fileName + ".description";
+            addInstallPanel(folder, pageBuilder, false);
 
-            farmsBuilder.add(new PageComponent(image + ".jpg", version, firstCheckBox, secondCheckBox, description, "farms"));
-            farmsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+            for(String component : UtilsSystem.listObjectsFromConfig.get(folder)){
+                switch(folder){
+                    case "farms":
+                        pageBuilder.add(new PageComponent(component, "", "", "", "", folder));
+                        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+                        break;
 
+                    case "resourcepacks":
+                        pageBuilder.add(new PageComponent(component, "", "", folder));
+                        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+                        break;
+                    case "datapacks":
+                        pageBuilder.add(new PageComponent(component, "", "", "", folder));
+                        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+                        break;
+                }
+            }
+            addTab(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), pageBuilder.build());
         }
-        addTab(UtilsSystem.getLocaleString("tab.farms"), new ImageIcon(Main.class.getResource("/images/farms.png")), farmsBuilder.build());
-
-        PageBuilder rpsBuilder = new PageBuilder();
-        addInstallPanel("resourcepacks", rpsBuilder, false);
-        rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-
-        for(String image : UtilsSystem.listObjectsFromConfig.get("resourcepacks")){
-            String fileName = "rps." + image;
-            String firstCheckBox = fileName + ".install";
-            String description = fileName + ".description";
-
-            rpsBuilder.add(new PageComponent(image + ".png", firstCheckBox, description, "resourcepacks"));
-            rpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-        }
-        addTab(UtilsSystem.getLocaleString("tab.rps"), new ImageIcon(Main.class.getResource("/images/resourcepacks.png")), rpsBuilder.build());
-
-        PageBuilder dpsBuilder = new PageBuilder();
-        addTextComponentFieldPanel(dpsBuilder);
-        addInstallPanel("datapacks", dpsBuilder, false);
-        dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-
-        for(String image : UtilsSystem.listObjectsFromConfig.get("datapacks")){
-            String fileName = "dps." + image;
-            String version = fileName + ".version";
-            String firstCheckBox = fileName + ".install";
-            String description = fileName + ".description";
-
-            dpsBuilder.add(new PageComponent(image + ".png", version, firstCheckBox, description, "datapacks"));
-            dpsBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-        }
-        addTab(UtilsSystem.getLocaleString("tab.dps"), new ImageIcon(Main.class.getResource("/images/datapacks.png")), dpsBuilder.build());
 
         PageBuilder settingsBuilder = new PageBuilder();
         JPanel componentPanel = new JPanel();

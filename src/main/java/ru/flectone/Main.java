@@ -42,7 +42,7 @@ public class Main {
         UtilsSystem.getLocaleFile();
 
         try {
-            new Thread(() -> UtilsWeb.getModsList()).start();
+            new Thread(() -> UtilsWeb.parsingWebSite()).start();
         } catch (Exception ignored){
 
         }

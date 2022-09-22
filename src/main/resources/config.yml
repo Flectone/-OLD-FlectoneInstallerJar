@@ -4,7 +4,7 @@ version.Sodium: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1 1.16.5
 version.Optifine: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1
 mods.notop.version: 1.19.2 1.19.1 1.18.2
 settings.minecraft: betterfpsdist.json bobby.conf dynamicfps.toml moreculling.toml smoke_suppression.json sodium-options.json options.txt
-web.folders: datapacks farms resourcepacks
+web.folders: farms resourcepacks datapacks
 support.languages: ru en ua kz
 support.themes: dark light
 version.program: 1.5.2

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class UtilsWeb {
 
     //Get name mods from list.txt from www.flectone.ru/mods.../list
-    public static void getModsList() {
+    public static void parsingWebSite() {
         new Thread(() -> {
             String[] versionsNotOpMods = UtilsSystem.listObjectsFromConfig.get("mods.notop.version");
             for(String version : versionsNotOpMods){
@@ -21,7 +21,7 @@ public class UtilsWeb {
         }).start();
 
         for(String folder : UtilsSystem.listObjectsFromConfig.get("web.folders")){
-            ArrayList<String> listComponents = new ArrayList();
+            ArrayList<String> listComponents = new ArrayList<>();
             Elements components = getHtmlPage("/" + folder + "/").select("a[href]");
 
             for(Element element : components){
@@ -49,21 +49,6 @@ public class UtilsWeb {
             if(UtilsSystem.listObjectsFromConfig.get(folderPath) != null) continue;
             UtilsSystem.listObjectsFromConfig.put(folderPath, getModsFromWebSite(folderPath));
         }
-
-    }
-
-    private static void getDatapacks(){
-        ArrayList<String> datapacksList = new ArrayList();
-        Elements datapacks = getHtmlPage("/datapacks/").select("a[href]");
-
-        for(Element datapack : datapacks){
-            String name = datapack.attr("href");
-
-            if(name.contains(".zip")){
-                datapacksList.add(name.replace(".zip", ""));
-            }
-        }
-        UtilsSystem.listObjectsFromConfig.put("dps", datapacksList.toArray(new String[0]));
 
     }
 

@@ -15,34 +15,38 @@ public class PageComponent extends PageDefault {
         add(new Image(imageName));
     }
 
-    public PageComponent(String imageName, String version, String firstCheckBox, String secondCheckBox, String description, String page){
-        this(imageName);
+    public PageComponent(String component, String version, String firstCheckBox, String secondCheckBox, String description, String page){
+        this(component + ".jpg");
 
         UtilsSystem.getCountCheckBox(page);
 
+        component = "farms." + component;
+
         Box box = Box.createVerticalBox();
-        box.add(createLabel(version));
+        box.add(createLabel(component + ".version"));
         box.add(createRigidArea(0, 5));
-        box.add(createCheckBox(firstCheckBox, page));
+        box.add(createCheckBox(component + ".install", page));
         box.add(createRigidArea(0, 5));
-        box.add(createCheckBox(secondCheckBox, page));
+        box.add(createCheckBox(component + ".litematic", page));
         box.add(createRigidArea(0, 5));
-        box.add(createLabel(description));
+        box.add(createLabel(component + ".description"));
 
         setSecondBackgroundColor();
         add(box);
 
     }
 
-    public PageComponent(String imageName, String checkBox, String description, String page){
-        this(imageName);
+    public PageComponent(String component, String checkBox, String description, String page){
+        this(component + ".png");
 
         UtilsSystem.getCountCheckBox(page);
 
+        component = "resourcepacks." + component;
+
         Box box = Box.createVerticalBox();
-        box.add(createCheckBox(checkBox, page));
+        box.add(createCheckBox(component + ".install", page));
         box.add(createRigidArea(0, 5));
-        box.add(createLabel(description));
+        box.add(createLabel(component + ".description"));
 
         setSecondBackgroundColor();
         add(box);
@@ -74,17 +78,19 @@ public class PageComponent extends PageDefault {
         } else UtilsSystem.setChangeBackgroundColor(true);
     }
 
-    public PageComponent(String imageName, String version, String checkBox, String description, String page){
-        this(imageName);
+    public PageComponent(String component, String version, String checkBox, String description, String page){
+        this(component + ".png");
 
         UtilsSystem.getCountCheckBox(page);
 
+        component = "datapacks." + component;
+
         Box box = Box.createVerticalBox();
-        box.add(createLabel(version));
+        box.add(createLabel(component + ".version"));
         box.add(createRigidArea(0, 5));
-        box.add(createCheckBox(checkBox, page));
+        box.add(createCheckBox(component + ".install", page));
         box.add(createRigidArea(0, 5));
-        box.add(createLabel(description));
+        box.add(createLabel(component + ".description"));
 
         setSecondBackgroundColor();
         add(box);
