@@ -185,7 +185,7 @@ public class TabbedPane extends JTabbedPane {
 
         settingsBuilder.add(new FPanel()
                 .addComponent(createEditorPane("support"))
-                .addComponent(createEditorPane("support")));
+                .addComponent(createEditorPane("answers")));
 
         settingsBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
 
@@ -403,7 +403,7 @@ public class TabbedPane extends JTabbedPane {
             JTabbedPane newTabbedPane = new TabbedPane();
             newTabbedPane.setSelectedIndex( Frame.getSelectedIndex());
 
-            Frame.getFrame().setTitle(UtilsSystem.getLocaleString("frame.title"));
+            Frame.getFrame().setTitle(UtilsSystem.getLocaleString("frame.title") + UtilsSystem.getVersionProgram());
             Frame.getFrame().getContentPane().removeAll();
             Frame.getFrame().getContentPane().add(newTabbedPane);
             Frame.getFrame().validate();
