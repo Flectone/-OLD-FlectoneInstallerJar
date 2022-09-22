@@ -1,6 +1,7 @@
-package ru.flectone;
+package ru.flectone.components;
 
 import com.formdev.flatlaf.ui.FlatButtonBorder;
+import ru.flectone.Main;
 import ru.flectone.swing.MessageDialog;
 import ru.flectone.utils.UtilsSystem;
 

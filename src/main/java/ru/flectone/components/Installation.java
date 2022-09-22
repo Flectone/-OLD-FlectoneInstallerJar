@@ -1,5 +1,6 @@
-package ru.flectone;
+package ru.flectone.components;
 
+import ru.flectone.Main;
 import ru.flectone.swing.MessageDialog;
 import ru.flectone.utils.UtilsSystem;
 

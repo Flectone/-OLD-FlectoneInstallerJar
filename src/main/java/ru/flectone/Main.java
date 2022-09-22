@@ -3,6 +3,7 @@ package ru.flectone;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.jsoup.select.Elements;
+import ru.flectone.components.Installation;
 import ru.flectone.swing.Frame;
 import ru.flectone.utils.UtilsOS;
 import ru.flectone.utils.UtilsSystem;

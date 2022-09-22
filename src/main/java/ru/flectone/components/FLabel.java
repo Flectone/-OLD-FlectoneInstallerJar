@@ -1,4 +1,4 @@
-package ru.flectone.swing;
+package ru.flectone.components;
 
 import ru.flectone.utils.UtilsSystem;
 
