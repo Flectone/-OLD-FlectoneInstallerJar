@@ -36,6 +36,7 @@ label.version.mods: "Minecraft нұсқасы:"
 label.support: "Бізді қолда"
 label.answers: "Сұрақтарға жауаптар"
 label.clickme: "*Flectone Inc*"
+label.empty: "Тақырып табылмады"
 
 checkbox.FPS: "Максималды FPS"
 checkbox.FPS.tooltip: "Максималды FPS үшін тұрақсыз режимдер (FPS құлауына әкелуі мүмкін)"

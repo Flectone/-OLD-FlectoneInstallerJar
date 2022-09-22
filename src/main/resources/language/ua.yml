@@ -36,6 +36,7 @@ label.version.mods: "Версiя Майнкрафту:"
 label.support: "Поддержать нас"
 label.answers: "Ответы на вопросы"
 label.clickme: "*Flectone Inc*"
+label.empty: "Названия не найдено"
 
 checkbox.FPS: "Максимальный фпс"
 checkbox.FPS.tooltip: "Нестабільні моди для максимального ФПС (можуть спричинити падіння ФПС)"

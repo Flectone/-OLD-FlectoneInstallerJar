@@ -120,6 +120,7 @@ public class UtilsSystem {
 
     //All strings from locales ru, en
     public static String getLocaleString(String string){
+        if(localeFile.get(string) == null) return localeFile.get("label.empty");
         //Get string from hash map
         return localeFile.get(string);
     }

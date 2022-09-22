@@ -36,6 +36,7 @@ label.version.mods: "Version Minecraft:"
 label.support: "Support"
 label.answers: "FAQ"
 label.clickme: "*Flectone Inc*"
+label.empty: "Title not found"
 
 checkbox.FPS: "Maximum FPS"
 checkbox.FPS.tooltip: "Unstable mods for maximum FPS (may cause FPS drops)"
