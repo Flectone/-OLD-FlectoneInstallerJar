@@ -27,7 +27,7 @@ public class UtilsWeb {
             for(Element element : components){
                 String name = element.attr("href");
 
-                if(name.contains(".zip") && !name.contains("litematic")){
+                if(name.contains(".") && !name.contains("litematic")){
                     listComponents.add(name.replace(".zip", ""));
                 }
             }
