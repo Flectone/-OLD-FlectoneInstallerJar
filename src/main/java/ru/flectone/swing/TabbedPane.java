@@ -110,6 +110,7 @@ public class TabbedPane extends JTabbedPane {
             if(folder.equals("datapacks")) addTextComponentFieldPanel(pageBuilder);
 
             addInstallPanel(folder, pageBuilder, false);
+            pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
 
             for(String component : UtilsSystem.listObjectsFromConfig.get(folder)){
                 switch(folder){
