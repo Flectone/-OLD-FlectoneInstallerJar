@@ -46,6 +46,7 @@ checkbox.profile: "Створити профiль"
 checkbox.profile.tooltip: "Встановлення фабрика та створення профiля запуску"
 checkbox.delete: "Очистити папку"
 checkbox.delete.tooltip: "Очищення вище вказанної папки пiд час встановлення"
+checkbox.warns: "Больше не показывать предупреждения"
 
 message.install.success: "Встановлення завершено, перевіряйте!"
 message.install.title: "Установник"
@@ -63,6 +64,7 @@ message.warn.vulkan: "Увага! Данний тип збiрки може не 
 message.update.title: "Обновление программы"
 message.update.agreement: "Существует более новая версия программы, хотите ли вы обновиться?"
 message.error.jar: "Не удалось запустить файл .jar "
+message.warn.maxfps: "Не рекомендуем использовать данный пункт из-за его нестабильности"
 
 dialog.title: "Вкажiть ваш шлях"
 

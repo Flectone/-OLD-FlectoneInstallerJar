@@ -46,6 +46,7 @@ checkbox.profile: "Create a profile"
 checkbox.profile.tooltip: "Installation fabric and creation of a profile"
 checkbox.delete: "Clear Folder"
 checkbox.delete.tooltip: "Clearing the above specified folder during installation"
+checkbox.warns: "Don't show warnings again"
 
 message.install.success: "Installation is complete check it out!"
 message.install.title: "Installer"
@@ -63,6 +64,7 @@ message.warn.vulkan: "Warning! This type of modpack may not work due to incompat
 message.update.title: "Update program"
 message.update.agreement: "There is a newer version of the program, do you want to upgrade?"
 message.error.jar: "Failed to run file .jar "
+message.warn.maxfps: "We do not recommend using this item due to its instability"
 
 dialog.title: "Select the installation location"
 

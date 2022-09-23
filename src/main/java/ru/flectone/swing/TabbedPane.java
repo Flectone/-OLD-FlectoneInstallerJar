@@ -254,6 +254,8 @@ public class TabbedPane extends JTabbedPane {
                 String chosenTheme = "chosen.Theme: " +  (UtilsSystem.getLocaleString("button.dark").equals(comboBoxTheme.getSelectedItem()) ? "dark" : "light");
                 listForFile.add(chosenTheme);
 
+                listForFile.add("show.Warns: " + UtilsSystem.showWarnMessages);
+
                 Files.write(Paths.get(UtilsSystem.getWorkingDirectory(), File.separator + "flectone.installer"), listForFile);
 
             } catch (IOException ignored) {
@@ -277,6 +279,9 @@ public class TabbedPane extends JTabbedPane {
             for(JCheckBox checkBox : listCheckBox.get("modsextension")){
                 checkBox.setSelected(checkBoxFPS.isSelected());
             }
+
+            if(checkBoxFPS.isSelected()) new MessageDialog(UtilsSystem.getLocaleString("message.warn.maxfps"), "warn");
+
         });
 
         comboBoxVersionOp.addActionListener(e -> {
@@ -470,7 +475,7 @@ public class TabbedPane extends JTabbedPane {
             switch(page){
                 case "modsmain":
                     if(comboBoxType.getSelectedItem().equals("Vulkan")){
-                        new MessageDialog(UtilsSystem.getLocaleString("message.warn.vulkan"), "warn", 2);
+                        new MessageDialog(UtilsSystem.getLocaleString("message.warn.vulkan"), "warn");
                     }
 
                     if(checkBoxDelete.isSelected()){

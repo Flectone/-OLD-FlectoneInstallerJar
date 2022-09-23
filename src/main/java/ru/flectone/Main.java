@@ -3,6 +3,7 @@ package ru.flectone;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.jsoup.select.Elements;
+import ru.flectone.components.FPanel;
 import ru.flectone.components.Installation;
 import ru.flectone.swing.Frame;
 import ru.flectone.utils.UtilsOS;
@@ -10,6 +11,7 @@ import ru.flectone.utils.UtilsSystem;
 import ru.flectone.utils.UtilsWeb;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 
@@ -50,6 +52,7 @@ public class Main {
 
         //Get default minecraft path
         UtilsSystem.getMinecraftFolder();
+        UtilsSystem.getBooleanShowWarnMessages();
 
         new Frame();
 

@@ -22,6 +22,22 @@ public class UtilsSystem {
 
     public static boolean changeBackgroundColor = false;
 
+    public static boolean showWarnMessages;
+
+    public static void setShowWarnMessages(boolean showWarnMessages) {
+        UtilsSystem.showWarnMessages = showWarnMessages;
+    }
+
+    public static void getBooleanShowWarnMessages(){
+
+        if(UtilsSystem.settingsFile.get("show.Warns") == null){
+            setShowWarnMessages(true);
+            return;
+        }
+
+        setShowWarnMessages(Boolean.parseBoolean(UtilsSystem.settingsFile.get("show.Warns")));
+    }
+
     public static void setChangeBackgroundColor(boolean changeBackgroundColor) {
         UtilsSystem.changeBackgroundColor = changeBackgroundColor;
     }
