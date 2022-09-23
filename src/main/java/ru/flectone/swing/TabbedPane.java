@@ -472,9 +472,48 @@ public class TabbedPane extends JTabbedPane {
         arrayList.add(labelStatus);
         arrayList.add(buttonInstall);
 
+        JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
+        buttonDialog.setToolTipText(UtilsSystem.getLocaleString("button.dialog.tooltip"));
+        buttonDialog.addActionListener(e -> {
+            actionOnButtonDialog(textComponentSettings);
+        });
+
+        JButton buttonSelect = new JButton(UtilsSystem.getLocaleString("button.select.true"));
+        buttonSelect.setToolTipText(UtilsSystem.getLocaleString("button.select.tooltip"));
+        buttonSelect.addActionListener(e -> {
+            boolean bol = buttonSelect.getText().equals(UtilsSystem.getLocaleString("button.select.true"));
+            buttonSelect.setText(UtilsSystem.getLocaleString("button.select." + !bol));
+
+            buttonInstall.setEnabled(bol);
+            labelStatus.setEnabled(bol);
+            labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready." + bol));
+
+            for(JCheckBox checkBox : listCheckBox.get(page)){
+                checkBox.setSelected(bol);
+            }
+            if(page.equals("modsmain")){
+                for(JCheckBox checkBox : listCheckBox.get("modsextension")){
+                    checkBox.setSelected(bol);
+                }
+                checkBoxFPS.setSelected(bol);
+            }
+
+            if(bol){
+                UtilsSystem.countCheckBoxHashMap.put(page, listCheckBox.get(page).toArray().length);
+            } else {
+                UtilsSystem.countCheckBoxHashMap.put(page, 0);
+            }
+        });
+
         buttonInstall.addActionListener(e -> new Thread(() -> {
+            buttonInstall.setEnabled(false);
+            buttonDialog.setEnabled(false);
+            buttonSelect.setEnabled(false);
+
+
             switch(page){
                 case "modsmain":
+
                     if(comboBoxType.getSelectedItem().equals("Vulkan")){
                         new MessageDialog(UtilsSystem.getLocaleString("message.warn.vulkan"), "warn");
                     }
@@ -513,40 +552,10 @@ public class TabbedPane extends JTabbedPane {
                     break;
 
             }
+            buttonInstall.setEnabled(true);
+            buttonDialog.setEnabled(true);
+            buttonSelect.setEnabled(true);
         }).start());
-
-        JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
-        buttonDialog.setToolTipText(UtilsSystem.getLocaleString("button.dialog.tooltip"));
-        buttonDialog.addActionListener(e -> {
-            actionOnButtonDialog(textComponentSettings);
-        });
-
-        JButton buttonSelect = new JButton(UtilsSystem.getLocaleString("button.select.true"));
-        buttonSelect.setToolTipText(UtilsSystem.getLocaleString("button.select.tooltip"));
-        buttonSelect.addActionListener(e -> {
-            boolean bol = buttonSelect.getText().equals(UtilsSystem.getLocaleString("button.select.true"));
-            buttonSelect.setText(UtilsSystem.getLocaleString("button.select." + !bol));
-
-            buttonInstall.setEnabled(bol);
-            labelStatus.setEnabled(bol);
-            labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready." + bol));
-
-            for(JCheckBox checkBox : listCheckBox.get(page)){
-                checkBox.setSelected(bol);
-            }
-            if(page.equals("modsmain")){
-                for(JCheckBox checkBox : listCheckBox.get("modsextension")){
-                    checkBox.setSelected(bol);
-                }
-                checkBoxFPS.setSelected(bol);
-            }
-
-            if(bol){
-                UtilsSystem.countCheckBoxHashMap.put(page, listCheckBox.get(page).toArray().length);
-            } else {
-                UtilsSystem.countCheckBoxHashMap.put(page, 0);
-            }
-        });
 
         Box box = Box.createVerticalBox();
         box.add(panelStatus);
