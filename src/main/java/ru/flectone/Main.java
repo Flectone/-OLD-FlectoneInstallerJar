@@ -3,7 +3,6 @@ package ru.flectone;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.jsoup.select.Elements;
-import ru.flectone.components.FPanel;
 import ru.flectone.components.Installation;
 import ru.flectone.swing.Frame;
 import ru.flectone.utils.UtilsOS;
@@ -11,7 +10,6 @@ import ru.flectone.utils.UtilsSystem;
 import ru.flectone.utils.UtilsWeb;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 
@@ -21,6 +19,7 @@ public class Main {
         UtilsSystem.countCheckBoxHashMap = new HashMap<>();
         UtilsSystem.enabledComponentsHashMap = new HashMap<>();
         UtilsSystem.listCheckBox = new HashMap<>();
+
         //Create new hash map from config.yml
         UtilsSystem.listObjectsFromConfig = new HashMap<>();
 
@@ -62,10 +61,11 @@ public class Main {
     private static void checkUpdate(){
 
         //Get files from html document
-        Elements links = UtilsWeb.getHtmlPage("versions/apps/").select("a[href]");
+        Elements links = UtilsWeb.getHtmlPage("download/version/").select("a[href]");
 
         String lastProgramName = links.last().attr("href");
-        String lastVersion = lastProgramName.split("-")[1].replace(".jar", "");
+
+        String lastVersion = lastProgramName.split("_")[0].split("-")[1];
 
         if(!lastVersion.equals(UtilsSystem.getVersionProgram())){
 
