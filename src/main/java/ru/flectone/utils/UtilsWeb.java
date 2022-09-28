@@ -21,21 +21,22 @@ public class UtilsWeb {
         }).start();
 
         for(String folder : UtilsSystem.listObjectsFromConfig.get("web.folders")){
-            ArrayList<String> listComponents = new ArrayList<>();
-            Elements components = getHtmlPage("/" + folder + "/").select("a[href]");
+            new Thread(() -> {
+                ArrayList<String> listComponents = new ArrayList<>();
+                Elements components = getHtmlPage("/" + folder + "/").select("a[href]");
 
-            for(Element element : components){
-                String name = element.attr("href");
+                for(Element element : components){
+                    String name = element.attr("href");
 
-                if(name.contains(".") && !name.contains("litematic")){
-                    listComponents.add(name.replace(".zip", ""));
+                    if(name.contains(".") && !name.contains("litematic")){
+                        listComponents.add(name.replace(".zip", ""));
+                    }
                 }
-            }
-            UtilsSystem.listObjectsFromConfig.put(folder, listComponents.toArray(new String[0]));
+                UtilsSystem.listObjectsFromConfig.put(folder, listComponents.toArray(new String[0]));
+            }).start();
         }
 
         String[] modsType = UtilsSystem.listObjectsFromConfig.get("type");
-
         ArrayList<String> arrayList = new ArrayList<>();
         for(String modType : modsType){
             String[] versionMods = UtilsSystem.listObjectsFromConfig.get("version." + modType);
