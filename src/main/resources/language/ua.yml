@@ -1,4 +1,4 @@
-flectone.url: "http://193.122.10.85/"
+flectone.url: "http://130.61.101.12/"
 frame.title: "Flectone установник - "
 
 tab.optimization: "Оптимізація"
@@ -279,6 +279,10 @@ mods.label.extension: "Додатковi моди"
 mods.label.notop: "Користувальницькі моди"
 mods.total: "Усього "
 
+farms.turtle.install: "Установить «Ферму черепах»"
+farms.turtle.version: "1.13+"
+farms.turtle.litematic: "Установить лайтматику"
+farms.turtle.description: "Бесконечные щитки и морская трава"
 farms.iron.install: "Установить «Ферму железа»"
 farms.iron.version: "1.14+"
 farms.iron.description: "Ферма железа за 5 минут"

@@ -1,4 +1,4 @@
-flectone.url: "http://193.122.10.85/"
+flectone.url: "http://130.61.101.12/"
 frame.title: "Flectone Орнатушы - "
 
 tab.optimization: "Оңтайландыру"
@@ -279,6 +279,10 @@ mods.label.extension: "Қосымша режимдер"
 mods.label.notop: "Пайдаланушы модтары"
 mods.total: "Барлығы"
 
+farms.turtle.install: "«Тасбақа фермасы» орнату"
+farms.turtle.version: "1.13+"
+farms.turtle.litematic: "Лайтматика орнату"
+farms.turtle.description: "Шексіз қалқандар мен теңіз шөптері"
 farms.iron.install: "«Ферму заліза» орнату"
 farms.iron.version: "1.14+"
 farms.iron.description: "Темір фермасы 5 минутта"

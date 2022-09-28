@@ -1,4 +1,4 @@
-flectone.url: "http://193.122.10.85/"
+flectone.url: "http://130.61.101.12/"
 frame.title: "Flectone installer - "
 
 tab.optimization: "Optimization"
@@ -279,6 +279,10 @@ mods.label.extension: "Extension mods"
 mods.label.notop: "User mods"
 mods.total: "Total "
 
+farms.turtle.install: "Install «Turtle farm»"
+farms.turtle.version: "1.13+"
+farms.turtle.litematic: "Install litematic"
+farms.turtle.description: "Endless shells and seagrass"
 farms.iron.install: "Install «Iron farm»"
 farms.iron.version: "1.14+"
 farms.iron.description: "iron farm in 5 minutes"

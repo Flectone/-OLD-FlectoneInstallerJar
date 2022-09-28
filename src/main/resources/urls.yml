@@ -104,6 +104,7 @@ url.CullLessLeaves: "https://www.youtube.com/watch?v=cgKRpzNbTPE"
 url.cullleaves: "https://www.youtube.com/watch?v=cgKRpzNbTPE"
 
 #FARMS
+url.turtle: "https://youtu.be/Lo7x3V0Xu54"
 url.iron: "https://youtu.be/bsUIkEGln-w"
 url.gold: "https://youtu.be/14XRy0pbezQ"
 url.portalporox: "https://youtu.be/-JvYNsuZmqI"
@@ -158,4 +159,4 @@ url.youtube: "https://www.youtube.com/c/%D0%A4%D0%B0%D1%81%D1%8D%D1%80"
 url.github: "https://github.com/Flectone-ru"
 url.clickme: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 url.support: "https://www.donationalerts.com/r/thefaser"
-url.answers: "https://www.flectone.ru/info/"
+url.answers: "https://www.flectone.ru/faq/"
