@@ -55,6 +55,20 @@ public class UtilsSystem {
         UtilsSystem.secondColor = secondColor;
     }
 
+    public static int tabbedPaneAlign;
+
+    public static void setTabbedPaneAlign(int tabbedPaneAlign) {
+        UtilsSystem.tabbedPaneAlign = tabbedPaneAlign;
+    }
+
+    public static void getTabbedPaneAlign() {
+        if(UtilsSystem.settingsFile.get("chosen.Tab_Align") == null){
+            setTabbedPaneAlign(JTabbedPane.LEFT);
+            return;
+        }
+        setTabbedPaneAlign(Integer.valueOf(UtilsSystem.settingsFile.get("chosen.Tab_Align")));
+    }
+
     public static int getCountCheckBox(String page){
         int count;
         if(countCheckBoxHashMap.get(page) == null){
@@ -135,7 +149,7 @@ public class UtilsSystem {
     }
 
     //All strings from locales ru, en
-    public static String getLocaleString(String string){
+    public final static String getLocaleString(String string){
         if(localeFile.get(string) == null) return localeFile.get("label.empty");
         //Get string from hash map
         return localeFile.get(string);

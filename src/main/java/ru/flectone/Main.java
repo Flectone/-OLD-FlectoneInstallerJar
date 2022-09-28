@@ -52,6 +52,7 @@ public class Main {
         //Get default minecraft path
         UtilsSystem.getMinecraftFolder();
         UtilsSystem.getBooleanShowWarnMessages();
+        UtilsSystem.getTabbedPaneAlign();
 
         new Frame();
 

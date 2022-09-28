@@ -4,6 +4,8 @@ version.Sodium: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1 1.16.5
 version.Optifine: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1
 mods.notop.version: 1.19.2 1.19.1 1.18.2
 web.folders: farms resourcepacks datapacks settings
+tabs: tab.optimization tab.mods tab.farms tab.resourcepacks tab.datapacks tab.settings byTheFaser social
 support.languages: ru en ua kz
 support.themes: dark light
+support.tab_align: 1 2 3 4
 version.program: 1.5.4

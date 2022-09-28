@@ -4,10 +4,8 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.ui.FlatButtonBorder;
 import ru.flectone.*;
-import ru.flectone.components.FLabel;
-import ru.flectone.components.FPanel;
+import ru.flectone.components.*;
 import ru.flectone.components.Image;
-import ru.flectone.components.Installation;
 import ru.flectone.swing.pages.PageBuilder;
 import ru.flectone.swing.pages.PageComponent;
 import ru.flectone.utils.UtilsOS;
@@ -26,8 +24,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static ru.flectone.utils.UtilsSystem.listCheckBox;
+import static ru.flectone.utils.UtilsSystem.listObjectsFromConfig;
 
-public class TabbedPane extends JTabbedPane {
+public class TabbedPane extends FTabbedPane {
 
     private final JComboBox<String> comboBoxType = createComboBox("type");
 
@@ -36,6 +35,8 @@ public class TabbedPane extends JTabbedPane {
     private final JComboBox<String> comboBoxLanguage = createComboBoxConfig("languages");
 
     private final JComboBox<String> comboBoxTheme = createComboBoxConfig("themes");
+
+    private final JComboBox<String> comboBoxTabAlign = createComboBoxConfig("tab_align");
 
     private final JComboBox<String> comboBoxVersionNotOp = createComboBox("mods.notop.version");
 
@@ -58,156 +59,187 @@ public class TabbedPane extends JTabbedPane {
     private final Box modsNotOp = Box.createVerticalBox();
 
     public TabbedPane(){
-        setTabPlacement(JTabbedPane.LEFT);
+        setTabPlacement(UtilsSystem.tabbedPaneAlign);
         setBorder(null);
 
-        ///////CREATE TAB OPTIMIZATION
-        PageBuilder optimizationBuilder = new PageBuilder();
-        optimizationBuilder.add(createOptimizationTab());
-
-        addInstallPanel("modsmain", optimizationBuilder, true);
-
-        optimizationBuilder.add(modsMain);
-        optimizationBuilder.add(modsExtension);
-
-        createModsListPanel();
-
-        addTab(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), optimizationBuilder.build());
-
-        ///////CREATE TAB MODS
-        PageBuilder modsBuilder = new PageBuilder();
-
-        comboBoxVersionNotOp.setPreferredSize(new Dimension(300, 20));
-        comboBoxVersionNotOp.addActionListener(e -> {
-            modsNotOp.removeAll();
-            UtilsSystem.listCheckBox.put("modsnotop", new ArrayList<>());
-            createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
-            UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
-        });
-
-        JLabel label = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
-        JPanel panelMods = new JPanel();
-        panelMods.add(label);
-        panelMods.add(comboBoxVersionNotOp);
-
-        modsBuilder.add(panelMods);
-        modsBuilder.add(modsNotOp);
-
-        addInstallPanel("modsnotop", modsBuilder, false);
-        createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
-        UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
-
-        modsBuilder.add(modsNotOp);
-
-        addTab(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), modsBuilder.build());
-
-        ///////CREATE TABS: FARMS, RESOURCEPACKS, DATAPACKS
-        for(String folder : UtilsSystem.listObjectsFromConfig.get("web.folders")){
-            if(folder.equals("settings")) continue;
-
-            PageBuilder pageBuilder = new PageBuilder();
-
-            if(folder.equals("datapacks")) addTextComponentFieldPanel(pageBuilder);
-
-            addInstallPanel(folder, pageBuilder, false);
-            pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-
-            for(String component : UtilsSystem.listObjectsFromConfig.get(folder)){
-                switch(folder){
-                    case "farms":
-                        pageBuilder.add(new PageComponent(component, "", "", "", "", folder));
-                        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-                        break;
-
-                    case "resourcepacks":
-                        pageBuilder.add(new PageComponent(component, "", "", folder));
-                        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-                        break;
-                    case "datapacks":
-                        pageBuilder.add(new PageComponent(component, "", "", "", folder));
-                        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
-                        break;
-                }
-            }
-            addTab(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), pageBuilder.build());
+        if(UtilsSystem.settingsFile.get("tab.Sequence") == null){
+            UtilsSystem.settingsFile.put("tab.Sequence", String.join(" ", listObjectsFromConfig.get("tabs")));
         }
 
-        ///////CREATE SETTINGS TAB
+        for(String pageName : UtilsSystem.settingsFile.get("tab.Sequence").split(" ")){
+            switch(pageName) {
+                case "tab.optimization":
+                    PageBuilder optimizationBuilder = new PageBuilder();
+                    optimizationBuilder.add(createOptimizationTab());
 
-        //Create field
-        textComponentSettings.setBorder(new FlatButtonBorder());
+                    addInstallPanel("modsmain", optimizationBuilder, true);
 
-        //Create text component with name from locale
-        textComponentSettings.setText(UtilsSystem.pathToMinecraftFolder);
+                    optimizationBuilder.add(modsMain);
+                    optimizationBuilder.add(modsExtension);
 
-        //Create button for setting dialog for select path
-        JButton buttonDialogSettings = new JButton(UtilsSystem.getLocaleString("button.dialog"));
-        buttonDialogSettings.addActionListener(e -> new Thread(() -> actionOnButtonDialog(textComponentSettings)).start());
+                    createModsListPanel();
 
-        FPanel textComponentLine = new FPanel();
-        textComponentLine.setLayout(new BoxLayout(textComponentLine, BoxLayout.X_AXIS));
+                    addTab(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), optimizationBuilder.build());
+                    break;
 
-        textComponentLine
-                .addComponent(textComponentSettings)
-                .createRigidArea(3, 0)
-                .addComponent(buttonDialogSettings);
+                case "tab.mods":
+                    PageBuilder modsBuilder = new PageBuilder();
 
-        FPanel componentPanel = new FPanel();
-        componentPanel.setLayout(new BoxLayout(componentPanel, BoxLayout.Y_AXIS));
+                    comboBoxVersionNotOp.setPreferredSize(new Dimension(300, 20));
+                    comboBoxVersionNotOp.addActionListener(e -> {
+                        modsNotOp.removeAll();
+                        UtilsSystem.listCheckBox.put("modsnotop", new ArrayList<>());
+                        createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
+                        UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
+                    });
 
-        componentPanel
-                .createRigidArea(0, 3)
-                .addComponent(textComponentLine)
-                .createRigidArea(0, 10)
-                .addComponent(comboBoxLanguage)
-                .createRigidArea(0, 10)
-                .addComponent(comboBoxTheme);
+                    JLabel label = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
+                    JPanel panelMods = new JPanel();
+                    panelMods.add(label);
+                    panelMods.add(comboBoxVersionNotOp);
 
-        comboBoxLanguage.setSelectedItem(UtilsSystem.getLocaleString("button." + UtilsOS.getSystemLocale()));
-        comboBoxTheme.setSelectedItem(FlatLightLaf.isLafDark() ? UtilsSystem.getLocaleString("button.dark") : UtilsSystem.getLocaleString("button.light"));
+                    modsBuilder.add(panelMods);
+                    modsBuilder.add(modsNotOp);
 
-        FPanel labelPanel = new FPanel();
-        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
-        labelPanel
-                .addComponent(new FLabel("label.folder.minecraft").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
-                .createRigidArea(0, 14)
-                .addComponent(new FLabel("label.language").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
-                .createRigidArea(0, 14)
-                .addComponent(new FLabel("label.theme").setComponentAlignmentX(Component.RIGHT_ALIGNMENT));
+                    addInstallPanel("modsnotop", modsBuilder, false);
+                    createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
+                    UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
 
-        comboBoxLanguage.addActionListener(e -> actionWhenChangedLocale(comboBoxLanguage));
-        comboBoxTheme.addActionListener(e -> actionWhenChangedTheme(comboBoxTheme));
+                    modsBuilder.add(modsNotOp);
 
-        PageBuilder settingsBuilder = new PageBuilder();
+                    addTab(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), modsBuilder.build());
+                    break;
 
-        settingsBuilder.add(new FPanel()
-                .addComponent(labelPanel)
-                .addComponent(componentPanel));
+                case "tab.farms":
+                    addFarmRpDpTab("farms");
+                    break;
+                case "tab.resourcepacks":
+                    addFarmRpDpTab("resourcepacks");
+                    break;
+                case "tab.datapacks":
+                    addFarmRpDpTab("datapacks");
+                    break;
+                case "tab.settings":
 
-        settingsBuilder.add(new FPanel()
-                .addComponent(createEditorPane("support"))
-                .addComponent(createEditorPane("answers")));
+                    //Create field
+                    textComponentSettings.setBorder(new FlatButtonBorder());
 
-        settingsBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
+                    //Create text component with name from locale
+                    textComponentSettings.setText(UtilsSystem.pathToMinecraftFolder);
 
-        //?????????
-        settingsBuilder.add(new FPanel().addComponent(createEditorPane("clickme")));
+                    //Create button for setting dialog for select path
+                    JButton buttonDialogSettings = new JButton(UtilsSystem.getLocaleString("button.dialog"));
+                    buttonDialogSettings.addActionListener(e -> new Thread(() -> actionOnButtonDialog(textComponentSettings)).start());
 
-        addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/images/settings.png")), settingsBuilder.build());
-        addTab("by TheFaser", null, null, UtilsSystem.getLocaleString("tab.author.tooltip"));
-        addTab("", null, new JPanel());
+                    FPanel textComponentLine = new FPanel();
+                    textComponentLine.setLayout(new BoxLayout(textComponentLine, BoxLayout.X_AXIS));
 
-        FPanel imagePanel = new FPanel()
-                .addComponent(new Image("discord.png").setCustomBorder(null))
-                .addComponent(new Image("yt.png").setCustomBorder(null))
-                .addComponent(new Image("github.png").setCustomBorder(null));
+                    textComponentLine
+                            .addComponent(textComponentSettings)
+                            .createRigidArea(3, 0)
+                            .addComponent(buttonDialogSettings);
 
-        setTabComponentAt(getTabCount() - 1, imagePanel);
+                    FPanel componentPanel = new FPanel();
+                    componentPanel.setLayout(new BoxLayout(componentPanel, BoxLayout.Y_AXIS));
 
-        setEnabledAt(getTabCount() - 1, false);
-        setEnabledAt(getTabCount() - 2, false);
+                    componentPanel
+                            .createRigidArea(0, 2)
+                            .addComponent(textComponentLine)
+                            .createRigidArea(0, 10)
+                            .addComponent(comboBoxLanguage)
+                            .createRigidArea(0, 10)
+                            .addComponent(comboBoxTheme)
+                            .createRigidArea(0, 10)
+                            .addComponent(comboBoxTabAlign);
+
+                    comboBoxLanguage.setSelectedItem(UtilsSystem.getLocaleString("button." + UtilsOS.getSystemLocale()));
+                    comboBoxTheme.setSelectedItem(FlatLightLaf.isLafDark() ? UtilsSystem.getLocaleString("button.dark") : UtilsSystem.getLocaleString("button.light"));
+                    comboBoxTabAlign.setSelectedItem(UtilsSystem.getLocaleString("button." + UtilsSystem.tabbedPaneAlign));
+
+                    comboBoxLanguage.addActionListener(e -> actionWhenChangedLocale(comboBoxLanguage));
+                    comboBoxTheme.addActionListener(e -> actionWhenChangedTheme(comboBoxTheme));
+                    comboBoxTabAlign.addActionListener(e -> actionWhenChangedTabAlign(comboBoxTabAlign));
+
+                    FPanel labelPanel = new FPanel();
+                    labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+                    labelPanel
+                            .addComponent(new FLabel("label.folder.minecraft").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
+                            .createRigidArea(0, 14)
+                            .addComponent(new FLabel("label.language").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
+                            .createRigidArea(0, 14)
+                            .addComponent(new FLabel("label.theme").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
+                            .createRigidArea(0, 14)
+                            .addComponent(new FLabel("label.tab_align").setComponentAlignmentX(Component.RIGHT_ALIGNMENT));
+
+                    PageBuilder settingsBuilder = new PageBuilder();
+
+                    settingsBuilder.add(new FPanel()
+                            .addComponent(labelPanel)
+                            .addComponent(componentPanel));
+
+                    settingsBuilder.add(new FPanel()
+                            .addComponent(createEditorPane("support"))
+                            .addComponent(createEditorPane("answers")));
+
+                    settingsBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
+
+                    //?????????
+                    settingsBuilder.add(new FPanel().addComponent(createEditorPane("clickme")));
+
+                    addTab(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/images/settings.png")), settingsBuilder.build());
+                    break;
+
+                case "byTheFaser":
+                    addTab("by TheFaser", null, null, UtilsSystem.getLocaleString("tab.author.tooltip"));
+                    setEnabledAt(getTabCount() - 1, false);
+                    break;
+
+                case "social":
+                    addTab("social", null, new JPanel());
+
+                    FPanel imagePanel = new FPanel()
+                            .addComponent(new Image("discord.png").setCustomBorder(null))
+                            .addComponent(new Image("yt.png").setCustomBorder(null))
+                            .addComponent(new Image("github.png").setCustomBorder(null));
+
+                    setTabComponentAt(getTabCount() - 1, imagePanel);
+
+                    setEnabledAt(getTabCount() - 1, false);
+                    break;
+            }
+        }
 
         saveConfigWhenExit();
+
+    }
+
+    private void addFarmRpDpTab(String folder){
+
+        PageBuilder pageBuilder = new PageBuilder();
+
+        if(folder.equals("datapacks")) addTextComponentFieldPanel(pageBuilder);
+
+        addInstallPanel(folder, pageBuilder, false);
+        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+
+        for(String component : UtilsSystem.listObjectsFromConfig.get(folder)){
+            switch(folder){
+                case "farms":
+                    pageBuilder.add(new PageComponent(component, "", "", "", "", folder));
+                    pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+                    break;
+                case "resourcepacks":
+                    pageBuilder.add(new PageComponent(component, "", "", folder));
+                    pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+                    break;
+
+                case "datapacks":
+                    pageBuilder.add(new PageComponent(component, "", "", "", folder));
+                    pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+                    break;
+            }
+        }
+        addTab(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), pageBuilder.build());
     }
 
     private JEditorPane createEditorPane(String labelLocale){
@@ -256,6 +288,26 @@ public class TabbedPane extends JTabbedPane {
                 listForFile.add(chosenTheme);
 
                 listForFile.add("show.Warns: " + UtilsSystem.showWarnMessages);
+
+                listForFile.add("chosen.Tab_Align: " +  UtilsSystem.tabbedPaneAlign);
+
+                String tabSequence = "";
+                for(int x = 0; x < getTabCount(); x++){
+                    if(getTitleAt(x).equals("by TheFaser") || getTitleAt(x).equals("social")){
+                        tabSequence += getTitleAt(x).replace(" ", "") + " ";
+                        continue;
+                    }
+
+                    for(String tabName : listObjectsFromConfig.get("tabs")){
+                        if(getTitleAt(x).replace(" ", "").equals(UtilsSystem.getLocaleString(tabName))){
+                            tabSequence += tabName + " ";
+                            break;
+                        }
+                    }
+
+                }
+                listForFile.add("tab.Sequence: " + tabSequence);
+
 
                 Files.write(Paths.get(UtilsSystem.getWorkingDirectory(), File.separator + "flectone.installer"), listForFile);
 
@@ -372,6 +424,16 @@ public class TabbedPane extends JTabbedPane {
 
             panel.add(new PageComponent(string, "", modsList.length, "", "mods" + folder));
             panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        }
+    }
+
+    private void actionWhenChangedTabAlign(JComboBox<String> comboBoxTabAlign){
+        for(String string : UtilsSystem.listObjectsFromConfig.get("support.tab_align")){
+            if(UtilsSystem.getLocaleString("button." + string).equals(comboBoxTabAlign.getSelectedItem())){
+                setTabPlacement(Integer.valueOf(string));
+                UtilsSystem.setTabbedPaneAlign(Integer.valueOf(string));
+                break;
+            }
         }
     }
 
