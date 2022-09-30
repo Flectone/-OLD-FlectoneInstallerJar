@@ -355,4 +355,29 @@ public class FTabbedPane extends JTabbedPane {
             }
         }
     }
+
+    final String PRE_HTML = "<html><p style=\"text-align: left; width: 70px\">";
+    final String POST_HTML = "</p></html>";
+
+
+    protected void addTabAlignLeft(String title, Icon icon, Component component, String tip, int tabbedPlacement) {
+        if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
+            title = PRE_HTML + title + POST_HTML;
+        }
+        addTab(title, icon, component, tip);
+    }
+
+    protected void addTabAlignLeft(String title, Icon icon, Component component, int tabbedPlacement) {
+        if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
+            title = PRE_HTML + title + POST_HTML;
+        }
+        addTab(title, icon, component);
+    }
+
+    protected void addTabAlignLeft(String title, Component component, int tabbedPlacement) {
+        if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
+            title = PRE_HTML + title + POST_HTML;
+        }
+        addTab(title, component);
+    }
 }

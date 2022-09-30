@@ -149,7 +149,8 @@ public class UtilsSystem {
     }
 
     //All strings from locales ru, en
-    public final static String getLocaleString(String string){
+    public static String getLocaleString(String string){
+        if(string.contains("litematic")) return localeFile.get("farms.litematic");
         if(localeFile.get(string) == null) return localeFile.get("label.empty");
         //Get string from hash map
         return localeFile.get(string);
