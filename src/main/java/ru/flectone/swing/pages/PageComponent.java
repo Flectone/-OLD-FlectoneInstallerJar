@@ -28,9 +28,9 @@ public class PageComponent extends JPanel {
         Box box = Box.createVerticalBox();
         box.add(createLabel(component + ".version"));
         box.add(createRigidArea(0, 5));
-        box.add(createCheckBox(component + ".install", page));
+        box.add(createCheckBox(UtilsSystem.getLocaleString(component + ".install"),component + ".install", page));
         box.add(createRigidArea(0, 5));
-        box.add(createCheckBox(component + ".litematic", page));
+        box.add(createCheckBox(UtilsSystem.getLocaleString("farms.litematic"),component + ".litematic", page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
@@ -47,7 +47,7 @@ public class PageComponent extends JPanel {
         component = "resourcepacks." + component;
 
         Box box = Box.createVerticalBox();
-        box.add(createCheckBox(component + ".install", page));
+        box.add(createCheckBox(UtilsSystem.getLocaleString("label.install").replace("%component_name%", UtilsSystem.getLocaleString(component)), component, page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
@@ -65,7 +65,7 @@ public class PageComponent extends JPanel {
         component = "mods." + component;
 
         Box box = Box.createVerticalBox();
-        box.add(createCheckBox(component + ".install", page));
+        box.add(createCheckBox(UtilsSystem.getLocaleString("label.install").replace("%component_name%", UtilsSystem.getLocaleString(component)),component + ".install", page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
@@ -93,7 +93,7 @@ public class PageComponent extends JPanel {
         Box box = Box.createVerticalBox();
         box.add(createLabel(component + ".version"));
         box.add(createRigidArea(0, 5));
-        box.add(createCheckBox(component + ".install", page));
+        box.add(createCheckBox(UtilsSystem.getLocaleString("label.install").replace("%component_name%", UtilsSystem.getLocaleString(component)),component + ".install", page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
@@ -135,12 +135,12 @@ public class PageComponent extends JPanel {
         return Box.createRigidArea(new Dimension(width, height));
     }
 
-    protected JCheckBox createCheckBox(String checkBoxName, String page){
-        JCheckBox checkBox = new JCheckBox(UtilsSystem.getLocaleString(checkBoxName));
+    protected JCheckBox createCheckBox(String checkBoxName, String checkBoxConfigName, String page){
+        JCheckBox checkBox = new JCheckBox(checkBoxName);
         checkBox.setAlignmentX(LEFT_ALIGNMENT);
 
-        checkBox.setName(checkBoxName.split("\\.")[1]);
-        if(checkBoxName.contains("litematic") && page.equals("farms")) checkBox.setName(checkBoxName.split("\\.")[1] + "litematic");
+        checkBox.setName(checkBoxConfigName.split("\\.")[1]);
+        if(checkBoxConfigName.contains("litematic") && page.equals("farms")) checkBox.setName(checkBoxConfigName.split("\\.")[1] + "litematic");
 
         ArrayList<JCheckBox> listCheckBox = new ArrayList<>();
         if(UtilsSystem.listCheckBox.get(page) != null){

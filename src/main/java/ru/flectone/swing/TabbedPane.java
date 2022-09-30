@@ -175,8 +175,6 @@ public class TabbedPane extends FTabbedPane {
                             .createRigidArea(0, 14)
                             .addComponent(new FLabel("label.tab_align").setComponentAlignmentX(Component.RIGHT_ALIGNMENT));
 
-
-
                     pageBuilder.add(new FPanel()
                             .addComponent(labelPanel)
                             .addComponent(componentPanel));
