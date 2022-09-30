@@ -318,6 +318,13 @@ public class TabbedPane extends FTabbedPane {
 
             listForFile.add("tab.Selected: " + getSelectedIndex());
 
+            try {
+                listForFile.add("last.Path: " + Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+            } catch (Exception error){
+                new MessageDialog(error.toString(), "error", 0);
+            }
+
+            listForFile.add("boolean.Update: " + Main.updateProgram);
 
             Files.write(Paths.get(UtilsSystem.getWorkingDirectory(), File.separator + "flectone.installer"), listForFile);
 
