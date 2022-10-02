@@ -38,10 +38,6 @@ public class UtilsSystem {
         setShowWarnMessages(Boolean.parseBoolean(UtilsSystem.settingsFile.get("show.Warns")));
     }
 
-    public static void setChangeBackgroundColor(boolean changeBackgroundColor) {
-        UtilsSystem.changeBackgroundColor = changeBackgroundColor;
-    }
-
     public static Color getSecondColor() {
         if(secondColor == null){
             if(FlatDarkLaf.isLafDark()) return new Color(54, 57, 59);

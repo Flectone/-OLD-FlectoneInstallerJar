@@ -15,8 +15,8 @@ public class Frame extends JFrame{
         frame = this;
         this.add(tabbedPane);
 
-        setSize(new Dimension(800, 450));
-        setMinimumSize(new Dimension(800, 450));
+        setSize(new Dimension(1000, 630));
+        setMinimumSize(new Dimension(1000, 630));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle(UtilsSystem.getLocaleString("frame.title") + UtilsSystem.getVersionProgram());
         setVisible(true);

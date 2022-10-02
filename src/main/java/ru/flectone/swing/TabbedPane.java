@@ -13,6 +13,8 @@ import ru.flectone.utils.UtilsSystem;
 import ru.flectone.utils.UtilsWeb;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
@@ -52,12 +54,6 @@ public class TabbedPane extends FTabbedPane {
 
     private final JTextComponent datapackTextComponent = new JTextField();
 
-    private final Box modsMain = Box.createVerticalBox();
-
-    private final Box modsExtension = Box.createVerticalBox();
-
-    private final Box modsNotOp = Box.createVerticalBox();
-
     private final Thread threadSaveConfig = new Thread(() -> saveConfig());
 
     public TabbedPane() {
@@ -70,58 +66,129 @@ public class TabbedPane extends FTabbedPane {
 
         for(String pageName : UtilsSystem.settingsFile.get("tab.Sequence").split(" ")){
 
-            PageBuilder pageBuilder = new PageBuilder();
+            PageBuilder componentBuilder = new PageBuilder();
+            PageBuilder installBuilder = new PageBuilder();
+            PageBuilder finalBuilder = new PageBuilder();
 
             switch (pageName){
                 case "tab.optimization":
-                    pageBuilder.add(createOptimizationTab());
 
-                    addInstallPanel("modsmain", pageBuilder, true);
+                    comboBoxType.setPreferredSize(new Dimension(200, 20));
 
-                    pageBuilder.add(modsMain);
-                    pageBuilder.add(modsExtension);
+                    checkBoxFPS.addActionListener(e -> {
+                        for (JCheckBox checkBox : listCheckBox.get("modsextension")) {
+                            checkBox.setSelected(checkBoxFPS.isSelected());
+                        }
 
-                    createModsListPanel();
+                        if (checkBoxFPS.isSelected()) new MessageDialog(UtilsSystem.getLocaleString("message.warn.maxfps"), "warn");
 
-                    addTabAlignLeft(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), pageBuilder.build(), getTabPlacement());
+                    });
+
+                    //Create additional panel for type Version, so they are on the same line
+                    FPanel typeVersionLine = new FPanel();
+
+                    typeVersionLine
+                            .setPanelLayout(new BoxLayout(typeVersionLine, BoxLayout.X_AXIS))
+                            .addComponent(comboBoxType)
+                            .createRigidArea(1, 0)
+                            .addComponent(checkBoxFPS);
+
+                    //Create panel for other components
+                    FPanel rightPanel = new FPanel();
+
+                    //Add type version to right panel
+                    rightPanel
+                            .setPanelLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS))
+                            .addComponent(typeVersionLine)
+                            .createRigidArea(0, 10)
+                            .addComponent(comboBoxVersionOp);
+
+                    //Panel for labels, so they don't depend on other components
+                    FPanel leftPanel = new FPanel();
+                    leftPanel
+                            .setPanelLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS))
+                            .addComponent(new FLabel("label.type.mods").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
+                            .createRigidArea(0, 14)
+                            .addComponent(new FLabel("label.version.mods").setComponentAlignmentX(Component.RIGHT_ALIGNMENT));
+
+                    //Create Box so that other components do not depend on the main panel
+                    FPanel finalPanel = new FPanel();
+                    finalPanel
+                            //Set vertical layout
+                            .setPanelLayout(new BoxLayout(finalPanel, BoxLayout.Y_AXIS))
+                            .createRigidArea(0, 5)
+                            //Add left panel (text) and right panel (combobox and checkbox)
+                            .addComponent(new FPanel().addComponent(leftPanel).addComponent(rightPanel))
+                            //Add checkboxs in down
+                            .add(new FPanel().addComponent(checkBoxFabric).addComponent(checkBoxSettings).addComponent(checkBoxDelete));
+
+                    installBuilder.add(finalPanel);
+
+                    comboBoxVersionOp.addActionListener(e -> {
+                        listCheckBox.put("modsmain", new ArrayList<>());
+                        listCheckBox.put("modsextension", new ArrayList<>());
+                        componentBuilder.clearBuilder();
+                        createModsListPanel(componentBuilder);
+                    });
+
+                    comboBoxType.addActionListener(e -> {
+                        String[] list = UtilsSystem.listObjectsFromConfig.get("version." + comboBoxType.getSelectedItem());
+                        comboBoxVersionOp.setModel(new DefaultComboBoxModel<>(list));
+                        listCheckBox.put("modsmain", new ArrayList<>());
+                        listCheckBox.put("modsextension", new ArrayList<>());
+                        componentBuilder.clearBuilder();
+                        createModsListPanel(componentBuilder);
+                    });
+
+                    createInstallPanel("modsmain", true, componentBuilder, installBuilder);
+                    createModsListPanel(componentBuilder);
+
+                    finalBuilder.add(installBuilder.panelBuild());
+                    finalBuilder.add(componentBuilder.scrollBuild());
+
+                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), finalBuilder.build(), getTabPlacement());
                     break;
 
                 case "tab.mods":
 
+                    JLabel label = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
+                    FPanel panelMods = new FPanel()
+                            .addComponent(label)
+                            .addComponent(comboBoxVersionNotOp);
+                    installBuilder.add(panelMods);
+
                     comboBoxVersionNotOp.setPreferredSize(new Dimension(300, 20));
                     comboBoxVersionNotOp.addActionListener(e -> {
-                        modsNotOp.removeAll();
+                        componentBuilder.clearBuilder();
+
                         UtilsSystem.listCheckBox.put("modsnotop", new ArrayList<>());
-                        createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
+                        createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", componentBuilder);
                         UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
                     });
 
-                    JLabel label = new JLabel(UtilsSystem.getLocaleString("label.version.mods"));
-                    JPanel panelMods = new JPanel();
-                    panelMods.add(label);
-                    panelMods.add(comboBoxVersionNotOp);
 
-                    pageBuilder.add(panelMods);
-                    pageBuilder.add(modsNotOp);
-
-                    addInstallPanel("modsnotop", pageBuilder, false);
-                    createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", modsNotOp);
+                    createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop",componentBuilder);
                     UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
 
-                    pageBuilder.add(modsNotOp);
 
-                    addTabAlignLeft(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), pageBuilder.build(), getTabPlacement());
+                    createInstallPanel("modsnotop", false, componentBuilder, installBuilder);
+
+                    finalBuilder.add(installBuilder.panelBuild());
+                    finalBuilder.add(componentBuilder.scrollBuild());
+
+                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), finalBuilder.build(), getTabPlacement());
                     break;
 
                 case "tab.farms":
-                    addFarmRpDpTab("farms", pageBuilder);
+                    addFarmRpDpTab("farms", componentBuilder, installBuilder);
                     break;
                 case "tab.resourcepacks":
-                    addFarmRpDpTab("resourcepacks", pageBuilder);
+                    addFarmRpDpTab("resourcepacks", componentBuilder, installBuilder);
                     break;
                 case "tab.datapacks":
-                    addTextComponentFieldPanel(pageBuilder);
-                    addFarmRpDpTab("datapacks", pageBuilder);
+                    installBuilder.add(createTextComponent());
+
+                    addFarmRpDpTab("datapacks", componentBuilder, installBuilder);
                     break;
                 case "tab.settings":
 
@@ -175,20 +242,19 @@ public class TabbedPane extends FTabbedPane {
                             .createRigidArea(0, 14)
                             .addComponent(new FLabel("label.tab_align").setComponentAlignmentX(Component.RIGHT_ALIGNMENT));
 
-                    pageBuilder.add(new FPanel()
+                    componentBuilder.add(new FPanel()
                             .addComponent(labelPanel)
                             .addComponent(componentPanel));
 
-                    pageBuilder.add(new FPanel()
+                    componentBuilder.add(new FPanel()
                             .addComponent(createEditorPane("support"))
                             .addComponent(createEditorPane("answers")));
 
-                    pageBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
+                    componentBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
+//                    //?????????
+//                    componentBuilder.add(new FPanel().addComponent(createEditorPane("clickme")));
 
-                    //?????????
-                    pageBuilder.add(new FPanel().addComponent(createEditorPane("clickme")));
-
-                    addTabAlignLeft(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/images/settings.png")), pageBuilder.build(), getTabPlacement());
+                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/images/settings.png")), componentBuilder.build(), getTabPlacement());
                     break;
 
                 case "byTheFaser":
@@ -198,7 +264,7 @@ public class TabbedPane extends FTabbedPane {
                     break;
 
                 case "social":
-                    addTabAlignLeft("social", null, new JPanel(), getTabPlacement());
+                    addTabCustomAlign("social", null, new JPanel(), getTabPlacement());
 
                     FPanel imagePanel = new FPanel()
                             .addComponent(new Image("discord.png").setCustomBorder(null))
@@ -219,30 +285,30 @@ public class TabbedPane extends FTabbedPane {
 
     }
 
-    private void addFarmRpDpTab(String folder, PageBuilder pageBuilder){
-
-        addInstallPanel(folder, pageBuilder, false);
-        pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
+    private void addFarmRpDpTab(String folder, PageBuilder pageBuilder, PageBuilder installBuilder){
 
         for(String component : UtilsSystem.listObjectsFromConfig.get(folder)){
             //Maybe this bad code
             switch (folder) {
                 case "farms":
                     pageBuilder.add(new PageComponent(component, "", "", "", "", folder));
-                    pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
                     break;
                 case "resourcepacks":
                     pageBuilder.add(new PageComponent(component, "", "", folder));
-                    pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
                     break;
 
                 case "datapacks":
                     pageBuilder.add(new PageComponent(component, "", "", "", folder));
-                    pageBuilder.add(new JSeparator(SwingConstants.HORIZONTAL));
                     break;
             }
         }
-        addTabAlignLeft(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), pageBuilder.build(), getTabPlacement());
+        createInstallPanel(folder, false, pageBuilder, installBuilder);
+
+        PageBuilder finalBuilder = new PageBuilder();
+        finalBuilder.add(installBuilder.panelBuild());
+        finalBuilder.add(pageBuilder.scrollBuild());
+
+        addTabCustomAlign(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), finalBuilder.build(), getTabPlacement());
     }
 
     private JEditorPane createEditorPane(String labelLocale) {
@@ -331,75 +397,8 @@ public class TabbedPane extends FTabbedPane {
         }
     }
 
-    public Component createOptimizationTab() {
-
-        comboBoxType.setPreferredSize(new Dimension(200, 20));
-        comboBoxType.addActionListener(e -> {
-            String[] list = UtilsSystem.listObjectsFromConfig.get("version." + comboBoxType.getSelectedItem());
-            comboBoxVersionOp.setModel(new DefaultComboBoxModel<>(list));
-            listCheckBox.put("modsmain", new ArrayList<>());
-            listCheckBox.put("modsextension", new ArrayList<>());
-            createModsListPanel();
-        });
-
-        checkBoxFPS.addActionListener(e -> {
-            for (JCheckBox checkBox : listCheckBox.get("modsextension")) {
-                checkBox.setSelected(checkBoxFPS.isSelected());
-            }
-
-            if (checkBoxFPS.isSelected()) new MessageDialog(UtilsSystem.getLocaleString("message.warn.maxfps"), "warn");
-
-        });
-
-        comboBoxVersionOp.addActionListener(e -> {
-            listCheckBox.put("modsmain", new ArrayList<>());
-            listCheckBox.put("modsextension", new ArrayList<>());
-            createModsListPanel();
-        });
-
-        //Create additional panel for type Version, so they are on the same line
-        FPanel typeVersionLine = new FPanel();
-
-        typeVersionLine
-                .setPanelLayout(new BoxLayout(typeVersionLine, BoxLayout.X_AXIS))
-                .addComponent(comboBoxType)
-                .createRigidArea(1, 0)
-                .addComponent(checkBoxFPS);
-
-        //Create panel for other components
-        FPanel rightPanel = new FPanel();
-
-        //Add type version to right panel
-        rightPanel
-                .setPanelLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS))
-                .addComponent(typeVersionLine)
-                .createRigidArea(0, 10)
-                .addComponent(comboBoxVersionOp);
-
-        //Panel for labels, so they don't depend on other components
-        FPanel leftPanel = new FPanel();
-        leftPanel
-                .setPanelLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS))
-                .addComponent(new FLabel("label.type.mods").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
-                .createRigidArea(0, 14)
-                .addComponent(new FLabel("label.version.mods").setComponentAlignmentX(Component.RIGHT_ALIGNMENT));
-
-        //Create Box so that other components do not depend on the main panel
-        FPanel finalPanel = new FPanel();
-        finalPanel
-                //Set vertical layout
-                .setPanelLayout(new BoxLayout(finalPanel, BoxLayout.Y_AXIS))
-                .createRigidArea(0, 5)
-                //Add left panel (text) and right panel (combobox and checkbox)
-                .addComponent(new FPanel().addComponent(leftPanel).addComponent(rightPanel))
-                //Add checkboxs in down
-                .add(new FPanel().addComponent(checkBoxFabric).addComponent(checkBoxSettings).addComponent(checkBoxDelete));
-
-        return finalPanel;
-    }
-
     //Create combo box
-    private JComboBox<String> createComboBox(String nameMassive) {
+    private JComboBox<String> createComboBox(String nameMassive){
         //Create combo box with UtilsSystem.getFoldersList
         JComboBox<String> comboBox = new JComboBox<>(Objects.requireNonNull(UtilsSystem.listObjectsFromConfig.get(nameMassive)));
         //Add to action listener so that check click
@@ -409,42 +408,37 @@ public class TabbedPane extends FTabbedPane {
         return comboBox;
     }
 
-    private void createModsListPanel() {
-        modsMain.removeAll();
-        createModsUtil(comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem() + "/main", "main", modsMain);
+    private void createModsListPanel(PageBuilder builder){
 
-        modsExtension.removeAll();
-        createModsUtil(comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem() + "/extension", "extension", modsExtension);
+        createModsUtil(comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem() + "/main", "main", builder);
 
-        for (JCheckBox checkBox : listCheckBox.get("modsextension")) {
+        createModsUtil(comboBoxType.getSelectedItem() + "/" + comboBoxVersionOp.getSelectedItem() + "/extension", "extension", builder);
+
+        for(JCheckBox checkBox : listCheckBox.get("modsextension")){
             checkBox.setSelected(checkBoxFPS.isSelected());
         }
     }
 
-    private void createModsUtil(String pathToMods, String folder, Box panel) {
+    private void createModsUtil(String pathToMods, String folder, PageBuilder builder){
 
         String[] modsList = UtilsSystem.listObjectsFromConfig.get(pathToMods);
-        if (modsList == null) {
+        if(modsList == null){
             modsList = UtilsWeb.getModsFromWebSite(pathToMods);
 
             UtilsSystem.listObjectsFromConfig.put(pathToMods, modsList);
         }
 
-        panel.add(new FPanel().addComponent(new JLabel(UtilsSystem.getLocaleString("mods.label." + folder) + " (" + UtilsSystem.getLocaleString("mods.total") + modsList.length + ")")));
-        panel.add(new JSeparator(SwingUtilities.HORIZONTAL));
-
-        for (String string : modsList) {
+        for(String string : modsList){
             string = string.replace(".jar", "");
 
-            panel.add(new PageComponent(string, "", modsList.length, "", "mods" + folder));
-            panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+            builder.add(new PageComponent(string, "", modsList.length, "", "mods" + folder));
         }
     }
 
-    private void actionWhenChangedTabAlign(JComboBox<String> comboBoxTabAlign) {
+    private void actionWhenChangedTabAlign(JComboBox<String> comboBoxTabAlign){
         saveConfig();
-        for (String string : UtilsSystem.listObjectsFromConfig.get("support.tab_align")) {
-            if (UtilsSystem.getLocaleString("button." + string).equals(comboBoxTabAlign.getSelectedItem())) {
+        for(String string : UtilsSystem.listObjectsFromConfig.get("support.tab_align")){
+            if(UtilsSystem.getLocaleString("button." + string).equals(comboBoxTabAlign.getSelectedItem())){
                 setTabPlacement(Integer.valueOf(string));
                 UtilsSystem.setTabbedPaneAlign(Integer.valueOf(string));
                 break;
@@ -481,6 +475,8 @@ public class TabbedPane extends FTabbedPane {
             UtilsSystem.setSecondColor(new Color(54, 57, 59));
         }
         FlatLightLaf.updateUI();
+        FlatLightLaf.revalidateAndRepaintAllFramesAndDialogs();
+
         reloadFrame();
     }
 
@@ -500,6 +496,7 @@ public class TabbedPane extends FTabbedPane {
 
             Frame.getFrame().setTitle(UtilsSystem.getLocaleString("frame.title") + UtilsSystem.getVersionProgram());
             Frame.getFrame().getContentPane().removeAll();
+            removeAll();
             Frame.getFrame().getContentPane().add(newTabbedPane);
 
         }).start();
@@ -531,7 +528,7 @@ public class TabbedPane extends FTabbedPane {
         }
     }
 
-    public void addTextComponentFieldPanel(PageBuilder builder) {
+    public FPanel createTextComponent() {
         datapackTextComponent.setText(UtilsSystem.pathToMinecraftFolder + "saves" + File.separator);
 
         JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
@@ -543,10 +540,10 @@ public class TabbedPane extends FTabbedPane {
                 .addComponent(datapackTextComponent)
                 .addComponent(buttonDialog);
 
-        builder.add(dialogPanel);
+        return dialogPanel;
     }
 
-    public void addInstallPanel(String page, PageBuilder builder, boolean bolEnablePanel) {
+    public void createInstallPanel(String page, boolean bolEnablePanel, PageBuilder componentBuilder, PageBuilder installBuilder) {
 
         JLabel labelStatus = new JLabel(UtilsSystem.getLocaleString("label.status.ready." + bolEnablePanel));
         labelStatus.setEnabled(bolEnablePanel);
@@ -646,11 +643,62 @@ public class TabbedPane extends FTabbedPane {
             buttonSelect.setEnabled(true);
         }).start());
 
-        Box box = Box.createVerticalBox();
-        box.add(panelStatus);
-        box.add(new FPanel().addComponent(buttonSelect).addComponent(buttonInstall).addComponent(buttonDialog));
+        JTextField searchField = new JTextField();
+        searchField.setBorder(new FlatButtonBorder());
+        searchField.setPreferredSize(new Dimension(200, 20));
 
-        builder.add(box);
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                changeTextField();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                changeTextField();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                changeTextField();
+            }
+
+            public void changeTextField() {
+
+                int countComponents = componentBuilder.getComponents().length;
+
+                for(int x = 0; x < componentBuilder.getComponents().length; x++){
+                    Component component = componentBuilder.getComponents()[x];
+
+                    String componentName = UtilsSystem.getLocaleString(component.getName()).toLowerCase();
+                    String componentDescription = UtilsSystem.getLocaleString(component.getName() + ".description").toLowerCase();
+                    String inputText = searchField.getText().toLowerCase();
+
+                    boolean componentEquals = componentName.contains(inputText) || componentDescription.contains(inputText);
+                    componentBuilder.setVisibleComponent(x, componentEquals);
+
+                    if(!componentEquals) countComponents--;
+                    if(component.getSize().height > 500) componentBuilder.removeComponent(component);
+
+                }
+                JLabel label = new JLabel("");
+                label.setPreferredSize(new Dimension(0, 1000));
+
+                if(countComponents < 6){
+                    componentBuilder.add(label);
+                    componentBuilder.setScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+                } else {
+                    componentBuilder.setScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+                }
+
+                componentBuilder.updateColorComponents();
+                revalidate();
+            }
+        });
+
+        installBuilder.add(panelStatus);
+        installBuilder.add(new FPanel().addComponent(buttonSelect).addComponent(buttonInstall).addComponent(buttonDialog));
+
+        installBuilder.add(new FPanel().addComponent(new FLabel("label.search")).addComponent(searchField).createRigidArea(30, 0));
+
         UtilsSystem.enabledComponentsHashMap.put(page, arrayList);
     }
 

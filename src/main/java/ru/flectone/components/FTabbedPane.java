@@ -1,14 +1,10 @@
 package ru.flectone.components;
 
 import java.awt.*;
-import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
@@ -360,21 +356,21 @@ public class FTabbedPane extends JTabbedPane {
     final String POST_HTML = "</p></html>";
 
 
-    protected void addTabAlignLeft(String title, Icon icon, Component component, String tip, int tabbedPlacement) {
+    protected void addTabCustomAlign(String title, Icon icon, Component component, String tip, int tabbedPlacement) {
         if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
             title = PRE_HTML + title + POST_HTML;
         }
         addTab(title, icon, component, tip);
     }
 
-    protected void addTabAlignLeft(String title, Icon icon, Component component, int tabbedPlacement) {
+    protected void addTabCustomAlign(String title, Icon icon, Component component, int tabbedPlacement) {
         if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
             title = PRE_HTML + title + POST_HTML;
         }
         addTab(title, icon, component);
     }
 
-    protected void addTabAlignLeft(String title, Component component, int tabbedPlacement) {
+    protected void addTabCustomAlign(String title, Component component, int tabbedPlacement) {
         if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
             title = PRE_HTML + title + POST_HTML;
         }

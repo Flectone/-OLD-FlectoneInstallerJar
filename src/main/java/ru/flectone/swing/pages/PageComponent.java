@@ -11,8 +11,6 @@ import java.util.ArrayList;
 
 public class PageComponent extends JPanel {
 
-    private boolean changeBackgroundColor = UtilsSystem.changeBackgroundColor;
-
     public PageComponent(String imageName){
         setLayout(new FlowLayout(FlowLayout.LEFT));
         add(new Image(imageName));
@@ -28,15 +26,15 @@ public class PageComponent extends JPanel {
         Box box = Box.createVerticalBox();
         box.add(createLabel(component + ".version"));
         box.add(createRigidArea(0, 5));
-        box.add(createCheckBox(UtilsSystem.getLocaleString(component + ".install"),component + ".install", page));
+        box.add(createCheckBox(UtilsSystem.getLocaleString("label.install").replace("%component_name%", UtilsSystem.getLocaleString(component)),component + ".install", page));
         box.add(createRigidArea(0, 5));
         box.add(createCheckBox(UtilsSystem.getLocaleString("farms.litematic"),component + ".litematic", page));
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
-        setSecondBackgroundColor();
         add(box);
 
+        setName(component);
     }
 
     public PageComponent(String component, String checkBox, String description, String page){
@@ -51,9 +49,9 @@ public class PageComponent extends JPanel {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
-        setSecondBackgroundColor();
         add(box);
-        setName(page);
+
+        setName(component);
 
     }
 
@@ -69,18 +67,10 @@ public class PageComponent extends JPanel {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
-
-        setSecondBackgroundColor();
         add(box);
 
-    }
+        setName(component);
 
-    private void setSecondBackgroundColor(){
-        if(changeBackgroundColor) {
-            setBackground(UtilsSystem.getSecondColor());
-            UtilsSystem.setChangeBackgroundColor(false);
-
-        } else UtilsSystem.setChangeBackgroundColor(true);
     }
 
     public PageComponent(String component, String version, String checkBox, String description, String page){
@@ -97,8 +87,9 @@ public class PageComponent extends JPanel {
         box.add(createRigidArea(0, 5));
         box.add(createLabel(component + ".description"));
 
-        setSecondBackgroundColor();
         add(box);
+
+        setName(component);
     }
 
     //Create text component
