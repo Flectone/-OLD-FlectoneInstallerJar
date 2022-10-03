@@ -8,11 +8,11 @@ Choose those mods, farms, resource packs, data packs that you definitely need!
 
 ### Optimization tab -> Optimize your minecraft!
 
-<img width="500" alt="Optimization tab" src="https://user-images.githubusercontent.com/69783345/190899722-2ff47452-6d64-4ff6-b5e6-89481a726a99.jpeg">
+![2](https://user-images.githubusercontent.com/69783345/193578616-7590795f-dabd-4ff4-a979-e7b3f97997b2.png)
 
 ### Mods tab -> Additional mods you may like
 
-<img width="500" alt="Mods tab" src="https://user-images.githubusercontent.com/69783345/190899703-01c6acab-a4fc-4691-856e-a94190804b9b.png">
+![1](https://user-images.githubusercontent.com/69783345/193578625-945d8d7a-26d6-4bff-a0f0-94a1376d89f2.png)
 
 
 Support English, Russian, Ukrainian languages
@@ -28,6 +28,3 @@ Support versions:
 
 exe installer
 https://github.com/Flectone-ru/FlectoneMods-Exe
-
-
-
