@@ -129,6 +129,7 @@ public class TabbedPane extends FTabbedPane {
                         listCheckBox.put("modsextension", new ArrayList<>());
                         componentBuilder.clearBuilder();
                         createModsListPanel(componentBuilder);
+                        componentBuilder.updateColorComponents();
                     });
 
                     comboBoxType.addActionListener(e -> {
@@ -138,6 +139,7 @@ public class TabbedPane extends FTabbedPane {
                         listCheckBox.put("modsextension", new ArrayList<>());
                         componentBuilder.clearBuilder();
                         createModsListPanel(componentBuilder);
+                        componentBuilder.updateColorComponents();
                     });
 
                     createInstallPanel("modsmain", true, componentBuilder, installBuilder);
@@ -164,6 +166,7 @@ public class TabbedPane extends FTabbedPane {
                         UtilsSystem.listCheckBox.put("modsnotop", new ArrayList<>());
                         createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop", componentBuilder);
                         UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
+                        componentBuilder.updateColorComponents();
                     });
 
 
