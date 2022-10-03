@@ -43,6 +43,7 @@ label.clickme: "*Flectone Inc*"
 label.empty: "Title not found"
 label.tab_align: "Tab align:"
 label.install: "Install %component_name%"
+label.search: "Search:"
 
 checkbox.FPS: "Maximum FPS"
 checkbox.FPS.tooltip: "Unstable mods for maximum FPS (may cause FPS drops)"

@@ -43,6 +43,7 @@ label.clickme: "*Flectone Inc*"
 label.empty: "Тақырып табылмады"
 label.tab_align: "Қойындының орналасуы:"
 label.install: "%component_name% орнату"
+label.search: "Іздеу:"
 
 checkbox.FPS: "Максималды FPS"
 checkbox.FPS.tooltip: "Максималды FPS үшін тұрақсыз режимдер (FPS құлауына әкелуі мүмкін)"
