@@ -74,6 +74,9 @@ message.warn.maxfps: "We do not recommend using this item due to its instability
 
 dialog.title: "Select the installation location"
 
+mods.noxesium.description: "Mod performance improvements for specific situations not covered by other optimization mods"
+mods.exordium.description: "Mod render the GUI and screens at a lower framerate to speed up"
+mods.lunade-fastanim.description: "Mod speeds up entity animation calculations!"
 mods.3dskinlayers.description: "Mod changes second layer of skin to a 3D version"
 mods.advancementinfo.description: "Mod increases achievement window and shows what is missing"
 mods.appleskin.description: "Mod shows saturation"
