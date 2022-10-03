@@ -428,6 +428,12 @@ public class TabbedPane extends FTabbedPane {
             UtilsSystem.listObjectsFromConfig.put(pathToMods, modsList);
         }
 
+        FPanel panel = new FPanel();
+        panel.addComponent(new JLabel( UtilsSystem.getLocaleString("mods.label." + folder) + " (" + UtilsSystem.getLocaleString("mods.total") + modsList.length + ")"));
+        panel.setName("!!!");
+
+        builder.add(panel);
+
         for(String string : modsList){
             string = string.replace(".jar", "");
 
@@ -530,6 +536,7 @@ public class TabbedPane extends FTabbedPane {
 
     public FPanel createTextComponent() {
         datapackTextComponent.setText(UtilsSystem.pathToMinecraftFolder + "saves" + File.separator);
+        datapackTextComponent.setBorder(new FlatButtonBorder());
 
         JButton buttonDialog = new JButton(UtilsSystem.getLocaleString("button.dialog"));
         buttonDialog.addActionListener(e -> actionOnButtonDialog(datapackTextComponent));

@@ -40,7 +40,7 @@ public class PageBuilder {
         for(int x = 0; x < builder.getComponents().length; x++){
             Component component = builder.getComponents()[x];
 
-            if(!component.isVisible()) continue;
+            if(!component.isVisible() || (component.getName() != null && component.getName().equals("!!!"))) continue;
 
             if(count%2 == 0) component.setBackground(UtilsSystem.getSecondColor());
             else component.setBackground(panelForColor.getBackground());
