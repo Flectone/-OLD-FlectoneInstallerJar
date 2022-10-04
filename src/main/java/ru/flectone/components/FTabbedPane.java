@@ -1,11 +1,15 @@
 package ru.flectone.components;
 
+import ru.flectone.swing.MessageDialog;
+import ru.flectone.utils.UtilsSystem;
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.Optional;
 
 import javax.swing.*;
@@ -356,24 +360,29 @@ public class FTabbedPane extends JTabbedPane {
     final String POST_HTML = "</p></html>";
 
 
-    protected void addTabCustomAlign(String title, Icon icon, Component component, String tip, int tabbedPlacement) {
-        if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
+    protected void addTabCustomAlign(String title, Icon icon, Component component, String tip) {
+        if(getTabPlacement() == JTabbedPane.LEFT || getTabPlacement() == JTabbedPane.RIGHT){
             title = PRE_HTML + title + POST_HTML;
         }
         addTab(title, icon, component, tip);
     }
 
-    protected void addTabCustomAlign(String title, Icon icon, Component component, int tabbedPlacement) {
-        if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
+    protected void addTabCustomAlign(String title, Icon icon, Component component) {
+        if(getTabPlacement() == JTabbedPane.LEFT || getTabPlacement()== JTabbedPane.RIGHT){
             title = PRE_HTML + title + POST_HTML;
         }
         addTab(title, icon, component);
     }
 
-    protected void addTabCustomAlign(String title, Component component, int tabbedPlacement) {
-        if(tabbedPlacement == JTabbedPane.LEFT || tabbedPlacement == JTabbedPane.RIGHT){
+    protected void addTabCustomAlign(String title, Component component) {
+        if(getTabPlacement() == JTabbedPane.LEFT || getTabPlacement() == JTabbedPane.RIGHT){
             title = PRE_HTML + title + POST_HTML;
         }
         addTab(title, component);
     }
+
+    protected FButton createButton(String buttonName){
+        return new FButton(buttonName);
+    }
+
 }

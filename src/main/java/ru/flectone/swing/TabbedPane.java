@@ -20,6 +20,7 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -148,7 +149,7 @@ public class TabbedPane extends FTabbedPane {
                     finalBuilder.add(installBuilder.panelBuild());
                     finalBuilder.add(componentBuilder.scrollBuild());
 
-                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), finalBuilder.build(), getTabPlacement());
+                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.optimization"), new ImageIcon(Main.class.getResource("/images/optimization.png")), finalBuilder.build());
                     break;
 
                 case "tab.mods":
@@ -173,13 +174,12 @@ public class TabbedPane extends FTabbedPane {
                     createModsUtil("/notop/" + comboBoxVersionNotOp.getSelectedItem(), "notop",componentBuilder);
                     UtilsSystem.countCheckBoxHashMap.put("modsnotop", 0);
 
-
                     createInstallPanel("modsnotop", false, componentBuilder, installBuilder);
 
                     finalBuilder.add(installBuilder.panelBuild());
                     finalBuilder.add(componentBuilder.scrollBuild());
 
-                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), finalBuilder.build(), getTabPlacement());
+                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.mods"), new ImageIcon(Main.class.getResource("/images/mods.png")), finalBuilder.build());
                     break;
 
                 case "tab.farms":
@@ -202,7 +202,7 @@ public class TabbedPane extends FTabbedPane {
                     textComponentSettings.setText(UtilsSystem.pathToMinecraftFolder);
 
                     //Create button for setting dialog for select path
-                    JButton buttonDialogSettings = new JButton(UtilsSystem.getLocaleString("button.dialog"));
+                    JButton buttonDialogSettings = createButton("dialog");
                     buttonDialogSettings.addActionListener(e -> new Thread(() -> actionOnButtonDialog(textComponentSettings)).start());
 
                     FPanel textComponentLine = new FPanel();
@@ -235,8 +235,8 @@ public class TabbedPane extends FTabbedPane {
                     comboBoxTabAlign.addActionListener(e -> actionWhenChangedTabAlign(comboBoxTabAlign));
 
                     FPanel labelPanel = new FPanel();
-                    labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
                     labelPanel
+                            .setPanelLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS))
                             .addComponent(new FLabel("label.folder.minecraft").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
                             .createRigidArea(0, 14)
                             .addComponent(new FLabel("label.language").setComponentAlignmentX(Component.RIGHT_ALIGNMENT))
@@ -250,14 +250,14 @@ public class TabbedPane extends FTabbedPane {
                             .addComponent(componentPanel));
 
                     componentBuilder.add(new FPanel()
-                            .addComponent(createEditorPane("support"))
-                            .addComponent(createEditorPane("answers")));
+                            .addComponent(createButton("support").addURL())
+                            .addComponent(createButton("answers").addURL()));
 
                     componentBuilder.add(Box.createRigidArea(new Dimension(0, 1200)));
 //                    //?????????
 //                    componentBuilder.add(new FPanel().addComponent(createEditorPane("clickme")));
 
-                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/images/settings.png")), componentBuilder.build(), getTabPlacement());
+                    addTabCustomAlign(UtilsSystem.getLocaleString("tab.settings"), new ImageIcon(Main.class.getResource("/images/settings.png")), componentBuilder.build());
                     break;
 
                 case "byTheFaser":
@@ -267,7 +267,7 @@ public class TabbedPane extends FTabbedPane {
                     break;
 
                 case "social":
-                    addTabCustomAlign("social", null, new JPanel(), getTabPlacement());
+                    addTabCustomAlign("social", null, new JPanel());
 
                     FPanel imagePanel = new FPanel()
                             .addComponent(UtilsSystem.getImageHashMap("discord.png"))
@@ -275,7 +275,6 @@ public class TabbedPane extends FTabbedPane {
                             .addComponent(UtilsSystem.getImageHashMap("github.png"));
 
                     setTabComponentAt(getTabCount() - 1, imagePanel);
-
                     setEnabledAt(getTabCount() - 1, false);
                     break;
             }
@@ -311,7 +310,7 @@ public class TabbedPane extends FTabbedPane {
         finalBuilder.add(installBuilder.panelBuild());
         finalBuilder.add(pageBuilder.scrollBuild());
 
-        addTabCustomAlign(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), finalBuilder.build(), getTabPlacement());
+        addTabCustomAlign(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), finalBuilder.build());
     }
 
     private JEditorPane createEditorPane(String labelLocale) {
@@ -457,11 +456,11 @@ public class TabbedPane extends FTabbedPane {
     }
 
     //Action when user click on button locale (update frame)
-    private void actionWhenChangedLocale(JComboBox<String> comboBoxLanguage) {
+    private void actionWhenChangedLocale(JComboBox<String> comboBoxLanguage){
         saveConfig();
 
-        for (String string : UtilsSystem.listObjectsFromConfig.get("support.languages")) {
-            if (UtilsSystem.getLocaleString("button." + string).equals(comboBoxLanguage.getSelectedItem())) {
+        for(String string : UtilsSystem.listObjectsFromConfig.get("support.languages")){
+            if(UtilsSystem.getLocaleString("button." + string).equals(comboBoxLanguage.getSelectedItem())){
                 UtilsOS.setSystemLocale(string);
                 break;
             }
@@ -472,9 +471,9 @@ public class TabbedPane extends FTabbedPane {
         reloadFrame();
     }
 
-    private void actionWhenChangedTheme(JComboBox<String> comboBoxTheme) {
+    private void actionWhenChangedTheme(JComboBox<String> comboBoxTheme){
         saveConfig();
-        if (comboBoxTheme.getSelectedItem().equals(UtilsSystem.getLocaleString("button.light"))) {
+        if(comboBoxTheme.getSelectedItem().equals(UtilsSystem.getLocaleString("button.light"))){
             //Set light theme
             FlatLightLaf.setup();
             UtilsSystem.setSecondColor(new Color(218, 218, 218));
@@ -510,7 +509,7 @@ public class TabbedPane extends FTabbedPane {
 
     }
 
-    private void actionOnButtonDialog(JTextComponent textComponentFolder) {
+    private void actionOnButtonDialog(JTextComponent textComponentFolder){
         //Create new window with file chooser
         JFileChooser fileChooser = new JFileChooser();
         //Set file chooser title
@@ -526,15 +525,15 @@ public class TabbedPane extends FTabbedPane {
         //Get file chooser value
         int returnVal = fileChooser.showSaveDialog(this);
         //If user click save
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if(returnVal == JFileChooser.APPROVE_OPTION){
             //Set text component folder
             textComponentFolder.setText(fileChooser.getSelectedFile().getPath() + File.separator);
-            if (textComponentFolder == textComponentSettings)
+            if(textComponentFolder == textComponentSettings)
                 UtilsSystem.pathToMinecraftFolder = fileChooser.getSelectedFile().getPath() + File.separator;
         }
     }
 
-    public FPanel createTextComponent() {
+    public FPanel createTextComponent(){
         datapackTextComponent.setText(UtilsSystem.pathToMinecraftFolder + "saves" + File.separator);
         datapackTextComponent.setBorder(new FlatButtonBorder());
 
@@ -559,7 +558,6 @@ public class TabbedPane extends FTabbedPane {
         buttonInstall.setEnabled(bolEnablePanel);
 
         FPanel panelStatus = new FPanel().addComponent(labelStatus);
-
 
         ArrayList<Component> arrayList = new ArrayList<>();
         arrayList.add(labelStatus);
@@ -688,7 +686,7 @@ public class TabbedPane extends FTabbedPane {
                 JLabel label = new JLabel("");
                 label.setPreferredSize(new Dimension(0, 1000));
 
-                if(countComponents < 6){
+                if(countComponents < 4){
                     componentBuilder.add(label);
                     componentBuilder.setScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
                 } else {
