@@ -104,6 +104,7 @@ url.CullLessLeaves: "https://www.youtube.com/watch?v=cgKRpzNbTPE"
 url.cullleaves: "https://www.youtube.com/watch?v=cgKRpzNbTPE"
 
 #FARMS
+url.lygyxa: "https://youtu.be/VpV9cpYHqU8"
 url.turtle: "https://youtu.be/Lo7x3V0Xu54"
 url.iron: "https://youtu.be/bsUIkEGln-w"
 url.gold: "https://youtu.be/14XRy0pbezQ"
@@ -162,6 +163,7 @@ url.support: "https://www.donationalerts.com/r/thefaser"
 url.answers: "https://www.flectone.ru/faq/"
 
 #FARMS VERSION
+farms.lygyxa.version: "1.19+"
 farms.turtle.version: "1.13-1.19+"
 farms.iron.version: "1.14-1.19+"
 farms.gold.version: "1.15-1.19+"
@@ -213,6 +215,7 @@ resourcepacks.torchesreimagined: "«Torches Reimagined»"
 resourcepacks.voidomonenchanted: "«Voidomon's Enchanted Books»"
 
 #FARMS NAME
+farms.lygyxa: "«Froglight farm»"
 farms.turtle: "«Turtle farm»"
 farms.iron: "«Iron farm»"
 farms.gold: "«Gold farm»"

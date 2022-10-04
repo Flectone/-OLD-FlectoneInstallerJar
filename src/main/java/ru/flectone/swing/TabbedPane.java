@@ -313,25 +313,6 @@ public class TabbedPane extends FTabbedPane {
         addTabCustomAlign(UtilsSystem.getLocaleString("tab." + folder), new ImageIcon(Main.class.getResource("/images/" + folder + ".png")), finalBuilder.build());
     }
 
-    private JEditorPane createEditorPane(String labelLocale) {
-        JEditorPane editorPane = new JEditorPane();
-        editorPane.setContentType("text/html");
-
-        editorPane.setText("<a href='" + UtilsSystem.getLocaleString("url." + labelLocale) + "'>" + UtilsSystem.getLocaleString("label." + labelLocale));
-        editorPane.setEditable(false);
-        editorPane.addHyperlinkListener(e -> {
-            if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-                Desktop desktop = Desktop.getDesktop();
-                try {
-                    desktop.browse(e.getURL().toURI());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        return editorPane;
-    }
-
     //Save flectonemods.txt
     private void saveConfig() {
         try {
@@ -461,6 +442,9 @@ public class TabbedPane extends FTabbedPane {
 
         for(String string : UtilsSystem.listObjectsFromConfig.get("support.languages")){
             if(UtilsSystem.getLocaleString("button." + string).equals(comboBoxLanguage.getSelectedItem())){
+
+                if(string.equals(UtilsOS.getSystemLocale())) return;
+
                 UtilsOS.setSystemLocale(string);
                 break;
             }
