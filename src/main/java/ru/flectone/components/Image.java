@@ -2,7 +2,9 @@ package ru.flectone.components;
 
 import com.formdev.flatlaf.ui.FlatButtonBorder;
 import ru.flectone.Main;
+import ru.flectone.swing.Frame;
 import ru.flectone.swing.MessageDialog;
+import ru.flectone.swing.TabbedPane;
 import ru.flectone.utils.UtilsSystem;
 
 import javax.imageio.ImageIO;
@@ -19,10 +21,10 @@ import java.net.URLConnection;
 public class Image extends JLabel {
 
     public Image(String string){
-        ImageIcon imageIcon = new ImageIcon(Main.class.getResource("/images/flectone.gif"));
 
-        setIcon(imageIcon);
-        setBorder(new FlatButtonBorder());
+        System.out.println(string);
+
+        UtilsSystem.imageHashMap.put(string, this);
 
         getImageForLabel("/images/" + string);
 
@@ -60,12 +62,14 @@ public class Image extends JLabel {
     }
 
     protected void getImageForLabel(String url){
+
         new Thread(() -> {
+
 
             int k = 10;
 
             //Default flectone.gif width
-            while(getIcon().getIconWidth() == 50){
+            while(getIcon() == null){
                 try {
 
                     //Connect to site
@@ -76,7 +80,9 @@ public class Image extends JLabel {
 
                     //Trying to download a file
                     InputStream in = openConnection.getInputStream();
+
                     BufferedImage myPicture = ImageIO.read(in);
+
                     setIcon(new ImageIcon(myPicture));
 
                 } catch (Exception ignored){

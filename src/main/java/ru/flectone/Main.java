@@ -26,6 +26,7 @@ public class Main {
         UtilsSystem.countCheckBoxHashMap = new HashMap<>();
         UtilsSystem.enabledComponentsHashMap = new HashMap<>();
         UtilsSystem.listCheckBox = new HashMap<>();
+        UtilsSystem.imageHashMap = new HashMap<>();
 
         //Create new hash map from config.yml
         UtilsSystem.listObjectsFromConfig = new HashMap<>();

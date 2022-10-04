@@ -13,7 +13,8 @@ public class PageComponent extends JPanel {
 
     public PageComponent(String imageName){
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        add(new Image(imageName));
+
+        add(UtilsSystem.getImageHashMap(imageName).setCustomBorder(new FlatButtonBorder()));
     }
 
     public PageComponent(String component, String version, String firstCheckBox, String secondCheckBox, String description, String page){

@@ -270,9 +270,9 @@ public class TabbedPane extends FTabbedPane {
                     addTabCustomAlign("social", null, new JPanel(), getTabPlacement());
 
                     FPanel imagePanel = new FPanel()
-                            .addComponent(new Image("discord.png").setCustomBorder(null))
-                            .addComponent(new Image("yt.png").setCustomBorder(null))
-                            .addComponent(new Image("github.png").setCustomBorder(null));
+                            .addComponent(UtilsSystem.getImageHashMap("discord.png"))
+                            .addComponent(UtilsSystem.getImageHashMap("yt.png"))
+                            .addComponent(UtilsSystem.getImageHashMap("github.png"));
 
                     setTabComponentAt(getTabCount() - 1, imagePanel);
 
@@ -490,25 +490,22 @@ public class TabbedPane extends FTabbedPane {
     }
 
     private void reloadFrame() {
-        new Thread(() -> {
+        Runtime.getRuntime().removeShutdownHook(threadSaveConfig);
 
-            Runtime.getRuntime().removeShutdownHook(threadSaveConfig);
+        UtilsSystem.getSettingsFile();
 
-            UtilsSystem.getSettingsFile();
+        UtilsSystem.enabledComponentsHashMap.clear();
+        UtilsSystem.countCheckBoxHashMap.clear();
+        listCheckBox.clear();
 
-            UtilsSystem.enabledComponentsHashMap.clear();
-            UtilsSystem.countCheckBoxHashMap.clear();
-            listCheckBox.clear();
+        FTabbedPane newTabbedPane = new TabbedPane();
+        newTabbedPane.setSelectedIndex(getSelectedIndex());
 
-            FTabbedPane newTabbedPane = new TabbedPane();
-            newTabbedPane.setSelectedIndex(getSelectedIndex());
+        Frame.getFrame().setTitle(UtilsSystem.getLocaleString("frame.title") + UtilsSystem.getVersionProgram());
 
-            Frame.getFrame().setTitle(UtilsSystem.getLocaleString("frame.title") + UtilsSystem.getVersionProgram());
-            Frame.getFrame().getContentPane().removeAll();
-            removeAll();
-            Frame.getFrame().getContentPane().add(newTabbedPane);
-
-        }).start();
+        Frame.getFrame().getContentPane().removeAll();
+        removeAll();
+        Frame.getFrame().getContentPane().add(newTabbedPane);
 
 
     }

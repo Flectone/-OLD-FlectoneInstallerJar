@@ -2,6 +2,7 @@ package ru.flectone.utils;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import ru.flectone.Main;
+import ru.flectone.components.Image;
 import ru.flectone.swing.MessageDialog;
 
 import javax.swing.*;
@@ -17,15 +18,24 @@ public class UtilsSystem {
 
     public static HashMap<String, ArrayList<Component>> enabledComponentsHashMap;
 
-    public static String pathToMinecraftFolder;
-    public static Color secondColor;
+    public static HashMap<String, Image> imageHashMap;
 
-    public static boolean changeBackgroundColor = false;
+    public static String pathToMinecraftFolder;
+
+    public static Color secondColor;
 
     public static boolean showWarnMessages;
 
     public static void setShowWarnMessages(boolean showWarnMessages) {
         UtilsSystem.showWarnMessages = showWarnMessages;
+    }
+
+    public static Image getImageHashMap(String imageName) {
+
+//        if(image.getIcon() == null) image.setIcon(new ImageIcon(Main.class.getResource("/images/flectone.gif")));
+
+        return imageHashMap.get(imageName) != null ? imageHashMap.get(imageName) : new Image(imageName);
+
     }
 
     public static void getBooleanShowWarnMessages(){

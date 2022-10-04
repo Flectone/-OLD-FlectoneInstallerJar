@@ -8,7 +8,6 @@ public class UtilsOS {
     //Get system locale
     public static String systemLocale = System.getProperty("user.language");
 
-
     public static String getSystemLocale() {
         return systemLocale;
     }
