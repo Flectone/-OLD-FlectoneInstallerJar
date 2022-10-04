@@ -22,8 +22,6 @@ public class Image extends JLabel {
 
     public Image(String string){
 
-        System.out.println(string);
-
         UtilsSystem.imageHashMap.put(string, this);
 
         getImageForLabel("/images/" + string);
