@@ -1,11 +1,6 @@
-package ru.flectone.components;
+package ru.flectone;
 
-import com.formdev.flatlaf.ui.FlatButtonBorder;
-import ru.flectone.Main;
-import ru.flectone.swing.Frame;
-import ru.flectone.swing.MessageDialog;
-import ru.flectone.swing.TabbedPane;
-import ru.flectone.utils.UtilsSystem;
+import ru.flectone.components.FMessageDialog;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,18 +13,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class Image extends JLabel {
+public class FImage extends JLabel {
 
-    public Image(String string){
 
-        UtilsSystem.imageHashMap.put(string, this);
+    public FImage(String string){
 
-        getImageForLabel("/images/" + string);
-
-        String urlString = string
-                .replace(".jpg", "")
-                .replace(".png", "")
-                .replace(".jpeg", "");
+        if(Utils.getImage(string) != null){
+            setIcon(Utils.getImage(string).getIcon());
+        } else {
+            getImageForLabel("/images/" + string);
+            Utils.putIcon(string, this);
+        }
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -45,16 +39,16 @@ public class Image extends JLabel {
             public void mouseClicked(MouseEvent e) {
 
                 try {
-                    Desktop.getDesktop().browse(new URL(UtilsSystem.getLocaleString("url." + urlString)).toURI());
+                    Desktop.getDesktop().browse(new URL(Utils.getString("url." + string)).toURI());
                 } catch (Exception error) {
-                    new MessageDialog(error.getMessage(), "error", 0);
+                    new FMessageDialog(error.getMessage(), "error", 0);
                 }
 
             }
         });
     }
 
-    public Image setCustomBorder(Border border){
+    public FImage setCustomBorder(Border border){
         setBorder(border);
         return this;
     }
@@ -63,7 +57,6 @@ public class Image extends JLabel {
 
         new Thread(() -> {
 
-
             int k = 10;
 
             //Default flectone.gif width
@@ -71,7 +64,7 @@ public class Image extends JLabel {
                 try {
 
                     //Connect to site
-                    URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + url).openConnection();
+                    URLConnection openConnection = new URL(Utils.getString("flectone.url") + url + ".png").openConnection();
 
                     //Add property to request than connect was real
                     openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
@@ -85,9 +78,9 @@ public class Image extends JLabel {
 
                 } catch (Exception ignored){
                     try {
-                        k -= 1;
+                        k--;
                         if(k == 0) {
-                            setIcon(new ImageIcon(Main.class.getResource("/images/timed-out.png")));
+                            setIcon(Utils.getImageResources("timed-out"));
                             break;
                         }
                         Thread.sleep(5000);

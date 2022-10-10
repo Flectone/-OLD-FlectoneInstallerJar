@@ -1,3 +1,11 @@
+flectone.url: "https://www.flectone.ru/"
+
+count.optimization: 2
+count.mods: 2
+count.datapacks: 3
+count.farms: 4
+count.resourcepacks: 2
+
 #MODS
 url.3dskinlayers: "https://www.curseforge.com/minecraft/mc-mods/skin-layers-3d"
 url.advancementinfo: "https://www.curseforge.com/minecraft/mc-mods/advancementinfo"

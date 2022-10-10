@@ -1,14 +1,21 @@
-package ru.flectone.swing.pages;
+package ru.flectone.components;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import ru.flectone.components.FPanel;
-import ru.flectone.utils.UtilsSystem;
+import ru.flectone.FSystem;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class PageBuilder {
+public class FBuilder {
+
+    private int countComponents;
+
+    public FBuilder(int countComponents){
+        this.countComponents = countComponents;
+    }
+
+    public FBuilder(){
+
+    }
 
     private final Box builder = Box.createVerticalBox();
 
@@ -17,7 +24,6 @@ public class PageBuilder {
     public void add(Component component){
         builder.add(component);
     }
-
 
     public JScrollPane scrollBuild(){
 
@@ -42,15 +48,17 @@ public class PageBuilder {
 
             if(!component.isVisible() || (component.getName() != null && component.getName().equals("!!!"))) continue;
 
-            if(count%2 == 0) component.setBackground(UtilsSystem.getSecondColor());
+            if(count%2 == 0) component.setBackground(FSystem.getBackgroundColor());
             else component.setBackground(panelForColor.getBackground());
             count++;
 
         }
     }
 
-    public FPanel panelBuild(){
-        return new FPanel().addComponent(builder);
+    public JPanel panelBuild(){
+        JPanel panel = new JPanel();
+        panel.add(builder);
+        return panel;
     }
 
     public Box build(){
@@ -78,6 +86,4 @@ public class PageBuilder {
         builder.remove(component);
         builder.revalidate();
     }
-
 }
-

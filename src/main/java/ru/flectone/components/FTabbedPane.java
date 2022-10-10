@@ -1,8 +1,8 @@
 package ru.flectone.components;
 
-import ru.flectone.swing.MessageDialog;
-import ru.flectone.utils.UtilsSystem;
+import ru.flectone.Utils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -10,17 +10,19 @@ import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
-
-import javax.swing.*;
 
 public class FTabbedPane extends JTabbedPane {
     private static final int LINEWIDTH = 3;
     private static final String NAME = "test";
-    private final GhostGlassPane glassPane = new GhostGlassPane();
+    private final FTabbedPane.GhostGlassPane glassPane = new FTabbedPane.GhostGlassPane();
     private final Rectangle lineRect  = new Rectangle();
     private final Color   lineColor = new Color(0, 100, 255);
     private int dragTabIndex = -1;
+
+    protected static void setHtmlWidth() {
+    }
 
     private void clickArrowButton(String actionKey) {
         ActionMap map = getActionMap();
@@ -128,7 +130,7 @@ public class FTabbedPane extends JTabbedPane {
             }
         };
         new DropTarget(glassPane, DnDConstants.ACTION_COPY_OR_MOVE,
-                new CDropTargetListener(), true);
+                new FTabbedPane.CDropTargetListener(), true);
         new DragSource().createDefaultDragGestureRecognizer(
                 this, DnDConstants.ACTION_COPY_OR_MOVE, dgl);
     }
@@ -188,6 +190,7 @@ public class FTabbedPane extends JTabbedPane {
     }
 
     private boolean hasGhost = true;
+
     public void setPaintGhost(boolean flag) {
         hasGhost = flag;
     }
@@ -356,9 +359,8 @@ public class FTabbedPane extends JTabbedPane {
         }
     }
 
-    final String PRE_HTML = "<html><p style=\"text-align: left; width: 70px\">";
-    final String POST_HTML = "</p></html>";
-
+    private final String PRE_HTML = "<html><p style=\"text-align: left; width: 70px\">";
+    private final String POST_HTML = "</p></html>";
 
     protected void addTabCustomAlign(String title, Icon icon, Component component, String tip) {
         if(getTabPlacement() == JTabbedPane.LEFT || getTabPlacement() == JTabbedPane.RIGHT){
@@ -381,8 +383,69 @@ public class FTabbedPane extends JTabbedPane {
         addTab(title, component);
     }
 
-    protected FButton createButton(String buttonName){
-        return new FButton(buttonName);
+    public JLabel createLabel(String name, float alignment){
+        JLabel label = createLabel(name);
+        label.setAlignmentX(alignment);
+        return label;
+    }
+
+    public JLabel createLabel(String name, boolean enable){
+        JLabel label = createLabel(name);
+        label.setEnabled(enable);
+        return label;
+    }
+
+    public JLabel createLabel(String name){
+        return new JLabel(Utils.getString(name));
+    }
+
+    public Component createRigidArea(int width, int height){
+        return Box.createRigidArea(new Dimension(width, height));
+    }
+
+    public JCheckBox createCheckBox(String name){
+        JCheckBox checkBox = new JCheckBox(Utils.getString(name));
+        checkBox.setName(name);
+        checkBox.setToolTipText(Utils.getString(name + ".tooltip"));
+        return checkBox;
+    }
+
+    public JButton createButton(String name){
+        JButton button = new JButton(Utils.getString(name));
+        button.setName(name.split("\\.")[1]);
+        return button;
+    }
+
+    public JButton createButton(String name, boolean enable){
+        JButton button = createButton(name);
+        button.setEnabled(enable);
+        return button;
+    }
+
+    public JButton createButton(String name, String toolTip){
+        JButton button = createButton(name);
+        button.setToolTipText(Utils.getString(toolTip));
+        return button;
+    }
+
+    public JComboBox<String> createComboBox(String[] strings){
+        ArrayList<String> arrayList = new ArrayList<>();
+        for(String string : strings){
+            arrayList.add(Utils.getString("button." + string));
+        }
+
+        return new JComboBox<>(arrayList.toArray(new String[0]));
+    }
+
+    public JButton addURL(JButton button){
+        button.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().browse(new URL(Utils.getString("url." + button.getName())).toURI());
+            } catch (Exception error) {
+                new FMessageDialog(error.getMessage(), "error", 0);
+            }
+        });
+        return button;
     }
 
 }

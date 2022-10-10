@@ -1,8 +1,7 @@
 package ru.flectone.components;
 
 import ru.flectone.Main;
-import ru.flectone.swing.MessageDialog;
-import ru.flectone.utils.UtilsSystem;
+import ru.flectone.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,16 +34,16 @@ public class Installation {
             File jsonFile = new File(Paths.get(pathToMinecraftFolder, "launcher_profiles.json").toString());
             //Check default minecraft path
             if(!jsonFile.exists()){
-                new MessageDialog(UtilsSystem.getLocaleString("message.error.profile"), "error", 0);
+                new FMessageDialog(Utils.getString("message.error.profile"), "error", 0);
                 return;
             }
             //Get path to fabric jar and download
-            String pathFabricJar = Paths.get(UtilsSystem.getWorkingDirectory(), "fabric.jar").toString();
+            String pathFabricJar = Paths.get(Utils.getWorkingDirectory(), "fabric.jar").toString();
             downloadFiles("mods/fabric.jar", pathFabricJar);
 
             //Get command and run fabric jar
             //Waiting process
-            Process process = UtilsSystem.runJarFile(pathFabricJar + " client -dir " + pathToMinecraftFolder + " -noprofile -mcversion " + minecraftVersion);
+            Process process = runJarFile(pathFabricJar + " client -dir " + pathToMinecraftFolder + " -noprofile -mcversion " + minecraftVersion);
             if(process == null) return;
             process.waitFor();
 
@@ -88,7 +87,7 @@ public class Installation {
                     //Add flectone profile to file
                     if(line.equals("    },") && !profileCreated){
                         //Read file from resources line by line
-                        Scanner scannerProfile = new Scanner(Main.class.getResourceAsStream("/profile.yml"), "UTF-8").useDelimiter("\\A");
+                        Scanner scannerProfile = new Scanner(Utils.getAsStreamResources("/profile.yml"), "UTF-8").useDelimiter("\\A");
 
                         //If profile.yml not empty
                         while(scannerProfile.hasNext()){
@@ -112,7 +111,7 @@ public class Installation {
             Files.write(Paths.get(jsonFile.getPath()), listForFile);
         } catch (Exception error){
             //Show error
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.profile") + "\n" + error.getMessage(), "error", 0);
+            new FMessageDialog(Utils.getString("message.error.profile") + "\n" + error.getMessage(), "error", 0);
         }
     }
 
@@ -124,7 +123,7 @@ public class Installation {
             if(!checkBox.isSelected()) continue;
 
             labelStatus.setForeground(new Color(79, 240, 114));
-            labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + checkBox.getName() + "...");
+            labelStatus.setText(Utils.getString("label.status.install") + checkBox.getName() + "...");
 
             if(urlFolder.equals("farms")){
                 String toFile = "saves" + File.separator + checkBox.getName();
@@ -143,11 +142,25 @@ public class Installation {
             String url = urlFolder + "/" + checkBox.getName() + fileExtension;
             String path = Paths.get(folderPath.toString(), checkBox.getName() + fileExtension).toString();
 
-            downloadFiles(url, path);
+
+            try {
+                downloadFiles(url, path);
+            } catch (IOException error){
+
+                if(urlFolder.contains("main")){
+                    try {
+                        downloadFiles(url.replace("main", "extension"), path);
+                    } catch (IOException errorTwo){
+                        new FMessageDialog(Utils.getString("message.error.download") + error.getMessage(), url, "error", 0);
+                    }
+
+                }
+
+            }
+
         }
-        if(!urlFolder.contains("/main")){
-            showSuccessInstallMessage(labelStatus);
-        }
+
+        showSuccessInstallMessage(labelStatus);
     }
 
     public Installation(JLabel labelStatus, String[] strings, Path folderPath){
@@ -164,17 +177,23 @@ public class Installation {
             }
 
             labelStatus.setForeground(new Color(79, 240, 114));
-            labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + fileName + "...");
+            labelStatus.setText(Utils.getString("label.status.install") + fileName + "...");
 
             //Download file
-            downloadFiles("settings/" + fileName, path.toString());
+            try {
+                downloadFiles("settings/" + fileName, path.toString());
+            } catch (IOException error){
+                //If file unable to download
+                new FMessageDialog(Utils.getString("message.error.download") + error.getMessage(), "settings/" + fileName, "error", 0);
+            }
+
         }
     }
 
     private void showSuccessInstallMessage(JLabel labelStatus){
         labelStatus.setForeground(null);
-        labelStatus.setText(UtilsSystem.getLocaleString("label.status.ready.true"));
-        new MessageDialog(UtilsSystem.getLocaleString("message.install.success"), "install", 1);
+        labelStatus.setText(Utils.getString("label.status.ready.true"));
+        new FMessageDialog(Utils.getString("message.install.success"), "install", 1);
     }
 
     private void unZipFile(String url, Path decryptTo, JLabel labelStatus) {
@@ -189,7 +208,7 @@ public class Installation {
 
             for (ZipEntry entry = zipInputStream.getNextEntry(); entry != null; entry = zipInputStream.getNextEntry()) {
                 labelStatus.setForeground(new Color(79, 240, 114));
-                labelStatus.setText(UtilsSystem.getLocaleString("label.status.install") + entry.getName() + "...");
+                labelStatus.setText(Utils.getString("label.status.install") + entry.getName() + "...");
 
                 Path toPath = decryptTo.resolve(entry.getName());
                 if (entry.isDirectory()) {
@@ -200,35 +219,39 @@ public class Installation {
             }
 
         } catch (Exception error){
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.file.exist") + "\n" + error.getMessage(), "error", 0);
+            new FMessageDialog(Utils.getString("message.error.file.exist") + "\n" + error.getMessage(), "error", 0);
         }
     }
 
     //Download files from www.flectone.ru/mods
-    public static void downloadFiles(String urlString, String toFileName){
-        try {
-            File file = new File(toFileName);
-            if(!file.exists()) file.mkdirs();
+    public static void downloadFiles(String urlString, String toFileName) throws IOException {
 
-            //Copy file is download to file path
-            Files.copy(openConnection(urlString).getInputStream(), Paths.get(toFileName), StandardCopyOption.REPLACE_EXISTING);
+        File file = new File(toFileName);
+        if(!file.exists()) file.mkdirs();
 
-        } catch (IOException error){
-            //If file unable to download
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.download") + error.getMessage(), urlString, "error", 0);
-        }
+        //Copy file is download to file path
+        Files.copy(openConnection(urlString).getInputStream(), Paths.get(toFileName), StandardCopyOption.REPLACE_EXISTING);
     }
 
     private static URLConnection openConnection(String urlString){
         try {
             //Connect to site
-            URLConnection openConnection = new URL(UtilsSystem.getWebSiteIp() + urlString).openConnection();
+            URLConnection openConnection = new URL(Utils.getString("flectone.url") + urlString).openConnection();
             //Add property to request than connect was real
             openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
             return openConnection;
         } catch (IOException error) {
-            new MessageDialog(UtilsSystem.getLocaleString("message.error.site") + error.getMessage(), "error", 0);
+            new FMessageDialog(Utils.getString("message.error.site") + error.getMessage(), "error", 0);
             return null;
         }
+    }
+
+    public static Process runJarFile(String pathToFile){
+        try {
+            return Runtime.getRuntime().exec("java -jar " + pathToFile);
+        } catch (Exception error){
+            new FMessageDialog(Utils.getString("message.error.jar") + error, "error", 0);
+        }
+        return null;
     }
 }
