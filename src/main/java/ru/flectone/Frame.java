@@ -29,16 +29,17 @@ public class Frame extends JFrame {
         setTitle(Utils.getString("frame.title") + Utils.getString("version.program"));
         setIconImage(Utils.getImageResources("logo").getImage());
 
-        JPanel panel = new JPanel();
+
         JLabel label = new JLabel();
         label.setIcon(Utils.getImageResources("flectone"));
-        panel.add(label);
+        label.setHorizontalAlignment(JLabel.CENTER);
 
-        this.add(panel);
+
+        this.add(label);
 
         this.add(new TabbedPane());
 
-        this.remove(panel);
+        this.remove(label);
 
         revalidate();
     }
