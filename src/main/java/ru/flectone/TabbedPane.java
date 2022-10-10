@@ -109,7 +109,7 @@ public class TabbedPane extends FTabbedPane {
         listForFile.add("path.Minecraft: " + FSystem.getPathToMinecraft());
         listForFile.add("chosen.Language: " + FSwing.getSelectedLanguage());
         listForFile.add("chosen.Theme: " + FSwing.getSelectedTheme());
-        listForFile.add("show.Warns: " + FSwing.getShowWarns());
+        listForFile.add("show.Warns: " + FSwing.isShowWarns());
         listForFile.add("chosen.Tab_Align: " + FSwing.getTabbedPaneAlign());
 
         StringBuilder tabSequence = new StringBuilder();
@@ -143,7 +143,8 @@ public class TabbedPane extends FTabbedPane {
             new FMessageDialog(error.toString(), "error", 0);
         }
 
-        listForFile.add("boolean.Update: " + FSwing.getShowWarns());
+        listForFile.add("boolean.Update: " + FSwing.isUpdateProgram());
+        listForFile.add("frame.Size: " + Frame.getFrame().getWidth() + " " + Frame.getFrame().getHeight());
 
         try {
             Files.write(Paths.get(Utils.getWorkingDirectory(), File.separator + "flectone.installer"), listForFile);

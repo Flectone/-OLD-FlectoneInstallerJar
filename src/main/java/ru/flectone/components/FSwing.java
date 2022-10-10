@@ -3,6 +3,8 @@ package ru.flectone.components;
 import ru.flectone.FSystem;
 import ru.flectone.Utils;
 
+import java.awt.*;
+
 public class FSwing {
 
     private static int tabbedPaneAlign = 1;
@@ -41,12 +43,35 @@ public class FSwing {
         FSwing.showWarns = showWarns;
     }
 
-    public static boolean getShowWarns() {
+    public static boolean isShowWarns() {
        return showWarns;
     }
 
     public static String[] getTabSequence() {
         if(Utils.getString("tab.Sequence").equals(Utils.getString(""))) return Utils.getString("tabs").split(" ");
+
+        if(Utils.getString("tab.Sequence").split(" ")[0].startsWith("tab")) return Utils.getString("tabs").split(" ");
+
         return Utils.getString("tab.Sequence").split(" ");
+    }
+
+    private static boolean updateProgram = false;
+
+    public static void setUpdateProgram(boolean updateProgram) {
+        FSwing.updateProgram = updateProgram;
+    }
+
+    public static boolean isUpdateProgram() {
+        return updateProgram;
+    }
+
+    private static Dimension frameSize = new Dimension(1000, 550);
+
+    public static void setFrameSize(Dimension frameSize) {
+        FSwing.frameSize = frameSize;
+    }
+
+    public static Dimension getFrameSize() {
+        return frameSize;
     }
 }

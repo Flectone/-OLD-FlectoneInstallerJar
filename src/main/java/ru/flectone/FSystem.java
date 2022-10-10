@@ -3,6 +3,7 @@ package ru.flectone;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import ru.flectone.components.FSwing;
+import ru.flectone.components.Installation;
 
 import java.awt.*;
 import java.io.File;
@@ -43,8 +44,17 @@ public class FSystem {
             setBackgroundColor(new Color(54, 57, 59));
         }
 
-        if(!Utils.getString("show.Warns").equals("")){
+        if(!Utils.getString("show.Warns").equals(Utils.getString(""))){
             FSwing.setShowWarns(Boolean.parseBoolean(Utils.getString("show.Warns")));
+        }
+
+        if(!Utils.getString("boolean.Update").equals(Utils.getString(""))){
+            FSwing.setUpdateProgram(Boolean.parseBoolean(Utils.getString("boolean.Update")));
+        }
+
+        if(!Utils.getString("frame.Size").equals(Utils.getString(""))){
+            String[] ints = Utils.getString("frame.Size").split(" ");
+            FSwing.setFrameSize(new Dimension(Integer.parseInt(ints[0]), Integer.parseInt(ints[1])));
         }
 
 

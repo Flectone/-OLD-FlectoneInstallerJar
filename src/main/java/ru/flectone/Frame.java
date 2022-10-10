@@ -1,5 +1,7 @@
 package ru.flectone;
 
+import ru.flectone.components.FSwing;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,7 +16,7 @@ public class Frame extends JFrame {
         thisFrame = this;
 
         //Set size for frame
-        setSizeFrame(1000, 550);
+        setSizeFrame(FSwing.getFrameSize().width, FSwing.getFrameSize().height);
         setMinimumSize(1000, 550);
 
         //Close and exit
@@ -30,16 +32,16 @@ public class Frame extends JFrame {
         setIconImage(Utils.getImageResources("logo").getImage());
 
 
-        JLabel label = new JLabel();
-        label.setIcon(Utils.getImageResources("flectone"));
-        label.setHorizontalAlignment(JLabel.CENTER);
+        JLabel flectoneGif = new JLabel();
+        flectoneGif.setIcon(Utils.getImageResources("flectone"));
+        flectoneGif.setHorizontalAlignment(JLabel.CENTER);
 
-
-        this.add(label);
+        this.add(flectoneGif);
+        revalidate();
 
         this.add(new TabbedPane());
 
-        this.remove(label);
+        this.remove(flectoneGif);
 
         revalidate();
     }

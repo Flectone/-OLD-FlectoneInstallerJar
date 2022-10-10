@@ -248,6 +248,7 @@ public class Installation {
 
     public static Process runJarFile(String pathToFile){
         try {
+            System.out.println("java -jar " + pathToFile);
             return Runtime.getRuntime().exec("java -jar " + pathToFile);
         } catch (Exception error){
             new FMessageDialog(Utils.getString("message.error.jar") + error, "error", 0);

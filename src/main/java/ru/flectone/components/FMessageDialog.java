@@ -14,7 +14,7 @@ public class FMessageDialog extends JOptionPane {
 
     public FMessageDialog(String message, String messageTitle){
 
-        if(!FSwing.getShowWarns()) return;
+        if(!FSwing.isShowWarns()) return;
 
         JCheckBox checkBox = new JCheckBox(Utils.getString("checkbox.warns"));
 
