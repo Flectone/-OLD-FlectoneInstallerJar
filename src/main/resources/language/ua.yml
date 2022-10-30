@@ -185,6 +185,8 @@ mods.label.notop: "Користувальницькі моди"
 mods.total: "Усього "
 
 farms.litematic: "Встановити лайтматику"
+farms.besttree.description: "Універсальна ферма для дерева"
+farms.newslime.description: "Ферма слизу без котів та собак"
 farms.lygyxa.description: "Ферма квамп і магма слизу"
 farms.turtle.description: "Нескінченні щитки та морська трава"
 farms.iron.description: "Ферма заліза за 5 хвилин"

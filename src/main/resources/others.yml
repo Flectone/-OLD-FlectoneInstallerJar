@@ -1,4 +1,4 @@
-flectone.url: "https://www.flectone.ru/"
+flectone.url: "http://130.61.101.12/"
 
 count.optimization: 2
 count.mods: 2
@@ -112,6 +112,8 @@ url.CullLessLeaves: "https://www.youtube.com/watch?v=cgKRpzNbTPE"
 url.cullleaves: "https://www.youtube.com/watch?v=cgKRpzNbTPE"
 
 #FARMS
+url.besttree: "https://youtu.be/3NVXlsoraSU"
+url.newslime: "https://youtu.be/xLfW_9bcy10"
 url.lygyxa: "https://youtu.be/VpV9cpYHqU8"
 url.turtle: "https://youtu.be/Lo7x3V0Xu54"
 url.iron: "https://youtu.be/bsUIkEGln-w"
@@ -171,6 +173,8 @@ url.support: "https://www.donationalerts.com/r/thefaser"
 url.answers: "https://www.flectone.ru/faq/"
 
 #FARMS VERSION
+farms.besttree.version: "1.19+"
+farms.newslime.version: "1.19+"
 farms.lygyxa.version: "1.19+"
 farms.turtle.version: "1.13-1.19+"
 farms.iron.version: "1.14-1.19+"
@@ -223,6 +227,8 @@ resourcepacks.torchesreimagined: "«Torches Reimagined»"
 resourcepacks.voidomonenchanted: "«Voidomon's Enchanted Books»"
 
 #FARMS NAME
+farms.besttree: "«Tree farm»"
+farms.newslime: "«Slime farm»"
 farms.lygyxa: "«Froglight farm»"
 farms.turtle: "«Turtle farm»"
 farms.iron: "«Iron farm»"

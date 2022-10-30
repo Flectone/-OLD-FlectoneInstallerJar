@@ -185,6 +185,8 @@ mods.label.notop: "User mods"
 mods.total: "Total "
 
 farms.litematic: "Install litematic"
+farms.besttree.description: "Generic Tree Farm"
+farms.newslime.description: "Slime farm without cats and dogs"
 farms.lygyxa.description: "Frog light and magma slime farm"
 farms.turtle.description: "Endless shells and seagrass"
 farms.iron.description: "iron farm in 5 minutes"
