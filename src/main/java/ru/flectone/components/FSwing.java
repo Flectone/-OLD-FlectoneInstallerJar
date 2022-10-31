@@ -50,7 +50,7 @@ public class FSwing {
     public static String[] getTabSequence() {
         if(Utils.getString("tab.Sequence").equals(Utils.getString(""))) return Utils.getString("tabs").split(" ");
 
-        if(Utils.getString("tab.Sequence").split(" ")[0].startsWith("tab")) return Utils.getString("tabs").split(" ");
+        if(Utils.getString("tab.Sequence").split(" ").length != 9) return Utils.getString("tabs").split(" ");
 
         return Utils.getString("tab.Sequence").split(" ");
     }

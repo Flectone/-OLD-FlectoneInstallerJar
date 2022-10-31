@@ -11,6 +11,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -48,6 +49,46 @@ public class TabbedPane extends FTabbedPane {
             FBuilder finalBuilder = new FBuilder();
             FBuilder installBuilder = new FBuilder();
             FBuilder componentBuilder = new FBuilder();
+
+            if(tabName.equals("plugins")){
+
+                JButton downloadButton = new JButton(Utils.getString("button.plugins.download"));
+
+                downloadButton.setFont(new Font("sdsd", Font.PLAIN, 20));
+                downloadButton.addActionListener(e -> {
+                    try {
+                        Desktop.getDesktop().browse(new URL("https://www.spigotmc.org/resources/flectonechat.89411/download?version=473849").toURI());
+                    } catch (Exception error) {
+                        error.printStackTrace();
+                    }
+                });
+
+                JButton informationButton = new JButton(Utils.getString("button.plugins.information"));
+                informationButton.setFont(new Font("sdsd", Font.PLAIN, 20));
+                informationButton.addActionListener(e -> {
+                    try {
+                        Desktop.getDesktop().browse(new URL("https://www.spigotmc.org/resources/flectonechat.89411").toURI());
+                    } catch (Exception error) {
+                        error.printStackTrace();
+                    }
+                });
+
+                JPanel buttonPanel = new JPanel();
+                buttonPanel.add(downloadButton);
+                buttonPanel.add(createRigidArea(20, 0));
+                buttonPanel.add(informationButton);
+
+                installBuilder.add(buttonPanel);
+
+                componentBuilder.add(new JLabel(Utils.getImageResources("flectonechat")));
+
+                finalBuilder.add(installBuilder.panelBuild());
+                finalBuilder.add(componentBuilder.scrollBuild());
+
+                addTabCustomAlign(Utils.getString("tab.plugins"), Utils.getImageResources("plugins"), finalBuilder.build());
+                continue;
+            }
+
 
             if(tabName.equals("settings")){
                 createSettingsTab();
