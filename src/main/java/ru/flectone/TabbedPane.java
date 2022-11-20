@@ -57,7 +57,7 @@ public class TabbedPane extends FTabbedPane {
                 downloadButton.setFont(new Font("sdsd", Font.PLAIN, 20));
                 downloadButton.addActionListener(e -> {
                     try {
-                        Desktop.getDesktop().browse(new URL("https://www.spigotmc.org/resources/flectonechat.89411/download?version=473849").toURI());
+                        Desktop.getDesktop().browse(new URL("https://www.flectone.ru/mods/FlectoneChat.jar").toURI());
                     } catch (Exception error) {
                         error.printStackTrace();
                     }

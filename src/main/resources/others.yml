@@ -7,6 +7,10 @@ count.farms: 4
 count.resourcepacks: 2
 
 #MODS
+url.cullclouds: "https://modrinth.com/mod/cullclouds"
+url.Debugify: "https://modrinth.com/mod/debugify"
+url.Fastload: "https://modrinth.com/mod/fastload"
+url.ImmediatelyFast: "https://modrinth.com/mod/immediatelyfast"
 url.3dskinlayers: "https://www.curseforge.com/minecraft/mc-mods/skin-layers-3d"
 url.advancementinfo: "https://www.curseforge.com/minecraft/mc-mods/advancementinfo"
 url.appleskin: "https://www.curseforge.com/minecraft/mc-mods/appleskin"
@@ -261,6 +265,10 @@ datapacks.bettervanilla: "«Vanilla Expansion»"
 datapacks.alchemy: "«Tetrajak's Alchemy»"
 
 #MODS NAME
+mods.cullclouds: "«Cull Clouds»"
+mods.Debugify: "«Debugify»"
+mods.Fastload: "«FastLoad»"
+mods.ImmediatelyFast: "«ImmediatelyFast»"
 mods.noxesium: "«Noxesium»"
 mods.exordium: "«Exordium»"
 mods.lunade-fastanim: "«FastAnim»"

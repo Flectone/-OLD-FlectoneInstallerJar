@@ -77,6 +77,10 @@ message.warn.maxfps: "Не рекомендуємо використовуват
 
 dialog.title: "Вкажіть ваш шлях"
 
+mods.cullclouds.description: "Мод прискорює будівництво хмар"
+mods.Debugify.description: "Мод виправляє величезну кількість багів майнкрафту"
+mods.Fastload.description: "Мод змінює завантажувальний двигун 441"
+mods.ImmediatelyFast.description: "Мод прискорює рендеринг майнкрафту"
 mods.noxesium.description: "Мод Ноксезій оптимізує ті речі, які інші моди не охопили"
 mods.exordium.description: "Мод Экзордіум оптимізує графічний інтерфейс, тим самим підвищує фпс у ф3"
 mods.lunade-fastanim.description: "Мод Швидка Анімація прискорює обчислення анімації сутностей"

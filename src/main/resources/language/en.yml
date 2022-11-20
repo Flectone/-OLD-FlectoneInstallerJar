@@ -77,6 +77,10 @@ message.warn.maxfps: "We do not recommend using this item due to its instability
 
 dialog.title: "Select the installation location"
 
+mods.cullclouds.description: "Mod improving clouds building"
+mods.Debugify.description: "Mod fixes Minecraft bugs"
+mods.Fastload.description: "Mod modifies the 441 Loading Engine"
+mods.ImmediatelyFast.description: "Speed up immediate mode rendering"
 mods.noxesium.description: "Mod performance improvements for specific situations not covered by other optimization mods"
 mods.exordium.description: "Mod render the GUI and screens at a lower framerate to speed up"
 mods.lunade-fastanim.description: "Mod speeds up entity animation calculations!"
