@@ -1,6 +1,6 @@
 type: Sodium Vulkan Optifine
 version.Vulkan: 1.19.2 1.19.1 1.19 1.18.2
-version.Sodium: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1 1.16.5
+version.Sodium: 1.19.3 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1 1.16.5
 version.Optifine: 1.19.2 1.19.1 1.19 1.18.2 1.18.1 1.17.1
 mods.notop.version: 1.19.2 1.19.1 1.18.2
 web.folders: farms resourcepacks datapacks settings
