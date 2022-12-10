@@ -77,6 +77,7 @@ message.warn.maxfps: "We do not recommend using this item due to its instability
 
 dialog.title: "Select the installation location"
 
+mods.mixintrace.description: "Mod removes crashes when minecraft crashes"
 mods.cullclouds.description: "Mod improving clouds building"
 mods.Debugify.description: "Mod fixes Minecraft bugs"
 mods.Fastload.description: "Mod modifies the 441 Loading Engine"

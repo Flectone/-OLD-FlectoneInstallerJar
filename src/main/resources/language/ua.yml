@@ -77,6 +77,7 @@ message.warn.maxfps: "Не рекомендуємо використовуват
 
 dialog.title: "Вкажіть ваш шлях"
 
+mods.mixintrace.description: "Мод прибирає вильоти при фарбуванні майнкрафту"
 mods.cullclouds.description: "Мод прискорює будівництво хмар"
 mods.Debugify.description: "Мод виправляє величезну кількість багів майнкрафту"
 mods.Fastload.description: "Мод змінює завантажувальний двигун 441"

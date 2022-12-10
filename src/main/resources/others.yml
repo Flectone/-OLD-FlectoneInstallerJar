@@ -7,6 +7,7 @@ count.farms: 4
 count.resourcepacks: 2
 
 #MODS
+url.mixintrace: "https://modrinth.com/mod/mixintrace"
 url.cullclouds: "https://modrinth.com/mod/cullclouds"
 url.Debugify: "https://modrinth.com/mod/debugify"
 url.Fastload: "https://modrinth.com/mod/fastload"
@@ -265,6 +266,7 @@ datapacks.bettervanilla: "«Vanilla Expansion»"
 datapacks.alchemy: "«Tetrajak's Alchemy»"
 
 #MODS NAME
+mods.mixintrace: "«MixinTrace»"
 mods.cullclouds: "«Cull Clouds»"
 mods.Debugify: "«Debugify»"
 mods.Fastload: "«FastLoad»"
